@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <meta charset="utf-8">
+        
+<!--        <script src="../public/jquery/jquery-3.2.1.min.js"></script>-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="js/output.js"></script>
+        
+
+            
+    </head>
+    <body onload="initializeTest((<%=JSON.stringify(testlist)%>));">
+        
+        <div id="head">
+            <h1>Orddiktat</h1>
+
+            <h2>Skriv de rigtige ord på linjen</h2>
+        </div>
+            
+        <div id="main">
+        </div>
+        
+        <div id="bottom">
+            <button id="submit">Submit</button>
+        </div>
+
+    </body>
+</html>
