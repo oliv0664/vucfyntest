@@ -45,7 +45,7 @@
         $newLineText1 = $('<input/>').attr({
             id: 'lineText1' + lineCount,
             type: 'text',
-            name: 'lines[line'+lineCount+'][lineText1]',
+            name: 'lines[line'+lineCount+']',  //[lineText1]
             placeholder: 'Indtast tekst her',
             size: size
         });
@@ -54,7 +54,7 @@
         $newLineTextAnswer = $('<input/>').attr({
             id: 'lineTextAnswer' + lineCount,
             type: 'text',
-            name: 'lines[line'+lineCount+'][lineTextAnswer]',
+            name: 'lines[line'+lineCount+']', //[lineTextAnswer]
             placeholder: 'Indsæt det korrekte ord',
             size: (size/2)
         });
@@ -64,7 +64,7 @@
         $newLineText2 = $('<input/>').attr({
             id: 'lineText2' + lineCount,
             type: 'text',
-            name: 'lines[line'+lineCount+'][lineText2]',
+            name: 'lines[line'+lineCount+']', //[lineText2]
             placeholder: 'Indtast tekst her',
             size: size
         });
@@ -74,7 +74,7 @@
         $audioFile = $('<input/>').attr({
             type: 'file',
             id: 'file' + lineCount,
-            name: 'lines[line'+lineCount+'][file]',
+            name: 'lines[line'+lineCount+']', //[file]
             accept: 'audio/*',
             onchange: 'readURL(this)'
         });

@@ -24,22 +24,31 @@ router.get('/userlist', function(req, res) {
 */
 
 
+
+
+//henter hjemmesiden 'main' 
 router.get('/main', function(req, res) {
     res.render('main', { title: 'Orddiktat' });
 });
 
+
+//henter 'output' og finder data i databasen, svarende til de indtastede initialer
 router.get('/output', function(req, res) {
     var db = req.db; 
     var collection = db.get('test'); 
-    collection.find({},{}, function(e, docs) {
+    
+    //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
+    //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
+    collection.find({'initials' : initials}, {}, function(e, docs) {
+        var docLenght = docs.length; 
         console.log("first");
         console.log(""); 
         console.log(docs);
         console.log("");
-        console.log(docs[0].title);
+        console.log(docs[docLenght-1].title);
         console.log("");
         res.render('output', {
-            "testlist" : docs,
+            "testlist" : docs[docLenght-1],
             title: 'output'
         });
     });
@@ -47,13 +56,17 @@ router.get('/output', function(req, res) {
 
 
 
+
+var initials; 
+
 router.post('/addname', function(req, res) {
 
+    
     // Set our internal DB variable
     var db = req.db;
     console.log("second"); 
     // Get our form values. These rely on the "name" attributes
-    var initials = req.body.initials; 
+    initials = req.body.initials; 
     console.log(initials); 
     
     var title = req.body.testTitle;
@@ -69,7 +82,6 @@ router.post('/addname', function(req, res) {
         textArray[i] = req.body.lineText1 + i; 
     }
     */
-    
     // Set our collection
     var collection = db.get('test');
 

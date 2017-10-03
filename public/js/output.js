@@ -36,28 +36,33 @@
     // indsætter alle elementer fra databasen 
     
     
+    
+    
     function initializeTest(testlist) {
         
-        $('#head').append('<h3>' + testlist[0].title + '</h3>');
-        console.log(testlist[0].initials); 
-        console.log(testlist[0].lines); 
-        console.log(testlist[0].lines.line0); 
-        console.log(testlist[0].lines.line0.lineText1); 
         
+        $('#head').append('<h3>' + testlist.title + '</h3>');
+        console.log(testlist.initials); 
+        console.log(testlist.lines); 
+        console.log(testlist.lines.line0);
+        console.log(testlist.lines.line0[0]);
         
-        for(i = 0; i < testlist.length; i++)
-        //for(var line in testlist[0].lines) 
-        {
-            var a = testlist[i].lines;
-            var b = a.line0;
-            console.log(a); 
-            console.log(b); 
-            for(j = 0; j <)
             //console.log(a.lineText1); 
             // indsætter det første linjestykke
-         $lineP = $('<nobr/>')
-             .attr({ class: 'newLine' })
-               .text(b.lineText1); 
+            $lineP1 = $('<nobr/>   ')
+                .attr({ class: 'newLine' })
+                .text(testlist.lines.line0[0]); 
+            
+            $lineInput = $('   <input/>   ').attr({
+                id: 'input',
+                name: 'input',
+                placeholder: 'Indsæt ord'
+            }); 
+        
+        
+            $lineP2 = $('   <nobr/>')
+                .attr({ class: 'newLine' })
+                .text(testlist.lines.line0[2]);
             
             // indsætter et input felt, hvor kursisten kan indtaste svar
             /*$lineInputP = $('<input/>').attr({
@@ -86,7 +91,9 @@
             
             // tilføjer alle elementer til siden 
             $('#main')
-                .append($lineP); 
+                .append($lineP1)
+                .append($lineInput)
+                .append($lineP2); 
                 /*.append($lineInputP)
                 .append($line2P)
                 //.append($audioControl)
@@ -94,7 +101,7 @@
             
           
             
-        }
+        
     }
     
     
