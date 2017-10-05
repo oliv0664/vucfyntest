@@ -36,72 +36,99 @@
     // indsætter alle elementer fra databasen 
     
     
-    
+    var totalLineCount; 
+    var count; 
+    var testlist; 
     
     function initializeTest(testlist) {
         
+        this.testlist = testlist; 
         
         $('#head').append('<h3>' + testlist.title + '</h3>');
         console.log(testlist.initials); 
         console.log(testlist.lines); 
-        console.log(testlist.lines.line0);
-        console.log(testlist.lines.line0[0]);
+        console.log(testlist.lines[0]);
+        console.log(testlist.lines[0][0]);
         
-            //console.log(a.lineText1); 
-            // indsætter det første linjestykke
-            $lineP1 = $('<nobr/>   ')
-                .attr({ class: 'newLine' })
-                .text(testlist.lines.line0[0]); 
-            
-            $lineInput = $('   <input/>   ').attr({
-                id: 'input',
-                name: 'input',
-                placeholder: 'Indsæt ord'
+        totalLineCount = testlist.lines.length; 
+        count = 0; 
+        
+        nextLine(count);    
+        
+    }
+    
+    
+    function nextLine(count) {
+        
+         // indsætter det første linjestykke
+        $lineP1 = $('<nobr/>')
+            .attr({ class: 'newLine' })
+            .text(testlist.lines[count][0]); 
+
+        $lineInput = $('<input/>').attr({
+            id: 'input' + count,
+            name: 'input',
+            placeholder: 'Indsæt ord'
+        }); 
+
+
+        $lineP2 = $('<nobr/>')
+            .attr({ class: 'newLine' })
+            .text(testlist.lines[count][2]);
+
+
+        $audioControl = $('<audio controls></audio>')
+            .append('</source>')
+            .attr({
+                id: 'soundSrc' + count,
+                src: testlist.files[count]
             }); 
+
+        $label = $('<label/>').text(testlist.files[count]); 
+
+
+        // tilføjer alle elementer til siden 
+        $('#main')
+            .append($lineP1)
+            .append($lineInput)
+            .append($lineP2)
+            .append($audioControl)
+            .append($label)
+            .append('<br>'); 
+
+
+        
+        $('#input' + count).one('keyup', function() {
+            $nextButton = $('<button/>').attr({ id: 'button' + count });
+
+            if((count+1) < totalLineCount) {
+                $nextButton
+                    .click(function() { next(); })
+                    .text('Næste');
+            } else {
+                $nextButton
+                    .click(function() { save(); })
+                    .text('Gem/Videre');
+            }
+            
+            $('#bottom').append($nextButton);  
+        }); 
+    }
+    
+    
         
         
-            $lineP2 = $('   <nobr/>')
-                .attr({ class: 'newLine' })
-                .text(testlist.lines.line0[2]);
-            
-            // indsætter et input felt, hvor kursisten kan indtaste svar
-            /*$lineInputP = $('<input/>').attr({
-                id: 'lineInput' + i,
-                type: 'text',
-                placeholder: 'Indsæt et ord her'
-            }); 
-            
-            // andet linjestykke
-            $line2P = $('<nobr/>')
-                .attr({ 
-                    class: 'newline',
-                    id: 'newLine' + i 
-                })
-                .text(dataFromParent[2][i]); */
-            
-            
-            // virker ikke med localstorage
-            /*$audioControl = $('<audio controls></audio>')
-                .append('</source>')
-                .attr({
-                    id: 'soundSrc' + i,
-                    src: dataFromParent[3][i]
-                });*/ 
-            
-            
-            // tilføjer alle elementer til siden 
-            $('#main')
-                .append($lineP1)
-                .append($lineInput)
-                .append($lineP2); 
-                /*.append($lineInputP)
-                .append($line2P)
-                //.append($audioControl)
-                .append('<br>'); */
-            
-          
-            
+    function next() {
+        count++;
+
+        nextLine(count);  
+
+        $('#bottom').empty();  
+    }
         
+        
+    function save() {
+        console.log('save'); 
     }
     
     

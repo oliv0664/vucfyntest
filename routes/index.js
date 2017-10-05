@@ -41,7 +41,7 @@ router.get('/output', function(req, res) {
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     collection.find({'initials' : initials}, {}, function(e, docs) {
         var docLenght = docs.length; 
-        console.log("first");
+        console.log("second");
         console.log(""); 
         console.log(docs);
         console.log("");
@@ -64,7 +64,7 @@ router.post('/addname', function(req, res) {
     
     // Set our internal DB variable
     var db = req.db;
-    console.log("second"); 
+    console.log("first"); 
     // Get our form values. These rely on the "name" attributes
     initials = req.body.initials; 
     console.log(initials); 
@@ -72,8 +72,12 @@ router.post('/addname', function(req, res) {
     var title = req.body.testTitle;
     console.log(title);
     
-    var lines = req.body.lines; 
+    var lines = req.body.lines;
     console.log(lines); 
+    
+    var files = req.body.files; 
+    console.log(files); 
+    
     
     
     /*var textArray = [];
@@ -89,7 +93,8 @@ router.post('/addname', function(req, res) {
     collection.insert({
         "initials" : initials,
         "title" : title,
-        "lines" : lines
+        "lines" : lines,
+        "files" : files
     }, function (err, doc) {
         if (err) {
             // If it failed, return error

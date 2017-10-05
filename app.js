@@ -4,10 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var Grid = require('gridfs-stream'); 
 
 var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('localhost:27017/vucfyntest');
+var gfs = Grid(db, mongo); 
 
 var index = require('./routes/index');
 var users = require('./routes/users');
