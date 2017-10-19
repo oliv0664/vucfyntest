@@ -6,14 +6,16 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
-    "body-parser": "~1.17.1",
+    "body-parser": "^1.18.2",
     "cookie-parser": "~1.4.3",
-    "debug": "~2.6.3",
-    "express": "~4.15.2",
+    "debug": "^3.1.0",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "gridfs-stream": "^1.1.1",
     "jade": "~1.11.0",
     "mongodb": "^2.2.25",
-    "monk": "^4.0.0",
-    "morgan": "~1.8.1",
+    "monk": "^6.0.5",
+    "morgan": "^1.9.0",
     "serve-favicon": "~2.4.2"
   }
 }
