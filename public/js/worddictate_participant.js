@@ -20,10 +20,11 @@
         
          // indsætter det første linjestykke
         $lineP1 = $('<nobr/>')
-            .attr({ class: 'newLine' })
+            .attr({ class: 'h2size' })
             .text(testlist.lines[count][0]); 
 
         $lineInput = $('<input/>').attr({
+            class: 'h2size',
             id: 'input' + count,
             name: 'userinput',
             placeholder: 'Indsæt ord'
@@ -31,7 +32,7 @@
 
 
         $lineP2 = $('<nobr/>')
-            .attr({ class: 'newLine' })
+            .attr({ class: 'h2size' })
             .text(testlist.lines[count][2]);
 
 
@@ -48,6 +49,7 @@
         $audioFile = $('<audio/>').attr({ src: '../images/aaaah.wav' }); 
          
         $audioControl = $('<input/>').attr({
+            class: 'h2size',
             type: 'button',
             id: 'audioControl' + count,
             value: 'Afspil'
@@ -65,7 +67,7 @@
         
 
         // tilføjer alle elementer til siden 
-        $('#main')
+        $('#subsection')
             .append($lineP1)
             .append($lineInput)
             .append($lineP2)
@@ -76,20 +78,25 @@
 
         
         $('#input' + count).one('keyup', function() {
-            $nextButton = $('<button/>').attr({ id: 'button' + count });
+            $nextButton = $('<button/>').attr({ 
+                class: 'h2size',
+                id: 'button' + count 
+            });
 
             if((count+1) < totalLineCount) {
                 $nextButton
                     .click(function() { next(); })
                     .text('Næste');
+                $('#subsubsection').append($nextButton); 
             } else {
-                $nextButton = $('<input/>').attr({
+                $submit = $('<input/>').attr({
                     type: 'submit',
                     value: 'Gem/Videre'
                 }); 
+                $('#bottom').append($submit); 
             }
             
-            $('#bottom').append($nextButton);  
+             
         }); 
     }
     
@@ -107,7 +114,7 @@
 
         nextLine(count);  
 
-        $('#bottom').empty();
+        $('#subsubsection').empty();
     }
     
     

@@ -19,16 +19,17 @@
         $newLine = $('<div/>')
             .attr({ 
                 id: 'line' + lineCount,
-                class: 'newLine'
+                class: 'h2size'
             })
             .text((lineCount + 1) + '. ');
         
         // tilføjer linjen til body
-        $('#body').append($newLine);
+        $('#subsection').append($newLine);
         
         
         // tilføj en lydfil
         $audioFile = $('<input/>').attr({
+            class: 'h2size',
             type: 'file',
             id: 'file' + lineCount,
             name: 'files[]', //[file]
@@ -53,6 +54,7 @@
         // tilføjer en slet knap
         if(lineCount == 0) {
             $removeLineButton = $('<input/>').attr({
+                class: 'h2size',
                 id: 'removeLineButton',
                 type: 'button',
                 value: 'Fjern linje'
@@ -61,7 +63,7 @@
             });
 
             
-            $('#bottom').append($removeLineButton);
+            $('#subsubsection').append($removeLineButton);
         }
         
         lineCount++;

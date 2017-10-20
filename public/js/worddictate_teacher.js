@@ -22,20 +22,21 @@
         $newLine = $('<div/>')
             .attr({ 
                 id: 'line' + lineCount,
-                class: 'newLine'
+                class: 'h2size'
             })
             .text((lineCount + 1) + '. ');
         
         // tilføjer linjen til body
-        $('#body').append($newLine);
+        $('#subsection').append($newLine);
         
         
         
         //størrelsen på tekst input felterne 
-        var size = 30; 
+        var size = 25; 
         
         // tilføj et tekststykke
         $newLineText1 = $('<input/>').attr({
+            class: 'h2size',
             id: 'lineText1' + lineCount,
             type: 'text',
             name: 'lines['+lineCount+'][]',  //[lineText1]
@@ -45,16 +46,18 @@
         
         
         $newLineTextAnswer = $('<input/>').attr({
+            class: 'h2size',
             id: 'lineTextAnswer' + lineCount,
             type: 'text',
             name: 'lines['+lineCount+'][]', //[lineTextAnswer]
             placeholder: 'Indsæt det korrekte ord',
-            size: (size/2)
+            size: (size-6)
         });
         
         
         // tilføj endnu et tekststykke
         $newLineText2 = $('<input/>').attr({
+            class: 'h2size',
             id: 'lineText2' + lineCount,
             type: 'text',
             name: 'lines['+lineCount+'][]', //[lineText2]
@@ -66,6 +69,7 @@
         // tilføj en lydfil
         $audioFile = $('<input/>').attr({
             type: 'file',
+            class: 'h2size',
             id: 'file' + lineCount,
             name: 'files[]', //[file]
             accept: 'audio/*',
@@ -97,6 +101,7 @@
         // tilføjer en slet knap
         if(lineCount == 0) {
             $removeLineButton = $('<input/>').attr({
+                class: 'h2size',
                 id: 'removeLineButton',
                 type: 'button',
                 value: 'Fjern linje'
@@ -105,7 +110,7 @@
             });
 
 
-            $('#bottom').append($removeLineButton);
+            $('#subsubsection').append($removeLineButton);
             
         }
         

@@ -15,6 +15,7 @@
     function nextLine(count) {
         
         $lineInput = $('<input/>').attr({
+            class: 'h2size',
             id: 'input' + count,
             name: 'userinput',
             placeholder: 'Indsæt ord'
@@ -34,6 +35,7 @@
         $audioFile = $('<audio/>').attr({ src: '../images/aaaah.wav' }); 
          
         $audioControl = $('<input/>').attr({
+            class: 'h2size',
             type: 'button',
             id: 'audioControl' + count,
             value: 'Afspil'
@@ -51,7 +53,7 @@
         
         
         // tilføjer alle elementer til siden 
-        $('#main')
+        $('#subsection')
             .append($lineInput)
             .append($audioControl)
             .append('<br>'); 
@@ -64,14 +66,14 @@
                 $nextButton
                     .click(function() { next(); })
                     .text('Næste');
+                $('#subsubsection').append($nextButton);  
             } else {
-                $nextButton = $('<input/>').attr({
+                $submit = $('<input/>').attr({
                     type: 'submit',
                     value: 'Gem/Videre'
                 }); 
+                $('#bottom').append($submit); 
             }
-            
-            $('#bottom').append($nextButton);  
         }); 
     }
     
@@ -84,6 +86,6 @@
 
         nextLine(count);  
 
-        $('#bottom').empty();
+        $('#subsubsection').empty();
     }
 }

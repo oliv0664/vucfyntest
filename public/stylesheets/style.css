@@ -1,8 +1,93 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+    /* styling af alt */
+    * {
+        font-family: arial black; 
+    }
+    
+    /* styling af page_header */
+    /* skal bruge en div med to h3 i */
+    .header {
+        display: inline-block; 
+        margin-top: 50px; 
+    }
 
-a {
-  color: #00B7FF;
-}
+    #head_1 {
+        margin-left: 50px; 
+    }
+
+    #head_2 {
+        vertical-align: top; 
+        margin-left: 20px; 
+    }
+
+    #head_3 {
+        float: right; 
+        margin-right: 50px; 
+    }
+
+
+
+    /* styling og positionering af body og subsection*/
+    #section, #subsection, #subsubsection {
+        position: relative; 
+        left: 50px; 
+    }
+
+    #section {
+        top: 100px; 
+    }
+
+    #h1_2 {
+        margin-top: 50px;  
+    }
+
+    #subsection { 
+        top: 200px; 
+    }
+
+    #subsubsection {
+        top: 225px; 
+    }
+
+
+
+    /* styling af main section input*/
+    .h1size { 
+        font-size: 25px; 
+        height: 1.5em;
+        font-weight: bold; 
+    }
+
+    .title {
+        color: #019732; 
+    }
+
+
+    /* styling af subsection input*/
+    .h2size {
+        font-size: 20px; 
+        height: 1.5em; 
+        font-weight: bold; 
+        margin-bottom: 5px; 
+    }
+
+    .inline {
+        display: inline-block;
+    }
+
+    .fullwidth {
+        width: 100%; 
+    }
+
+
+    /* styling af bottom */ 
+    #bottom {
+        position: relative; 
+        top: 350px; 
+        left: 50px; 
+        margin-bottom: 50px; 
+    }
+
+    input[type=submit] {
+        font-size: 25px; 
+        height: 1.5em; 
+    }
