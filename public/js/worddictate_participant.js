@@ -3,6 +3,9 @@
     var count; 
     var testlist; 
     var audioCount = 0; 
+    var d = new Date(); 
+    var startTime;
+    var checkpoint; 
     
     function initializeTest(testlist) {
         
@@ -11,8 +14,15 @@
         totalLineCount = testlist.lines.length; 
         count = 0; 
         
-        nextLine(count);    
-        
+        $('#start').click(function() {
+            startTime = d.getTime();
+            checkpoint = startTime;
+            console.log(startTime);
+            
+            nextLine(count); 
+            this.remove(); 
+        }); 
+           
     }
     
     
@@ -65,6 +75,12 @@
             //playAudio($audioFile);  
         });
         
+        $timestamp = $('<input/>').attr({
+            type: 'hidden',
+            id: 'timestamp' + count,
+            name: 'timestamp'
+        }); 
+        
 
         // tilføjer alle elementer til siden 
         $('#subsection')
@@ -73,6 +89,7 @@
             .append($lineP2)
             .append($audioControl)
 //            .append($label)
+            .append($timestamp)
             .append('<br>'); 
 
 
@@ -88,12 +105,12 @@
                     .click(function() { next(); })
                     .text('Næste');
                 $('#subsubsection').append($nextButton); 
-            } else {
+            } else { 
                 $submit = $('<input/>').attr({
                     type: 'submit',
                     value: 'Gem/Videre'
                 }); 
-                $('#bottom').append($submit); 
+                $('#bottom').append($submit);
             }
             
              
@@ -107,6 +124,8 @@
         
         
     function next() {
+        setTime();  
+        
         $('#audioControl' + count).remove(); 
         audioCount = 0; 
         
@@ -118,6 +137,13 @@
     }
     
     
+    function setTime() {
+        var d = new Date(); 
+        var timestamp = (d.getTime() - checkpoint);  
+        console.log(timestamp); 
+        $('#timestamp' + count).val(timestamp); 
+        checkpoint = d.getTime();
+    }
     
     // kan måske bruges når der skal tjekkes svar !!
     

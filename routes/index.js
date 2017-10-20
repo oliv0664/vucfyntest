@@ -198,12 +198,14 @@ router.get('/worddictate_participant', function(req, res) {
 router.post('/worddictate_addanswer', function(req, res) {
     var db = req.db; 
     
-    var userinput = req.body.userinput; 
+    var userinput = req.body.userinput;
+    var timestamp = req.body.timestamp; 
     
     var collection = db.get('worddictate_answer'); 
     
     collection.insert({
-        "participant_answer" : userinput
+        "participant_answer" : userinput,
+        "timestamp" : timestamp
     }, function(err, doc) {
         if(err) {
             res.send("There was a problem adding the information to the database.");
