@@ -6,13 +6,47 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+        
+
+        /*      HER ER ALLE TEACHER SIDERNE       */
 
 
-//henter hjemmesiden 'startpage' 
-router.get('/startpage', function(req, res) {
-    res.render('startpage', { title: 'Startside' });
+        /* ALLE FUNKTIONER DER ER TILKNYTTET MAIN */
+
+//henter hjemmesiden 'main' 
+router.get('/main', function(req, res) {
+    res.render('main', { title: 'Main' });
 });
 
+
+var initials; 
+router.post('/main_addinfo', function(req, res) {
+    // Set our internal DB variable
+    var db = req.db;
+    // Get our form values. These rely on the "name" attributes
+    initials = req.body.initials;  
+    
+    // Set our collection
+    var collection = db.get('owners');
+
+    // Submit to the DB
+    collection.insert({
+        "initials" : initials
+    }, function (err, doc) {
+        if (err) {
+            // If it failed, return error
+            res.send("There was a problem adding the information to the database.");
+        }
+        else {
+            // And forward to success page
+            res.redirect("worddictate_teacher");
+        }
+    });
+});
+
+
+
+        /* ALLE FUNKTIONER DER ER TILKNYTTET WORDDICTATE */
 
 //henter hjemmesiden 'worddictate_teacher' 
 router.get('/worddictate_teacher', function(req, res) {
@@ -20,43 +54,92 @@ router.get('/worddictate_teacher', function(req, res) {
 });
 
 
-//henter 'worddictate_participant' og finder data i databasen, svarende til de indtastede initialer
-router.get('/worddictate_participant', function(req, res) {
-    var db = req.db; 
-    var collection = db.get('worddictate'); 
+router.post('/worddictate_addinfo', function(req, res) {
+    // Set our internal DB variable
+    var db = req.db;
+    // Get our form values. These rely on the "name" attributes 
+    var lines = req.body.lines;
+    var files = req.body.files; 
     
-    //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
-    //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    collection.find({'initials' : initials}, {}, function(e, docs) {
-        var docLenght = docs.length; 
-        res.render('worddictate_participant', {
-            "testlist" : docs[docLenght-1],
-            title: 'worddictate_participant'
-        });
-    });
-}); 
+    // Set our collection
+    var collection = db.get('worddictate');
 
+    // Submit to the DB
+    collection.insert({
+        "initials" : initials,
+        "lines" : lines,
+        "files" : files
+    }, function (err, doc) {
+        if (err) {
+            // If it failed, return error
+            res.send("There was a problem adding the information to the database.");
+        }
+        else {
+            // And forward to success page
+            res.redirect("nonsense_teacher");
+        }
+    });
+});
+
+
+
+    /* ALLE FUNKTIONER DER ER TILKNYTTET NONSENSE*/
 
 router.get('/nonsense_teacher', function(req, res) {
     res.render('nonsense_teacher', { title: 'Vrøvleord' });
 });
 
 
-//henter 'output' og finder data i databasen, svarende til de indtastede initialer
-router.get('/nonsense_participant', function(req, res) {
+router.post('/nonsense_addinfo', function(req, res) {
     var db = req.db; 
+    
+    var files = req.body.files; 
+    
     var collection = db.get('nonsense'); 
     
-    //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
-    //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    collection.find({'initials' : initials}, {}, function(e, docs) {
-        var docLenght = docs.length; 
-        res.render('nonsense_participant', {
-            "testlist" : docs[docLenght-1],
-            title: 'nonsense_participant'
-        });
-    });
-}); 
+    collection.insert({
+        "initials" : initials,
+        "files" : files
+    }, function(err, doc) {
+        if(err) {
+            res.send("There was a problem adding the information to the database.");
+        } else {
+            res.redirect("nextpage");
+        }
+    }); 
+});
+
+
+
+    /* NEXTPAGE ER EN DUMMY DER SENDER DIG VIDERE TIL KURSISTSIDEN*/
+
+router.get('/nextpage', function(req, res) {
+    res.render('nextpage', { title: 'Nextpage' });
+});
+
+
+router.post('/nextpage', function(req, res) {
+    res.redirect("startpage");
+});
+
+
+
+
+
+
+
+
+
+
+        /*      HER ER ALLE PARTICIPANT SIDERNE     */
+
+
+        /* ALLE FUNKTIONER DER ER TILKNYTTET STARTPAGE */
+
+//henter hjemmesiden 'startpage' 
+router.get('/startpage', function(req, res) {
+    res.render('startpage', { title: 'Startside' });
+});
 
 
 router.post('/startpage_addinfo', function(req, res) {
@@ -86,46 +169,30 @@ router.post('/startpage_addinfo', function(req, res) {
         if(err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect("worddictate_teacher"); 
+            res.redirect("worddictate_participant"); 
         }
     });
 });
 
 
 
-var initials; 
+        /* ALLE FUNKTIONER DER ER TILKNYTTET WORDDICTATE */
 
-router.post('/worddictate_addinfo', function(req, res) {
-
+//henter 'worddictate_participant' og finder data i databasen, svarende til de indtastede initialer
+router.get('/worddictate_participant', function(req, res) {
+    var db = req.db; 
+    var collection = db.get('worddictate'); 
     
-    // Set our internal DB variable
-    var db = req.db;
-    // Get our form values. These rely on the "name" attributes
-    initials = req.body.initials; 
-    var title = req.body.testTitle;
-    var lines = req.body.lines;
-    var files = req.body.files; 
-    
-    // Set our collection
-    var collection = db.get('worddictate');
-
-    // Submit to the DB
-    collection.insert({
-        "initials" : initials,
-        "title" : title,
-        "lines" : lines,
-        "files" : files
-    }, function (err, doc) {
-        if (err) {
-            // If it failed, return error
-            res.send("There was a problem adding the information to the database.");
-        }
-        else {
-            // And forward to success page
-            res.redirect("worddictate_participant");
-        }
+    //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
+    //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
+    collection.find({'initials' : initials}, {}, function(e, docs) {
+        var docLenght = docs.length; 
+        res.render('worddictate_participant', {
+            "testlist" : docs[docLenght-1],
+            title: 'worddictate_participant'
+        });
     });
-});
+}); 
 
 
 router.post('/worddictate_addanswer', function(req, res) {
@@ -141,31 +208,30 @@ router.post('/worddictate_addanswer', function(req, res) {
         if(err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect("nonsense_teacher");
+            res.redirect("nonsense_participant");
         }
     }); 
 }); 
 
 
-router.post('/nonsense_addinfo', function(req, res) {
+
+    /* ALLE FUNKTIONER DER ER TILKNYTTET NONSENSE */
+
+//henter 'output' og finder data i databasen, svarende til de indtastede initialer
+router.get('/nonsense_participant', function(req, res) {
     var db = req.db; 
-    
-    initials = req.body.initials; 
-    var files = req.body.files; 
-    
     var collection = db.get('nonsense'); 
     
-    collection.insert({
-        "initials" : initials,
-        "files" : files
-    }, function(err, doc) {
-        if(err) {
-            res.send("There was a problem adding the information to the database.");
-        } else {
-            res.redirect("nonsense_participant");
-        }
-    }); 
-});
+    //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
+    //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
+    collection.find({'initials' : initials}, {}, function(e, docs) {
+        var docLenght = docs.length; 
+        res.render('nonsense_participant', {
+            "testlist" : docs[docLenght-1],
+            title: 'nonsense_participant'
+        });
+    });
+}); 
 
 
 router.post('/nonsense_addanswer', function(req, res) {
@@ -181,10 +247,13 @@ router.post('/nonsense_addanswer', function(req, res) {
         if(err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect("nextpage");
+            res.redirect("finalpage");
         }
     }); 
 }); 
+
+
+
 
 
 module.exports = router;

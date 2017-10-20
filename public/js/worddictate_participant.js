@@ -8,8 +8,6 @@
         
         this.testlist = testlist; 
         
-        $('#head').append('<h3>' + testlist.title + '</h3>');
-        
         totalLineCount = testlist.lines.length; 
         count = 0; 
         
