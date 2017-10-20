@@ -14,13 +14,13 @@ router.get('/startpage', function(req, res) {
 });
 
 
-//henter hjemmesiden 'main' 
+//henter hjemmesiden 'worddictate_teacher' 
 router.get('/worddictate_teacher', function(req, res) {
     res.render('worddictate_teacher', { title: 'Orddiktat' });
 });
 
 
-//henter 'output' og finder data i databasen, svarende til de indtastede initialer
+//henter 'worddictate_participant' og finder data i databasen, svarende til de indtastede initialer
 router.get('/worddictate_participant', function(req, res) {
     var db = req.db; 
     var collection = db.get('worddictate'); 
@@ -36,6 +36,27 @@ router.get('/worddictate_participant', function(req, res) {
     });
 }); 
 
+
+router.get('/nonsense_teacher', function(req, res) {
+    res.render('nonsense_teacher', { title: 'Vrøvleord' });
+});
+
+
+//henter 'output' og finder data i databasen, svarende til de indtastede initialer
+router.get('/nonsense_participant', function(req, res) {
+    var db = req.db; 
+    var collection = db.get('nonsense'); 
+    
+    //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
+    //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
+    collection.find({'initials' : initials}, {}, function(e, docs) {
+        var docLenght = docs.length; 
+        res.render('nonsense_participant', {
+            "testlist" : docs[docLenght-1],
+            title: 'nonsense_participant'
+        });
+    });
+}); 
 
 
 router.post('/startpage_addinfo', function(req, res) {
@@ -112,7 +133,47 @@ router.post('/worddictate_addanswer', function(req, res) {
     
     var userinput = req.body.userinput; 
     
-    var collection = db.get('worddictate_participant_answer'); 
+    var collection = db.get('worddictate_answer'); 
+    
+    collection.insert({
+        "participant_answer" : userinput
+    }, function(err, doc) {
+        if(err) {
+            res.send("There was a problem adding the information to the database.");
+        } else {
+            res.redirect("nonsense_teacher");
+        }
+    }); 
+}); 
+
+
+router.post('/nonsense_addinfo', function(req, res) {
+    var db = req.db; 
+    
+    initials = req.body.initials; 
+    var files = req.body.files; 
+    
+    var collection = db.get('nonsense'); 
+    
+    collection.insert({
+        "initials" : initials,
+        "files" : files
+    }, function(err, doc) {
+        if(err) {
+            res.send("There was a problem adding the information to the database.");
+        } else {
+            res.redirect("nonsense_participant");
+        }
+    }); 
+});
+
+
+router.post('/nonsense_addanswer', function(req, res) {
+    var db = req.db; 
+    
+    var userinput = req.body.userinput; 
+    
+    var collection = db.get('nonsense_answer'); 
     
     collection.insert({
         "participant_answer" : userinput

@@ -1,45 +1,8 @@
-{
-    
-    
-    
-    /*var testName = prompt('Skriv dine initialer'); 
-    if(testName.length > 3 || testName.length < 3) {
-        prompt('Dine initialer skal være 3 bogstaver!'); 
-    }*/
-    
-    // spørger brugeren om deres initialer
-    // VIGTIGT - skal ændres når database skal implementeres, så krusisten ikke skal indtaste initialer
-    /*var initialsOutput = prompt('Skriv dine initialer'); 
-    initialsOutput = initialsOutput.replace(/\s+/g, ''); 
-    
-    while(localStorage.getItem(initialsOutput) === null) {
-        alert('Der findes ingen test med disse initialer'); 
-        initialsOutput = prompt('Skriv dine initialer'); 
-    } 
-    
-    
-    // henter data ud fra initialer 
-    var dataFromParent = JSON.parse(localStorage.getItem(initialsOutput));
-    
-    
-    // dataFrom Parent ==> array 
-    // dataFromParent[0] ==> lineText1Array
-    // dataFromParent[1] ==> lineTextExampleArray
-    // dataFromParent[2] ==> lineText2Array
-    // dataFromParent[3] ==> audioSrcArray   //UPDATE - virker ikke med localstorage
-    // dataFromParent[3] ==> title //UPDATE - kun så længe audio ikke virker
-    
-    var numberOfQuestions = dataFromParent[0].length; 
-    */
-    //function init() {
-    
-    // indsætter alle elementer fra databasen 
-    
-    
+{   
     var totalLineCount; 
     var count; 
     var testlist; 
-    var audioCount = 0;
+    var audioCount = 0; 
     
     function initializeTest(testlist) {
         
@@ -83,6 +46,7 @@
 
         $label = $('<label/>').text(testlist.files[count]);*/ 
 
+        
         $audioFile = $('<audio/>').attr({ src: '../images/aaaah.wav' }); 
          
         $audioControl = $('<input/>').attr({
@@ -90,7 +54,15 @@
             id: 'audioControl' + count,
             value: 'Afspil'
         }).click(function() {
-            playAudio($audioFile, count);  
+            $audioFile[0].play();
+            
+            if(audioCount > 0) { 
+                this.remove(); 
+                audioCount = 0; 
+            } else { 
+                audioCount++;
+            }
+            //playAudio($audioFile);  
         });
         
 
@@ -124,68 +96,35 @@
     }
     
     
-    function playAudio(audioFile, id) {
-        console.log(audioFile); 
-        audioCount++; 
-        
-        if(audioCount < 2) { 
-            audioFile[0].play();
-        } else {
-            audioFile[0].play();
-            $('#audioControl' + id).remove(); 
-        }
-    }
+    /*function playAudio(audioFile) {
+        audioFile[0].play();
+    }*/
         
         
     function next() {
+        $('#audioControl' + count).remove(); 
+        audioCount = 0; 
+        
         count++;
 
         nextLine(count);  
 
-        $('#bottom').empty();  
+        $('#bottom').empty();
     }
-        
-        
-    function save() {
-        console.log('save'); 
-    }
+    
+    
+    
+    // kan måske bruges når der skal tjekkes svar !!
     
     
    /* $(function() {
         
-        
-        
-        
-        console.log("something"); 
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    //}
-
-    
-    
-    
-    
-    
         // når der klikkes, tjekkes svarene 
         $('#submit').click(function() {
             checkAnswer();     
         });
         
     });
-    
-    
-    
-    
     
     var lineAnswerArray = []; 
     
