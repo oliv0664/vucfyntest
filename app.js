@@ -7,7 +7,9 @@ var bodyParser = require('body-parser');
 
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/vucfyntest');
+//var url = 'localhost:27017/vucfyntest'
+var url = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb'
+var db = monk(url);
 
 var Grid = require('gridfs-stream'); 
 var fs = require('fs'); 
