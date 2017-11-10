@@ -14,42 +14,43 @@ router.get('/filepicker', function (req, res, next) {
     });
 });
 
-var initials = "oni";
+//var initials = "oni";
 /*      HER ER ALLE TEACHER SIDERNE       */
 
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET MAIN */
 
 //henter hjemmesiden 'main' 
-/*router.get('/main', function(req, res) {
-    res.render('main', { title: 'Main' });
+router.get('/main', function (req, res) {
+    res.render('main', {
+        title: 'Main'
+    });
 });
 
 
-var initials; 
-router.post('/main_addinfo', function(req, res) {
+var initials;
+router.post('/index_addinfo', function (req, res) {
     // Set our internal DB variable
     var db = req.db;
     // Get our form values. These rely on the "name" attributes
-    initials = req.body.initials;  
-    
+    initials = req.body.initials;
+
     // Set our collection
     var collection = db.get('owners');
 
     // Submit to the DB
     collection.insert({
-        "initials" : initials
+        "initials": initials
     }, function (err, doc) {
         if (err) {
             // If it failed, return error
             res.send("There was a problem adding the information to the database.");
-        }
-        else {
+        } else {
             // And forward to success page
             res.redirect("worddictate_teacher");
         }
     });
-});*/
+});
 
 
 

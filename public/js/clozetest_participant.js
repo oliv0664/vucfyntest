@@ -23,7 +23,7 @@
             this.remove();
         });
 
-
+        //lydfil til at afspille opgavebeskrivelsen
         $audioFile = $('<audio/>').attr({
             src: '../images/aaaah.wav'
         });
