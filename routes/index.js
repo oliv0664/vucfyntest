@@ -217,8 +217,7 @@ router.post('/interpret_addinfo', function (req, res) {
             res.send("There was a problem adding the information to the database.");
         } else {
             // And forward to success page
-            res.redirect("interpret_participant"); >>>
-            >>> > 371 c2eb96badc7172b1e35946e0600272916e0dc
+            res.redirect("interpret_participant");
         }
     });
 });
