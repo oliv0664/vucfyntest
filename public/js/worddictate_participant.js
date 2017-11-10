@@ -140,9 +140,9 @@
                 $('#subsubsection').append($nextButton);
             } else {
                 $submit = $('<input/>').attr({
-                    type: 'submit',
+                    type: 'button',
                     value: 'Gem/Videre'
-                });
+                }).click(submitForm());
                 $('#bottom').append($submit);
             }
 
@@ -167,6 +167,13 @@
         nextLine(count);
 
         $('#subsubsection').empty();
+    }
+
+
+    function submitForm() {
+        setTime();
+
+        $('#form').submit();
     }
 
 
