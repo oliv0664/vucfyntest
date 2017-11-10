@@ -1,11 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
+var initials;
+var testModules = [];
 /* GET home page. */
 router.get('/', function (req, res, next) {
     res.render('index', {
         title: 'Express'
     });
+    testModules = [];
 });
 
 router.get('/filepicker', function (req, res, next) {
@@ -28,12 +31,24 @@ router.get('/main', function (req, res) {
 });
 
 
-var initials;
+
 router.post('/index_addinfo', function (req, res) {
     // Set our internal DB variable
     var db = req.db;
+    // the array MUST be emptied so that no duplicates are psuhed in
+    testModules = [];
     // Get our form values. These rely on the "name" attributes
-    initials = req.body.initials;
+    var data = req.body;
+    // get the teachers initials and remove them from the data{}
+    initials = data.initials;
+    delete data.initials;
+    // each selected .test_options represents a selected module 
+
+    for (module in data) {
+        testModules.push(module);
+    }
+    console.log('the teacher: ' + initials + ' has chosen the ' + testModules.length + ' following modules: ' + testModules);
+
 
     // Set our collection
     var collection = db.get('owners');
@@ -47,7 +62,9 @@ router.post('/index_addinfo', function (req, res) {
             res.send("There was a problem adding the information to the database.");
         } else {
             // And forward to success page
-            res.redirect("worddictate_teacher");
+            res.redirect(testModules[0]);
+            testModules.shift();
+            console.log('next module should be ' + testModules[0]);
         }
     });
 });
@@ -73,7 +90,6 @@ router.post('/worddictate_addinfo', function (req, res) {
 
     // Set our collection
     var collection = db.get('worddictate');
-
     // Submit to the DB
     collection.insert({
         "initials": initials,
@@ -85,7 +101,9 @@ router.post('/worddictate_addinfo', function (req, res) {
             res.send("There was a problem adding the information to the database.");
         } else {
             // And forward to success page
-            res.redirect("nonsense_teacher");
+            res.redirect(testModules[0]);
+            testModules.shift();
+            console.log('next module should be ' + testModules[0]);
         }
     });
 });
@@ -107,7 +125,6 @@ router.post('/nonsense_addinfo', function (req, res) {
     var files = req.body.files;
 
     var collection = db.get('nonsense');
-
     collection.insert({
         "initials": initials,
         "files": files
@@ -115,7 +132,9 @@ router.post('/nonsense_addinfo', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect("clozetest_teacher");
+            res.redirect(testModules[0]);
+            testModules.shift();
+            console.log('next module should be ' + testModules[0]);
         }
     });
 });
@@ -141,7 +160,6 @@ router.post('/clozetest_addinfo', function (req, res) {
 
     // Set our collection
     var collection = db.get('clozetest');
-
     // Submit to the DB
     collection.insert({
         "initials": initials,
@@ -153,7 +171,9 @@ router.post('/clozetest_addinfo', function (req, res) {
             res.send("There was a problem adding the information to the database.");
         } else {
             // And forward to success page
-            res.redirect("clozetest_participant");
+            res.redirect(testModules[0]);
+            testModules.shift();
+            console.log('next module should be ' + testModules[0]);
         }
     });
 });

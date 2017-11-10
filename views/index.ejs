@@ -2,7 +2,9 @@
 
 <head>
     <script src="/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/js/index.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+
 </head>
 
 <body>
@@ -14,7 +16,7 @@
     </div>
 
 
-    <form id="form" method="post" action="/index_addinfo">
+    <form id="teacher_data" method="post" action="/index_addinfo" onsubmit="console.log('derpderp')">
 
         <div id="section">
             <h1 class="title" id="h1_1">NIVEAUAFKLARINGSTEST</h1>
@@ -33,30 +35,30 @@
                 </ol>
             </h2>
             <br/>
-            <input class="h2size" class="inline" type="text" id="initials" name="initials" placeholder="Indtast initialer">
+            <input class="h2size" class="inline" type="text" id="initials" name="initials" placeholder="Indtast initialer" required>
         </div>
 
         <div id="bottom">
             <table>
                 <tr>
                     <td>Orddiktat: </td>
-                    <td><input class="test_options" type="checkbox" value="worddictate_teacher"></td>
+                    <td><input class="test_options" type="checkbox" name="worddictate_teacher"></td>
                 </tr>
                 <tr>
                     <td>Vrøvlediktat: </td>
-                    <td><input class="test_options" type="checkbox" value="nonsense_teacher"></td>
+                    <td><input class="test_options" type="checkbox" name="nonsense_teacher"></td>
                 </tr>
                 <tr>
                     <td>Clozetest: </td>
-                    <td><input class="test_options" type="checkbox" value="cloze_teacher"></td>
+                    <td><input class="test_options" type="checkbox" name="clozetest_teacher"></td>
                 </tr>
                 <tr>
                     <td>Tekstforståelse: </td>
-                    <td><input class="test_options" type="checkbox" value="interpret_teacher"></td>
+                    <td><input class="test_options" type="checkbox" name="interpret_teacher"></td>
                 </tr>
                 <tr>
                     <td>Brev: </td>
-                    <td><input class="test_options" type="checkbox" value="letter_teacher"></td>
+                    <td><input class="test_options" type="checkbox" name="letter_teacher"></td>
                 </tr>
 
             </table>
