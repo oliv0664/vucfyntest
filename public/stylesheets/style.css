@@ -1,73 +1,72 @@
     /* styling af alt */
+
     * {
-        font-family: arial black; 
+        font-family: arial black;
     }
-    
+
     /* styling af page_header */
+
     /* skal bruge en div med to h3 i */
+
     .header {
-        display: inline-block; 
-        margin-top: 50px; 
+        display: inline-block;
+        margin-top: 4%;
     }
 
     #head_1 {
-        margin-left: 50px; 
+        margin-left: 4%;
     }
 
     #head_2 {
-        vertical-align: top; 
-        margin-left: 20px; 
+        vertical-align: top;
+        margin-left: 20px;
     }
 
     #head_3 {
-        float: right; 
-        margin-right: 50px; 
+        float: right;
+        margin-right: 4%;
     }
 
 
 
     /* styling og positionering af body og subsection*/
-    #section, #subsection, #subsubsection {
-        position: relative; 
-        left: 50px; 
-    }
 
-    #section {
-        top: 100px; 
-    }
+    #section,
+    #subsection,
+    #subsubsection {}
+
+    #section {}
 
     #h1_2 {
-        margin-top: 50px;  
+        margin-top: 4%;
     }
 
-    #subsection { 
-        top: 200px; 
-    }
+    #subsection {}
 
-    #subsubsection {
-        top: 225px; 
-    }
+    #subsubsection {}
 
 
 
     /* styling af main section input*/
-    .h1size { 
-        font-size: 25px; 
+
+    .h1size {
+        font-size: 25px;
         height: 1.5em;
-        font-weight: bold; 
+        font-weight: bold;
     }
 
     .title {
-        color: #019732; 
+        color: #019732;
     }
 
 
     /* styling af subsection input*/
+
     .h2size {
-        font-size: 20px; 
-        height: 1.5em; 
-        font-weight: bold; 
-        margin-bottom: 5px; 
+        font-size: 20px;
+        height: 1.5em;
+        font-weight: bold;
+        margin-bottom: 5px;
     }
 
     .inline {
@@ -75,19 +74,23 @@
     }
 
     .fullwidth {
-        width: 100%; 
+        width: 100%;
     }
 
 
-    /* styling af bottom */ 
+    /* styling af bottom */
+
     #bottom {
-        position: relative; 
-        top: 350px; 
-        left: 50px; 
-        margin-bottom: 50px; 
+        margin-bottom: 4%;
+    }
+
+    .submit {
+
+        margin-top: 5%;
+
     }
 
     input[type=submit] {
-        font-size: 25px; 
-        height: 1.5em; 
+        font-size: 25px;
+        height: 1.5em;
     }
