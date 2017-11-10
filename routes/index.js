@@ -48,6 +48,7 @@ router.post('/index_addinfo', function (req, res) {
         testModules.push(module);
     }
     console.log('the teacher: ' + initials + ' has chosen the ' + testModules.length + ' following modules: ' + testModules);
+    testModules.push('startpage');
 
 
     // Set our collection
@@ -217,7 +218,7 @@ router.post('/interpret_addinfo', function (req, res) {
             res.send("There was a problem adding the information to the database.");
         } else {
             // And forward to success page
-            res.redirect("interpret_participant");
+            res.redirect(testModules[0]);
         }
     });
 });
