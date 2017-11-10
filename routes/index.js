@@ -174,9 +174,55 @@ router.post('/clozetest_addinfo', function (req, res) {
             res.redirect(testModules[0]);
             testModules.shift();
             console.log('next module should be ' + testModules[0]);
+
         }
     });
 });
+
+
+/* ALLE FUNKTIONER DER ER TILKNYTTET INTERPRET*/
+
+router.get('/interpret_teacher', function (req, res) {
+    res.render('interpret_teacher', {
+        title: 'Tekstforståelse'
+    });
+});
+
+
+router.post('/interpret_addinfo', function (req, res) {
+    // Set our internal DB variable
+    var db = req.db;
+    // Get our form values. These rely on the "name" attributes 
+    var texts = req.body.texts;
+    var files = req.body.files;
+
+    var questions = req.body.questions;
+    var choices = req.body.choices;
+    var labels = req.body.labels;
+
+    // Set our collection
+    var collection = db.get('interpret');
+
+    // Submit to the DB
+    collection.insert({
+        "initials": initials,
+        "texts": texts,
+        "files": files,
+        "questions": questions,
+        "choices": choices,
+        "labels": labels
+    }, function (err, doc) {
+        if (err) {
+            // If it failed, return error
+            res.send("There was a problem adding the information to the database.");
+        } else {
+            // And forward to success page
+            res.redirect("interpret_participant"); >>>
+            >>> > 371 c2eb96badc7172b1e35946e0600272916e0dc
+        }
+    });
+});
+
 
 
 
@@ -373,6 +419,48 @@ router.post('/clozetest_addanswer', function (req, res) {
     });
 });
 
+
+
+/* ALLE FUNKTIONER DER ER TILKNYTTET INTERPRET */
+
+//henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
+router.get('/interpret_participant', function (req, res) {
+    var db = req.db;
+    var collection = db.get('interpret');
+
+    //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
+    //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
+    collection.find({
+        'initials': initials
+    }, {}, function (e, docs) {
+        var docLenght = docs.length;
+        res.render('interpret_participant', {
+            "testlist": docs[docLenght - 1],
+            title: 'interpret_participant'
+        });
+    });
+});
+
+
+router.post('/interpret_addanswer', function (req, res) {
+    var db = req.db;
+
+    var userinput = req.body.userinput;
+    var timestamp = req.body.timestamp;
+
+    var collection = db.get('interpret_answer');
+
+    collection.insert({
+        "participant_answer": userinput,
+        "timestamp": timestamp
+    }, function (err, doc) {
+        if (err) {
+            res.send("There was a problem adding the information to the database.");
+        } else {
+            res.redirect("finalpage");
+        }
+    });
+});
 
 
 
