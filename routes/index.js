@@ -226,6 +226,37 @@ router.post('/interpret_addinfo', function (req, res) {
 
 
 
+/* ALLE FUNKTIONER DER ER TILKNYTTET LETTER*/
+
+router.get('/letter_teacher', function (req, res) {
+    res.render('letter_teacher', {
+        title: 'Brev'
+    });
+});
+
+
+router.post('/letter_addinfo', function (req, res) {
+    var db = req.db;
+
+    var files = req.body.files;
+
+    var collection = db.get('letter');
+    collection.insert({
+        "initials": initials,
+        "files": files
+    }, function (err, doc) {
+        if (err) {
+            res.send("There was a problem adding the information to the database.");
+        } else {
+            res.redirect(testModules[0]);
+            testModules.shift();
+            console.log('next module should be ' + testModules[0]);
+        }
+    });
+});
+
+
+
 /* NEXTPAGE ER EN DUMMY DER SENDER DIG VIDERE TIL KURSISTSIDEN*/
 
 router.get('/nextpage', function (req, res) {
@@ -457,11 +488,53 @@ router.post('/interpret_addanswer', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect("finalpage");
+            res.redirect("letter_participant");
         }
     });
 });
 
+
+
+/* ALLE FUNKTIONER DER ER TILKNYTTET LETTER */
+
+//henter 'output' og finder data i databasen, svarende til de indtastede initialer
+router.get('/letter_participant', function (req, res) {
+    var db = req.db;
+    var collection = db.get('letter');
+
+    //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
+    //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
+    collection.find({
+        'initials': initials
+    }, {}, function (e, docs) {
+        var docLenght = docs.length;
+        res.render('letter_participant', {
+            "testlist": docs[docLenght - 1],
+            title: 'letter_participant'
+        });
+    });
+});
+
+
+router.post('/letter_addanswer', function (req, res) {
+    var db = req.db;
+
+    var userinput = req.body.userinput;
+    var timestamp = req.body.timestamp;
+
+    var collection = db.get('letter_answer');
+
+    collection.insert({
+        "participant_answer": userinput,
+        "timestamp": timestamp
+    }, function (err, doc) {
+        if (err) {
+            res.send("There was a problem adding the information to the database.");
+        } else {
+            res.redirect("finalpage");
+        }
+    });
+});
 
 
 
