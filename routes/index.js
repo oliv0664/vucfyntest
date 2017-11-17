@@ -21,6 +21,26 @@ router.get('/filepicker', function (req, res, next) {
 /*      HER ER ALLE TEACHER SIDERNE       */
 
 
+
+/* TEMPLATE */
+router.get('/template', function (req, res) {
+    var db = req.db;
+    var collection = db.get('letter');
+
+    //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
+    //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
+    collection.find({
+        'initials': initials
+    }, {}, function (e, docs) {
+        var docLenght = docs.length;
+        res.render('template', {
+            "testlist": docs[docLenght - 1],
+            title: 'TEMPLATE'
+        });
+    });
+});
+
+
 /* ALLE FUNKTIONER DER ER TILKNYTTET MAIN */
 
 //henter hjemmesiden 'main' 
@@ -29,7 +49,6 @@ router.get('/main', function (req, res) {
         title: 'Main'
     });
 });
-
 
 
 router.post('/index_addinfo', function (req, res) {
@@ -445,7 +464,7 @@ router.post('/clozetest_addanswer', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect("finalpage");
+            res.redirect("interpret_participant");
         }
     });
 });

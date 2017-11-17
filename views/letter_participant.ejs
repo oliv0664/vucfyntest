@@ -6,6 +6,7 @@
 
     <script src="/jquery/jquery-3.2.1.min.js"></script>
     <script src="/js/letter_participant.js"></script>
+    <script src="/js/time_handler.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
 
 
@@ -28,7 +29,10 @@
 
         <div id="subsection">
             <h2>Du skal skrive et brev. Her er ikke mulighed for at bruge stavekontrol eller formatere din tekst, du skal bare skrive.</h2>
-            <h2>Du har 15 min.</h2>
+            <div id="showTime">
+                <h2>Du har 15 min.</h2>
+                <div id="timer" class="h2size"></div>
+            </div>
             <button class="h2size" type="button" id="start">Start</button>
         </div>
 

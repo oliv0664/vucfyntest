@@ -3,10 +3,10 @@
     var count;
     var testlist;
     var audioCount = 0;
-    var d = new Date();
-    var startTime;
-    var checkpoint;
+    var endTime;
     var timer;
+    var x;
+    console.log("YEAH!");
 
     function initializeTest(testlist) {
 
@@ -14,14 +14,14 @@
 
         totalLineCount = testlist.files.length;
         count = 0;
-        timer = 900000; // 15 min. 
+        timer = 900000; // 15 min.
 
         $('#start').click(function () {
-            startTime = d.getTime();
-            checkpoint = startTime;
-            console.log(startTime);
+            setTime();
 
+            endTime = startTime + timer;
             nextLine(count);
+            x = setInterval(countdown, 1000);
             this.remove();
         });
 
@@ -49,6 +49,7 @@
         });
 
         $('#subsection').prepend($audioControl);
+
     }
 
 
@@ -86,25 +87,43 @@
 
         $submit = $('<input/>').attr({
             class: 'h2size',
+            id: 'saveButton',
             type: 'button',
             value: 'Gem'
         }).click(function () {
-            setTime();
-            addNextButton();
-            this.remove();
+            save()
         });
 
         $('#bottom').append($submit);
 
     }
 
+    function save() {
+        setCheckpoint();
+        lockTextfield();
+        addNextButton();
+        $('#saveButton').remove();
+    }
 
-    function setTime() {
-        var d = new Date();
-        var timestamp = (d.getTime() - checkpoint);
-        console.log(timestamp);
-        $('#timestamp' + count).val(timestamp);
-        checkpoint = d.getTime();
+
+    /*function setTime() {
+        var now = new Date().getTime();
+        var distance = now - checkpoint;
+        console.log(distance);
+        var minutes = Math.floor((distance / (1000 * 60)) % 60);
+        console.log(minutes);
+        var seconds = Math.floor((distance / 1000) % 60);
+        console.log(seconds);
+        $('#timestamp' + count).val(minutes + "m " + seconds + "s");
+        checkpoint = now;
+    }*/
+
+
+    function lockTextfield() {
+        $('#input' + count).attr({
+            readonly: 'readonly',
+            id: 'lockedField'
+        });
     }
 
 
@@ -115,5 +134,20 @@
         });
 
         $('#bottom').append($next);
+    }
+
+
+    function countdown() {
+        var now = new Date().getTime();
+        var distance = endTime - now;
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        $('#timer').text(minutes + ":" + seconds);
+
+        if (distance < 0) {
+            clearInterval(x);
+            $('#timer').text("Tiden er gået!");
+            save();
+        }
     }
 }
