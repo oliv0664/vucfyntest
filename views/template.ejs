@@ -1,0 +1,55 @@
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+
+    <script src="/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/js/start_handler.js"></script>
+    <script src="/js/time_handler.js"></script>
+    <script src="/js/initialize.js"></script>
+
+    <!-- script der behandler den specifikke test -->
+    <script id="test_handler"></script>
+
+    <!--    stylesheet skabelon for alle sider-->
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+
+
+</head>
+
+<body onload="initializeTest((<%=JSON.stringify(testlist)%>));">
+
+    <!--    standard header for alle sider-->
+    <div id="header">
+        <img class="header" id="head_1" src="images/VUC_logo.png" height="100">
+        <h3 class="header" id="head_2">NIVEAUAFKLARINGSTEST</h3>
+        <h3 class="header" id="head_3">VUC FYN ODENSE</h3>
+    </div>
+
+    <!-- indeholder titel for testen = statisk indhold -->
+    <div id="title_section">
+        <h1 class="title" id="h1_1">TESTTITEL</h1>
+        <div id="audio_description">LYDFIL MED BESKRIVELSE</div>
+        <h2>TESTBESKRIVELSE</h2>
+    </div>
+
+    <!-- her starter 'form' som gemmer data -->
+    <form id="form" method="post" action="/letter_addanswer">
+
+        <!-- alt det dynamiske indhold indsættes her -->
+        <div id="body_section">
+            <button class="h2size" type="button" id="start">STARTKNAP</button>
+        </div>
+
+        <!-- en ekstra section hvis det behøves til en test -->
+        <div id="subsection"></div>
+
+        <!-- her indsættes 'Gem'/'Næste'/'Videre' knapper -->
+        <div id="bottom"></div>
+
+    </form>
+
+</body>
+
+</html>
