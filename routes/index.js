@@ -1,6 +1,9 @@
 var express = require('express');
+var app = express();
 var router = express.Router();
-
+var path = require('path');
+var formidable = require('formidable');
+var fs = require('fs');
 var initials;
 var testModules = [];
 /* GET home page. */
@@ -67,7 +70,7 @@ router.post('/index_addinfo', function (req, res) {
         testModules.push(module);
     }
     console.log('the teacher: ' + initials + ' has chosen the ' + testModules.length + ' following modules: ' + testModules);
-    testModules.push('startpage');
+    //    testModules.push('startpage');
 
 
     // Set our collection
@@ -554,7 +557,61 @@ router.post('/letter_addanswer', function (req, res) {
         }
     });
 });
+// TEEEEEEEEEEEEEEEEEEEEST FILE SYSTEM
+router.get('/upload', function (req, res) {
+    res.render('upload', {
+        title: 'Filesystem'
+    });
+});
 
+router.post('/upload', function (req, res) {
+
+    var soundTrack;
+    var db = req.db;
+    var collection = db.get('upload');
+    // create an incoming form object
+
+    // create an incoming form object
+    var form = new formidable.IncomingForm();
+
+    // specify that we want to allow the user to upload multiple files in a single request
+
+    // stores the upload in local directory /view 
+    form.uploadDir = path.join(__dirname, '../uploads');
+
+    // every time a file has been uploaded successfully,
+    // rename it to it's orignal name
+    form.on('file', function (field, file) {
+        soundTrack = file;
+        console.log('###########', JSON.stringify(file), '##########');
+        fs.rename(file.path, path.join(form.uploadDir, file.name));
+    });
+
+    // log any errors that occur
+    form.on('error', function (err) {
+        console.log('An error has occured: \n' + err);
+    });
+
+    // once all the files have been uploaded, send a response to the client
+    form.on('end', function () {
+        res.end('success');
+        console.log('@@@@@@@@@@@', soundTrack, '@@@@@@@');
+        var p = JSON.stringify(soundTrack);
+        console.log('this is p: ' + p);
+        console.log('STRRRRIIIIIIING', JSON.stringify(soundTrack));
+        collection.insert({
+            "audio": soundTrack
+        }, function (err, doc) {
+            if (err) {
+                res.send("There was a problem adding the information to the database.");
+            }
+        });
+    });
+
+    // parse the incoming request containing the form data
+    form.parse(req);
+
+});
 
 
 module.exports = router;
