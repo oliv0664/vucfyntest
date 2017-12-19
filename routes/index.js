@@ -60,6 +60,7 @@ router.post('/index_addinfo', function (req, res) {
     var db = req.db;
     // the array MUST be emptied so that no duplicates are psuhed in
     teacherModules = [];
+    studentModules = [];
     // Get our form values. These rely on the "name" attributes
     var data = req.body;
     // get the teachers initials and remove them from the data{}
@@ -79,6 +80,7 @@ router.post('/index_addinfo', function (req, res) {
         }
     }
     teacherModules.push('nextpage');
+    studentModules.push('finalpage');
 
     console.log(teacherModules);
     console.log(studentModules);
@@ -399,6 +401,7 @@ router.post('/startpage_addinfo', function (req, res) {
 
 
 //initials = 'tintin';
+var g_moduleCount = 0;
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET WORDDICTATE */
 
@@ -412,11 +415,12 @@ router.get('/worddictate_participant', function (req, res) {
     collection.findOne({
         'initials': initials
     }, function (e, docs) {
+        console.log(docs.tests[g_moduleCount]);
         res.render('worddictate_participant', {
-            "data": docs.tests[0],
+            "data": docs.tests[g_moduleCount],
             title: 'worddictate_participant'
         });
-        docs.tests.shift();
+        g_moduleCount++;
     });
 });
 
@@ -461,11 +465,12 @@ router.get('/nonsense_participant', function (req, res) {
     collection.findOne({
         'initials': initials
     }, function (e, docs) {
+        console.log(docs.tests[g_moduleCount]);
         res.render('nonsense_participant', {
-            "data": docs.tests[0],
+            "data": docs.tests[g_moduleCount],
             title: 'nonsense_participant'
         });
-        docs.tests.shift();
+        g_moduleCount++;
     });
 });
 
@@ -510,11 +515,12 @@ router.get('/clozetest_participant', function (req, res) {
     collection.findOne({
         'initials': initials
     }, function (e, docs) {
+        console.log(docs.tests[g_moduleCount]);
         res.render('clozetest_participant', {
-            "data": docs.tests[0],
+            "data": docs.tests[g_moduleCount],
             title: 'clozetest_participant'
         });
-        docs.tests.shift();
+        g_moduleCount++;
     });
 });
 
@@ -559,11 +565,12 @@ router.get('/interpret_participant', function (req, res) {
     collection.findOne({
         'initials': initials
     }, function (e, docs) {
+        console.log(docs.tests[g_moduleCount]);
         res.render('interpret_participant', {
-            "data": docs.tests[0],
+            "data": docs.tests[g_moduleCount],
             title: 'interpret_participant'
         });
-        docs.tests.shift();
+        g_moduleCount++;
     });
 });
 
@@ -572,14 +579,14 @@ router.post('/interpret_addanswer', function (req, res) {
     var db = req.db;
 
     var answers = req.body.answers;
-    console.log("without JSON " + answers);
-    console.log(db);
+    console.log("non parsed " + answers);
+    console.log("parsed " + JSON.parse(answers));
     var collection = db.get('students');
     collection.update({
         "id": initials
     }, {
         "$push": {
-            "test": {
+            "tests": {
                 "type": "tekstforståelse",
                 "answers": JSON.parse(answers)
             }
@@ -609,10 +616,10 @@ router.get('/letter_participant', function (req, res) {
         'initials': initials
     }, function (e, docs) {
         res.render('letter_participant', {
-            "data": docs.tests[0],
+            "data": docs.tests[g_moduleCount],
             title: 'letter_participant'
         });
-        docs.tests.shift();
+        g_moduleCount++;
     });
 });
 
