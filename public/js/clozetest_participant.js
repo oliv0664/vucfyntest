@@ -1,23 +1,16 @@
 {
     var totalLineCount;
     var count;
-    var testlist;
+    var data;
     var audioCount = 0;
     var d = new Date();
     var startTime;
     var checkpoint;
 
-    function initializeTest(testlist) {
-
-        this.testlist = testlist;
-
-        totalLineCount = testlist.lines.length;
-        count = 0;
-
+    $(function () {
         $('#start').click(function () {
             startTime = d.getTime();
             checkpoint = startTime;
-            console.log(startTime);
 
             nextLine(count);
             this.remove();
@@ -32,21 +25,61 @@
         $audioControl = $('<input/>').attr({
             class: 'h2size',
             type: 'button',
-            id: 'audioControl' + count,
+            id: 'audioControl',
             value: 'Afspil'
         }).click(function () {
             $audioFile[0].play();
-
-            if (audioCount > 0) {
-                this.remove();
-                audioCount = 0;
-            } else {
-                audioCount++;
-            }
-            //playAudio($audioFile);  
         });
 
         $('#subsection').prepend($audioControl);
+
+
+        $('#form').bind('submit', function (event) {
+            setTime();
+
+            event.preventDefault(); //this will prevent the default submit
+
+            var answers = [];
+            for (var i = 0; i <= count; i++) {
+                var answer = $('#answer' + i).val();
+                /*
+                 *Hvis der skal laves score til clozetest
+                 *var correct = data.content[i].answer;
+                 */
+                var point = 1;
+                /*if (answer == correct) {
+                    point = 1;
+                }*/
+
+                var time = $('#timestamp' + i).val();
+
+
+                var object = {
+                    "answer": answer,
+                    "point": point,
+                    "time": time
+                }
+
+                answers.push(object);
+            }
+
+            $('#answers').val(JSON.stringify(answers));
+
+
+
+
+            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
+        });
+    });
+
+
+
+    function initializeTest(data) {
+
+        this.data = data;
+
+        totalLineCount = data.content.length;
+        count = 0;
 
     }
 
@@ -59,12 +92,12 @@
             .attr({
                 class: 'h2size'
             })
-            .text(testlist.lines[count][0]);
+            .text(data.content[count].line1);
 
         $lineInput = $('<input/>').attr({
             class: 'h2size',
-            id: 'input' + count,
-            name: 'userinput',
+            id: 'answer' + count,
+            //name: 'userinput',
             placeholder: 'Indsæt ord'
         });
 
@@ -73,7 +106,7 @@
             .attr({
                 class: 'h2size'
             })
-            .text(testlist.lines[count][1]);
+            .text(data.content[count].line2);
 
 
         /*$audioControl = $('<audio controls></audio>')
@@ -110,7 +143,7 @@
         $timestamp = $('<input/>').attr({
             type: 'hidden',
             id: 'timestamp' + count,
-            name: 'timestamp'
+            //name: 'timestamp'
         });
 
 
@@ -126,7 +159,7 @@
 
 
 
-        $('#input' + count).one('keyup', function () {
+        $('#answer' + count).one('keyup', function () {
             $nextButton = $('<button/>').attr({
                 class: 'h2size',
                 id: 'button' + count
@@ -141,9 +174,9 @@
                 $('#subsubsection').append($nextButton);
             } else {
                 $submit = $('<input/>').attr({
-                    type: 'submit',
-                    value: 'Gem/Videre'
-                }).click(submitForm());
+                    type: 'submit'
+                });
+
                 $('#bottom').append($submit);
             }
 
@@ -171,16 +204,9 @@
     }
 
 
-    function submitForm() {
-        setTime();
-
-        $('#form').submit();
-    }
-
     function setTime() {
         var d = new Date();
         var timestamp = (d.getTime() - checkpoint);
-        console.log(timestamp);
         $('#timestamp' + count).val(timestamp);
         checkpoint = d.getTime();
     }
