@@ -569,12 +569,9 @@ router.post('/upload', function (req, res) {
     var soundTrack;
     var db = req.db;
     var collection = db.get('upload');
-    // create an incoming form object
 
     // create an incoming form object
     var form = new formidable.IncomingForm();
-
-    // specify that we want to allow the user to upload multiple files in a single request
 
     // stores the upload in local directory /view 
     form.uploadDir = path.join(__dirname, '../uploads');
@@ -584,7 +581,7 @@ router.post('/upload', function (req, res) {
     form.on('file', function (field, file) {
         soundTrack = file;
         console.log('###########', JSON.stringify(file), '##########');
-        fs.rename(file.path, path.join(form.uploadDir, file.name));
+        fs.rename(file.path, path.join(form.uploadDir, "1"));
     });
 
     // log any errors that occur
@@ -594,13 +591,14 @@ router.post('/upload', function (req, res) {
 
     // once all the files have been uploaded, send a response to the client
     form.on('end', function () {
-        res.end('success');
-        console.log('@@@@@@@@@@@', soundTrack, '@@@@@@@');
+        // this is the callback, it can be populated with data eventually 
         var p = JSON.stringify(soundTrack);
+        res.end(p);
+        console.log('@@@@@@@@@@@', soundTrack, '@@@@@@@');
         console.log('this is p: ' + p);
         console.log('STRRRRIIIIIIING', JSON.stringify(soundTrack));
         collection.insert({
-            "audio": soundTrack
+            "audio": p
         }, function (err, doc) {
             if (err) {
                 res.send("There was a problem adding the information to the database.");
