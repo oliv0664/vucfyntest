@@ -11,6 +11,10 @@ var monk = require('monk');
 var url = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb'
 
 var db = monk(url);
+db.then(() => {
+    console.log('Connected correctly to server')
+});
+
 
 var Grid = require('gridfs-stream');
 var fs = require('fs');
