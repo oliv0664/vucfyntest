@@ -1,21 +1,13 @@
 {
     var totalLineCount;
     var count;
-    var testlist;
+    var data;
     var audioCount = 0;
     var endTime;
     var timer;
     var x;
-    console.log("YEAH!");
 
-    function initializeTest(testlist) {
-
-        this.testlist = testlist;
-
-        totalLineCount = testlist.files.length;
-        count = 0;
-        timer = 900000; // 15 min.
-
+    $(function () {
         $('#start').click(function () {
             setTime();
 
@@ -50,6 +42,47 @@
 
         $('#subsection').prepend($audioControl);
 
+
+
+        $('#form').bind('submit', function (event) {
+            event.preventDefault(); //this will prevent the default submit
+
+            var answers = [];
+            for (var i = 0; i <= count; i++) {
+                var answer = $('#answer' + i).val();
+                var point = 0;
+                if (answer != null) {
+                    point = 1;
+                }
+
+                var time = $('#timestamp' + i).val();
+
+
+                var object = {
+                    "answer": answer,
+                    "point": point,
+                    "time": time
+                }
+
+                answers.push(object);
+            }
+
+            $('#answers').val(JSON.stringify(answers));
+
+
+
+
+            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
+        });
+    });
+
+    function initializeTest(data) {
+
+        this.data = data;
+
+        totalLineCount = data.content.length;
+        count = 0;
+        timer = 900000; // 15 min.
     }
 
 
@@ -61,8 +94,8 @@
         $lineInput = $('<textarea/>')
             .attr({
                 class: 'h2size',
-                id: 'input' + count,
-                name: 'userinput',
+                id: 'answer' + count
+                //name: 'userinput',
                 placeholder: 'Skriv brev'
             })
             .css({
@@ -73,8 +106,8 @@
 
         $timestamp = $('<input/>').attr({
             type: 'hidden',
-            id: 'timestamp' + count,
-            name: 'timestamp'
+            id: 'timestamp' + count
+            //name: 'timestamp'
         });
 
 
@@ -99,24 +132,19 @@
     }
 
     function save() {
-        setCheckpoint();
+        setTime();
         lockTextfield();
         addNextButton();
         $('#saveButton').remove();
     }
 
 
-    /*function setTime() {
-        var now = new Date().getTime();
-        var distance = now - checkpoint;
-        console.log(distance);
-        var minutes = Math.floor((distance / (1000 * 60)) % 60);
-        console.log(minutes);
-        var seconds = Math.floor((distance / 1000) % 60);
-        console.log(seconds);
-        $('#timestamp' + count).val(minutes + "m " + seconds + "s");
-        checkpoint = now;
-    }*/
+    function setTime() {
+        var d = new Date();
+        var timestamp = (d.getTime() - checkpoint);
+        $('#timestamp' + count).val(timestamp);
+        checkpoint = d.getTime();
+    }
 
 
     function lockTextfield() {
