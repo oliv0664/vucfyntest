@@ -94,7 +94,7 @@
         $lineInput = $('<textarea/>')
             .attr({
                 class: 'h2size',
-                id: 'answer' + count
+                id: 'answer' + count,
                 //name: 'userinput',
                 placeholder: 'Skriv brev'
             })

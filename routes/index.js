@@ -318,7 +318,7 @@ router.post('/letter_addinfo', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect('nextpage');
+            res.redirect(teacherModules[0]);
             teacherModules.shift();
             console.log('next module should be ' + teacherModules[0]);
         }
@@ -391,7 +391,8 @@ router.post('/startpage_addinfo', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect('interpret_teacher'); //"worddictate_participant"
+            res.redirect(studentModules[0]); //"worddictate_participant"
+            studentModules.shift();
         }
     });
 });
@@ -415,6 +416,7 @@ router.get('/worddictate_participant', function (req, res) {
             "data": docs.tests[0],
             title: 'worddictate_participant'
         });
+        docs.tests.shift();
     });
 });
 
@@ -439,7 +441,8 @@ router.post('/worddictate_addanswer', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect("nonsense_participant");
+            res.redirect(studentModules[0]); //"worddictate_participant"
+            studentModules.shift();
         }
     });
 });
@@ -459,9 +462,10 @@ router.get('/nonsense_participant', function (req, res) {
         'initials': initials
     }, function (e, docs) {
         res.render('nonsense_participant', {
-            "data": docs.tests[1],
+            "data": docs.tests[0],
             title: 'nonsense_participant'
         });
+        docs.tests.shift();
     });
 });
 
@@ -486,7 +490,8 @@ router.post('/nonsense_addanswer', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect("clozetest_participant");
+            res.redirect(studentModules[0]); //"worddictate_participant"
+            studentModules.shift();
         }
     });
 });
@@ -506,9 +511,10 @@ router.get('/clozetest_participant', function (req, res) {
         'initials': initials
     }, function (e, docs) {
         res.render('clozetest_participant', {
-            "data": docs.tests[2],
+            "data": docs.tests[0],
             title: 'clozetest_participant'
         });
+        docs.tests.shift();
     });
 });
 
@@ -533,7 +539,8 @@ router.post('/clozetest_addanswer', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect("interpret_participant");
+            res.redirect(studentModules[0]); //"worddictate_participant"
+            studentModules.shift();
         }
     });
 });
@@ -556,6 +563,7 @@ router.get('/interpret_participant', function (req, res) {
             "data": docs.tests[0],
             title: 'interpret_participant'
         });
+        docs.tests.shift();
     });
 });
 
@@ -580,7 +588,8 @@ router.post('/interpret_addanswer', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect('nextpage');
+            res.redirect(studentModules[0]); //"worddictate_participant"
+            studentModules.shift();
         }
     });
 });
@@ -600,9 +609,10 @@ router.get('/letter_participant', function (req, res) {
         'initials': initials
     }, function (e, docs) {
         res.render('letter_participant', {
-            "data": docs.tests[4],
+            "data": docs.tests[0],
             title: 'letter_participant'
         });
+        docs.tests.shift();
     });
 });
 
@@ -614,7 +624,7 @@ router.post('/letter_addanswer', function (req, res) {
 
     var collection = db.get('students');
 
-    collection.insert({
+    collection.update({
         "id": initials
     }, {
         "$push": {
