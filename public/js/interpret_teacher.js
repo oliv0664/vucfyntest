@@ -13,55 +13,6 @@
             addQuestion();
         });
 
-        $('#form').bind('submit', function (event) {
-
-            event.preventDefault(); //this will prevent the default submit
-
-            var texts = [];
-            for (var i = 0; i < textCount; i++) {
-                var text = $('#text' + i).val();
-                var file = $('#file' + i).val();
-
-                var object = {
-                    "text": text,
-                    "file": file
-                }
-
-                texts.push(object);
-            }
-
-
-            var questions = [];
-
-            for (var i = 0; i < questionCount; i++) {
-                var question = $('#question' + i).val();
-
-                var answers = [];
-
-                for (var j = 0; j < ids[i]; j++) {
-                    var answer = $('#answer' + i + j).val();
-                    answers.push(answer);
-                }
-                var rightAnswer = $('#correct' + i).val();
-
-                var object = {
-                    "question": question,
-                    "answers": answers,
-                    "rightAnswer": rightAnswer
-                }
-                questions.push(object);
-            }
-
-            var content = {
-                "texts": texts,
-                "questions": questions
-            }
-
-            $('#content').val(JSON.stringify(content));
-
-            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
-        });
-
     });
 
 
@@ -92,7 +43,7 @@
             class: 'h2size',
             id: 'text' + textCount,
             form: 'form',
-            //name: 'texts[' + textCount + ']',
+            name: 'texts[' + textCount + ']',
             placeholder: 'Indtast tekst her',
             size: size
         }).css("height", "100px");
@@ -103,7 +54,7 @@
             type: 'file',
             class: 'h2size',
             id: 'file' + textCount,
-            //name: 'files[]', //[file]
+            name: 'files[]', //[file]
             accept: 'audio/*',
             onchange: 'readURL(this)'
         });
@@ -186,7 +137,7 @@
             class: 'h2size',
             id: 'question' + questionCount,
             type: 'text',
-            //name: 'questions[' + questionCount + ']',
+            name: 'questions[' + questionCount + ']',
             placeholder: 'Indsæt spørgsmål her',
             size: size
         });
@@ -236,21 +187,21 @@
 
         $newChoice = $('<input/>').attr({
             class: 'h2size',
-            id: 'correct' + ids[id],
+            id: 'choice' + ids[id],
             type: 'radio',
-            name: 'correct' + id
+            name: 'choices[' + id + ']'
         }).val(ids[id]);
+
+        ids[id]++;
 
 
         $label = $('<input/>').attr({
             type: 'text',
             class: 'h2size',
-            id: 'answer' + id + ids[id],
-            //name: 'labels[' + id + ']',
+            id: 'label' + id,
+            name: 'labels[' + id + ']',
             placeholder: 'Indtast svarmulighed'
         });
-
-        ids[id]++;
 
         $('#temp' + id)
             .append('<br>')

@@ -5,14 +5,13 @@ var path = require('path');
 var formidable = require('formidable');
 var fs = require('fs');
 var initials;
-var teacherModules = [];
-var studentModules = [];
+var testModules = [];
 /* GET home page. */
 router.get('/', function (req, res, next) {
     res.render('index', {
         title: 'Express'
     });
-    teacherModules = [];
+    testModules = [];
 });
 
 router.get('/filepicker', function (req, res, next) {
@@ -59,7 +58,7 @@ router.post('/index_addinfo', function (req, res) {
     // Set our internal DB variable
     var db = req.db;
     // the array MUST be emptied so that no duplicates are psuhed in
-    teacherModules = [];
+    testModules = [];
     // Get our form values. These rely on the "name" attributes
     var data = req.body;
     // get the teachers initials and remove them from the data{}
@@ -68,38 +67,27 @@ router.post('/index_addinfo', function (req, res) {
     // each selected .test_options represents a selected module 
 
     for (module in data) {
-        if (module == "startpage") {
-            studentModules.push(module);
-        } else {
-            console.log(module);
-            temp = module.split(' ');
-            console.log(temp + " " + temp[0] + " " + temp[1]);
-            teacherModules.push(temp[0]);
-            studentModules.push(temp[1]);
-        }
+        testModules.push(module);
     }
-    teacherModules.push('nextpage');
+    console.log('the teacher: ' + initials + ' has chosen the ' + testModules.length + ' following modules: ' + testModules);
+    //    testModules.push('startpage');
 
-    console.log(teacherModules);
-    console.log(studentModules);
 
     // Set our collection
-    var collection = db.get('teachers');
+    var collection = db.get('owners');
 
     // Submit to the DB
     collection.insert({
-        "initials": initials,
-        "totalTests": teacherModules.length,
-        "tests": []
+        "initials": initials
     }, function (err, doc) {
         if (err) {
             // If it failed, return error
             res.send("There was a problem adding the information to the database.");
         } else {
             // And forward to success page
-            res.redirect(teacherModules[0]);
-            teacherModules.shift();
-            console.log('next module should be ' + teacherModules[0]);
+            res.redirect(testModules[0]);
+            testModules.shift();
+            console.log('next module should be ' + testModules[0]);
         }
     });
 });
@@ -120,34 +108,25 @@ router.post('/worddictate_addinfo', function (req, res) {
     // Set our internal DB variable
     var db = req.db;
     // Get our form values. These rely on the "name" attributes 
-    //var lines = req.body.lines;
-    //var files = req.body.files;
-    var file = req.body.file;
-    var content = req.body.content;
+    var lines = req.body.lines;
+    var files = req.body.files;
 
     // Set our collection
-    var collection = db.get('teachers');
+    var collection = db.get('worddictate');
     // Submit to the DB
-    collection.update({
-        "initials": initials
-    }, {
-        "$push": {
-            "tests": {
-                "type": "orddiktat",
-                "file": file,
-                "content": JSON.parse(content)
-            }
-        }
-
+    collection.insert({
+        "initials": initials,
+        "lines": lines,
+        "files": files
     }, function (err, doc) {
         if (err) {
             // If it failed, return error
             res.send("There was a problem adding the information to the database.");
         } else {
             // And forward to success page
-            res.redirect(teacherModules[0]);
-            teacherModules.shift();
-            console.log('next module should be ' + teacherModules[0]);
+            res.redirect(testModules[0]);
+            testModules.shift();
+            console.log('next module should be ' + testModules[0]);
         }
     });
 });
@@ -166,27 +145,19 @@ router.get('/nonsense_teacher', function (req, res) {
 router.post('/nonsense_addinfo', function (req, res) {
     var db = req.db;
 
-    var file = req.body.file;
-    var content = req.body.content;
+    var files = req.body.files;
 
-    var collection = db.get('teachers');
-    collection.update({
-        "initials": initials
-    }, {
-        "$push": {
-            "tests": {
-                "type": "vrøvleord",
-                "file": file,
-                "content": JSON.parse(content)
-            }
-        }
+    var collection = db.get('nonsense');
+    collection.insert({
+        "initials": initials,
+        "files": files
     }, function (err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect(teacherModules[0]); //
-            teacherModules.shift();
-            console.log('next module should be ' + teacherModules[0]);
+            res.redirect(testModules[0]);
+            testModules.shift();
+            console.log('next module should be ' + testModules[0]);
         }
     });
 });
@@ -207,33 +178,25 @@ router.post('/clozetest_addinfo', function (req, res) {
     // Set our internal DB variable
     var db = req.db;
     // Get our form values. These rely on the "name" attributes 
-    var file = req.body.file;
-    var content = req.body.content;
+    var lines = req.body.lines;
+    var files = req.body.files;
 
     // Set our collection
-    var collection = db.get('teachers');
+    var collection = db.get('clozetest');
     // Submit to the DB
-    collection.update({
-        "initials": initials
-    }, {
-        "$push": {
-            "tests": {
-                "type": "clozetest",
-                "file": file,
-                "content": JSON.parse(content)
-            }
-        }
+    collection.insert({
+        "initials": initials,
+        "lines": lines,
+        "files": files
     }, function (err, doc) {
         if (err) {
             // If it failed, return error
             res.send("There was a problem adding the information to the database.");
         } else {
             // And forward to success page
-
-            console.log("clozetest redirect " + teacherModules[0]);
-            res.redirect(teacherModules[0]);
-            teacherModules.shift();
-            console.log('next module should be ' + teacherModules[0]);
+            res.redirect(testModules[0]);
+            testModules.shift();
+            console.log('next module should be ' + testModules[0]);
 
         }
     });
@@ -253,32 +216,31 @@ router.post('/interpret_addinfo', function (req, res) {
     // Set our internal DB variable
     var db = req.db;
     // Get our form values. These rely on the "name" attributes 
-    var file = req.body.file;
-    var content = req.body.content;
-    console.log(content);
+    var texts = req.body.texts;
+    var files = req.body.files;
+
+    var questions = req.body.questions;
+    var choices = req.body.choices;
+    var labels = req.body.labels;
+
     // Set our collection
-    var collection = db.get('teachers');
+    var collection = db.get('interpret');
 
     // Submit to the DB
-    collection.update({
-        "initials": initials
-    }, {
-        "$push": {
-            "tests": {
-                "type": "tekstforståelse",
-                "file": file,
-                "content": JSON.parse(content)
-            }
-        }
+    collection.insert({
+        "initials": initials,
+        "texts": texts,
+        "files": files,
+        "questions": questions,
+        "choices": choices,
+        "labels": labels
     }, function (err, doc) {
         if (err) {
             // If it failed, return error
             res.send("There was a problem adding the information to the database.");
         } else {
             // And forward to success page
-            res.redirect(teacherModules[0]);
-            teacherModules.shift();
-            console.log('next module should be ' + teacherModules[0]);
+            res.redirect(testModules[0]);
         }
     });
 });
@@ -298,29 +260,19 @@ router.get('/letter_teacher', function (req, res) {
 router.post('/letter_addinfo', function (req, res) {
     var db = req.db;
 
-    var file = req.body.file;
-    var time = req.body.time;
+    var files = req.body.files;
 
-    var collection = db.get('teachers');
-    collection.update({
-        "initials": initials
-    }, {
-        "$push": {
-            "tests": {
-                "type": "brev",
-                "file": file,
-                "content": [{
-                    "time": time
-        }]
-            }
-        }
+    var collection = db.get('letter');
+    collection.insert({
+        "initials": initials,
+        "files": files
     }, function (err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect('nextpage');
-            teacherModules.shift();
-            console.log('next module should be ' + teacherModules[0]);
+            res.redirect(testModules[0]);
+            testModules.shift();
+            console.log('next module should be ' + testModules[0]);
         }
     });
 });
@@ -337,9 +289,7 @@ router.get('/nextpage', function (req, res) {
 
 
 router.post('/nextpage', function (req, res) {
-    res.redirect(studentModules[0]);
-    studentModules.shift();
-    console.log('next module should be ' + studentModules[0]);
+    res.redirect("startpage");
 });
 
 
@@ -374,45 +324,44 @@ router.post('/startpage_addinfo', function (req, res) {
     var tong = req.body.tong_input;
     var home = req.body.home_input;
 
-    var collection = db.get('students');
+    var collection = db.get('startpage');
 
     collection.insert({
-        "id": initials,
+
         "date": date,
         "firstname": firstname,
         "lastname": lastname,
         "is_dyslexic": dys,
         "is_familyDyslexic": fam,
         "mother_tongue": tong,
-        "lang_at_home": home,
-        "time": "12:00:00",
-        "tests": []
+        "lang_at_home": home
+
     }, function (err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect('interpret_teacher'); //"worddictate_participant"
+            res.redirect("worddictate_participant");
         }
     });
 });
 
 
-//initials = 'tintin';
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET WORDDICTATE */
 
 //henter 'worddictate_participant' og finder data i databasen, svarende til de indtastede initialer
 router.get('/worddictate_participant', function (req, res) {
     var db = req.db;
-    var collection = db.get('teachers');
+    var collection = db.get('worddictate');
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    collection.findOne({
+    collection.find({
         'initials': initials
-    }, function (e, docs) {
+    }, {}, function (e, docs) {
+        var docLenght = docs.length;
         res.render('worddictate_participant', {
-            "data": docs.tests[0],
+            "testlist": docs[docLenght - 1],
             title: 'worddictate_participant'
         });
     });
@@ -422,19 +371,14 @@ router.get('/worddictate_participant', function (req, res) {
 router.post('/worddictate_addanswer', function (req, res) {
     var db = req.db;
 
-    var answers = req.body.answers;
+    var userinput = req.body.userinput;
+    var timestamp = req.body.timestamp;
 
-    var collection = db.get('students');
+    var collection = db.get('worddictate_answer');
 
-    collection.update({
-        "id": initials
-    }, {
-        "$push": {
-            "tests": {
-                "type": "orddiktat",
-                "answers": JSON.parse(answers)
-            }
-        }
+    collection.insert({
+        "participant_answer": userinput,
+        "timestamp": timestamp
     }, function (err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
@@ -451,15 +395,16 @@ router.post('/worddictate_addanswer', function (req, res) {
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
 router.get('/nonsense_participant', function (req, res) {
     var db = req.db;
-    var collection = db.get('teachers');
+    var collection = db.get('nonsense');
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    collection.findOne({
+    collection.find({
         'initials': initials
-    }, function (e, docs) {
+    }, {}, function (e, docs) {
+        var docLenght = docs.length;
         res.render('nonsense_participant', {
-            "data": docs.tests[1],
+            "testlist": docs[docLenght - 1],
             title: 'nonsense_participant'
         });
     });
@@ -469,19 +414,12 @@ router.get('/nonsense_participant', function (req, res) {
 router.post('/nonsense_addanswer', function (req, res) {
     var db = req.db;
 
-    var answers = req.body.answers;
+    var userinput = req.body.userinput;
 
-    var collection = db.get('students');
+    var collection = db.get('nonsense_answer');
 
-    collection.update({
-        "id": initials
-    }, {
-        "$push": {
-            "tests": {
-                "type": "vrøvleord",
-                "answers": JSON.parse(answers)
-            }
-        }
+    collection.insert({
+        "participant_answer": userinput
     }, function (err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
@@ -498,15 +436,16 @@ router.post('/nonsense_addanswer', function (req, res) {
 //henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
 router.get('/clozetest_participant', function (req, res) {
     var db = req.db;
-    var collection = db.get('teachers');
+    var collection = db.get('clozetest');
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    collection.findOne({
+    collection.find({
         'initials': initials
-    }, function (e, docs) {
+    }, {}, function (e, docs) {
+        var docLenght = docs.length;
         res.render('clozetest_participant', {
-            "data": docs.tests[2],
+            "testlist": docs[docLenght - 1],
             title: 'clozetest_participant'
         });
     });
@@ -516,19 +455,14 @@ router.get('/clozetest_participant', function (req, res) {
 router.post('/clozetest_addanswer', function (req, res) {
     var db = req.db;
 
-    var answers = req.body.answers;
+    var userinput = req.body.userinput;
+    var timestamp = req.body.timestamp;
 
-    var collection = db.get('students');
+    var collection = db.get('clozetest_answer');
 
-    collection.update({
-        "id": initials
-    }, {
-        "$push": {
-            "tests": {
-                "type": 'clozetest',
-                "answers": JSON.parse(answers)
-            }
-        }
+    collection.insert({
+        "participant_answer": userinput,
+        "timestamp": timestamp
     }, function (err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
@@ -545,15 +479,16 @@ router.post('/clozetest_addanswer', function (req, res) {
 //henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
 router.get('/interpret_participant', function (req, res) {
     var db = req.db;
-    var collection = db.get('teachers');
+    var collection = db.get('interpret');
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    collection.findOne({
+    collection.find({
         'initials': initials
-    }, function (e, docs) {
+    }, {}, function (e, docs) {
+        var docLenght = docs.length;
         res.render('interpret_participant', {
-            "data": docs.tests[0],
+            "testlist": docs[docLenght - 1],
             title: 'interpret_participant'
         });
     });
@@ -563,24 +498,19 @@ router.get('/interpret_participant', function (req, res) {
 router.post('/interpret_addanswer', function (req, res) {
     var db = req.db;
 
-    var answers = req.body.answers;
-    console.log("without JSON " + answers);
-    console.log(db);
-    var collection = db.get('students');
-    collection.update({
-        "id": initials
-    }, {
-        "$push": {
-            "test": {
-                "type": "tekstforståelse",
-                "answers": JSON.parse(answers)
-            }
-        }
+    var userinput = req.body.userinput;
+    var timestamp = req.body.timestamp;
+
+    var collection = db.get('interpret_answer');
+
+    collection.insert({
+        "participant_answer": userinput,
+        "timestamp": timestamp
     }, function (err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect('nextpage');
+            res.redirect("letter_participant");
         }
     });
 });
@@ -592,15 +522,16 @@ router.post('/interpret_addanswer', function (req, res) {
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
 router.get('/letter_participant', function (req, res) {
     var db = req.db;
-    var collection = db.get('teachers');
+    var collection = db.get('letter');
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    collection.findOne({
+    collection.find({
         'initials': initials
-    }, function (e, docs) {
+    }, {}, function (e, docs) {
+        var docLenght = docs.length;
         res.render('letter_participant', {
-            "data": docs.tests[4],
+            "testlist": docs[docLenght - 1],
             title: 'letter_participant'
         });
     });
@@ -610,19 +541,14 @@ router.get('/letter_participant', function (req, res) {
 router.post('/letter_addanswer', function (req, res) {
     var db = req.db;
 
-    var answers = req.body.answers;
+    var userinput = req.body.userinput;
+    var timestamp = req.body.timestamp;
 
-    var collection = db.get('students');
+    var collection = db.get('letter_answer');
 
     collection.insert({
-        "id": initials
-    }, {
-        "$push": {
-            "tests": {
-                "type": "brev",
-                "answers": JSON.parse(answers)
-            }
-        }
+        "participant_answer": userinput,
+        "timestamp": timestamp
     }, function (err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
@@ -631,9 +557,6 @@ router.post('/letter_addanswer', function (req, res) {
         }
     });
 });
-
-
-
 // TEEEEEEEEEEEEEEEEEEEEST FILE SYSTEM
 router.get('/upload', function (req, res) {
     res.render('upload', {

@@ -9,30 +9,6 @@
             addLine();
         });
 
-        $('#form').bind('submit', function (event) {
-
-            event.preventDefault(); //this will prevent the default submit
-
-            var content = [];
-            for (var i = 0; i < lineCount; i++) {
-                var line1 = $('#line1' + i).val();
-                var line2 = $('#line2' + i).val();
-                var file = $('#file' + i).val();
-
-                var object = {
-                    "line1": line1,
-                    "line2": line2,
-                    "file": file
-                }
-
-                content.push(object);
-            }
-
-            $('#content').val(JSON.stringify(content));
-
-            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
-        });
-
     });
 
 
@@ -61,9 +37,9 @@
         // tilføj et tekststykke
         $newLineText1 = $('<input/>').attr({
             class: 'h2size',
-            id: 'line1' + lineCount,
+            id: 'lineText1' + lineCount,
             type: 'text',
-            //name: 'lines[' + lineCount + '][]', //[lineText1]
+            name: 'lines[' + lineCount + '][]', //[lineText1]
             placeholder: 'Indtast tekst her',
             size: size
         });
@@ -79,9 +55,9 @@
         // tilføj endnu et tekststykke
         $newLineText2 = $('<input/>').attr({
             class: 'h2size',
-            id: 'line2' + lineCount,
+            id: 'lineText2' + lineCount,
             type: 'text',
-            //name: 'lines[' + lineCount + '][]', //[lineText2]
+            name: 'lines[' + lineCount + '][]', //[lineText2]
             placeholder: 'Indtast tekst her',
             size: size
         });
@@ -92,7 +68,7 @@
             type: 'file',
             class: 'h2size',
             id: 'file' + lineCount,
-            //name: 'files[]', //[file]
+            name: 'files[]', //[file]
             accept: 'audio/*',
             onchange: 'readURL(this)'
         });
