@@ -649,8 +649,11 @@ router.post('/letter_addanswer', function (req, res) {
     });
 });
 
-
-
+router.get('/finalpage', function (req, res) {
+    res.render('finalpage', {
+        title: 'finalpage'
+    });
+});
 // TEEEEEEEEEEEEEEEEEEEEST FILE SYSTEM
 router.get('/upload', function (req, res) {
     res.render('upload', {
