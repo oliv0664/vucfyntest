@@ -80,6 +80,7 @@
 
         totalLineCount = data.content.length;
         count = 0;
+        console.log(data);
 
     }
 

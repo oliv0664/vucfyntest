@@ -42,8 +42,9 @@
                     var answer = $('#answer' + i + j).val();
                     answers.push(answer);
                 }
-                var rightAnswer = $('#correct' + i).val();
-
+                // rightAnswer can also have white spaces infront and at the end thus it should be trimmed with trim();
+                var rightAnswer = $("input[name=correct" + i + "]:checked").next().val().trim();
+                console.log(rightAnswer);
                 var object = {
                     "question": question,
                     "answers": answers,
@@ -58,7 +59,7 @@
             }
 
             $('#content').val(JSON.stringify(content));
-
+            console.log(content);
             $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
         });
 
