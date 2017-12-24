@@ -48,9 +48,10 @@ router.get('/template', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET MAIN */
 
 //henter hjemmesiden 'main' 
-router.get('/main', function (req, res) {
-    res.render('main', {
-        title: 'Main'
+
+router.get('/welcome', function (req, res) {
+    res.render('welcome', {
+        title: 'main page'
     });
 });
 
