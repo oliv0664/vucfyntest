@@ -1,7 +1,7 @@
 var totalTextCount;
 var totalQuestionCount;
 var countT = 0;
-var countQ;
+var countQ = 0;
 var data;
 var audioCountT = 0;
 var audioCountQ = 0;
@@ -13,7 +13,6 @@ $(function () {
     $('#start').click(function () {
         startTime = d.getTime();
         checkpoint = startTime;
-        console.log(startTime);
 
         nextText(countT);
         this.remove();
@@ -52,11 +51,20 @@ $(function () {
 
             texts.push(object);
         }
-
+        var questionCount = $('.question').toArray().length;
+        console.log('LUCA IS THE TRUE MASTER: ' + questionCount);
         var questions = [];
-        for (var j = 0; j <= countQ; j++) {
-            var answer = $('input[name=choice' + j + ']:checked').val();
+        console.log('the answeres will be compared to this: ' + data.content)
+        for (var j = 0; j < questionCount; j++) {
+            var answer = $("input[name=choice" + j + "]:checked").val().trim();
+
+
+            console.log('Luca tests the answer: ' + answer);
+            console.log('Luca tests test1: ' + test1Selected);
+
+
             var correct = data.content.questions[j].rightAnswer;
+
             var point = 0;
             if (answer == correct) {
                 point = 1;
@@ -81,7 +89,7 @@ $(function () {
 
         $('#answers').val(JSON.stringify(answers));
 
-
+        console.log('this is uploaded to the db', answers);
 
 
         $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
@@ -92,13 +100,13 @@ $(function () {
 
 
 function initializeTest(data) {
-    console.log("only run once! data= " + data);
+    console.log("only run once! data= ", data);
     this.data = data;
-    console.log("only run uuh..twice!! data= " + data);
+    console.log("only run uuh..twice!! data= ", data);
     totalTextCount = data.content.texts.length;
     totalQuestionCount = data.content.questions.length;
     //    countT = 0;
-    countQ = 0;
+    //    countQ = 0;
 }
 
 
@@ -205,6 +213,7 @@ function nextT(c) {
     $('#subsubsection').empty();
     console.log("nextT: " + c);
     nextText(c);
+    console.log('countQ increments to:' + c);
 }
 
 
@@ -227,7 +236,8 @@ function nextQuestion(countQ) {
     // indsætter det første linjestykke
     $question = $('<nobr/>')
         .attr({
-            class: 'h2size'
+            class: 'h2size',
+            class: 'question'
         })
         .text(data.content.questions[countQ].question);
 
@@ -270,6 +280,7 @@ function nextQuestion(countQ) {
     var len = data.content.questions[countQ].answers.length;
     var con = 0;
 
+    // Generate radiobuttons for each question
     while (con < len) {
         $answerDiv = $('<div/>').attr({
             id: 'answerDiv' + countQ + con
@@ -280,7 +291,8 @@ function nextQuestion(countQ) {
         $choice = $('<input/>').attr({
             type: 'radio',
             id: 'choice' + countQ,
-            name: 'choice' + countQ
+            name: 'choice' + countQ,
+            value: data.content.questions[countQ].answers[con]
         });
 
 
@@ -339,6 +351,7 @@ function nextQuestion(countQ) {
         });
 
         $('#bottom').append($submit);
+        return countQ;
     }
 
 
@@ -357,7 +370,7 @@ function nextQuestion(countQ) {
         setTimeQuestion();
         $('#subsubsection').empty();
         $('#audioControlQ' + countQ).remove();
-        audiocountQ = 0;
+        audioCountQ = 0;
 
         countQ++;
 

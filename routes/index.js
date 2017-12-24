@@ -416,7 +416,7 @@ router.get('/worddictate_participant', function (req, res) {
     collection.findOne({
         'initials': initials
     }, function (e, docs) {
-        console.log(docs.tests[g_moduleCount]);
+        console.log('test data from db: ' + docs.tests[g_moduleCount]);
         res.render('worddictate_participant', {
             "data": docs.tests[g_moduleCount],
             title: 'worddictate_participant'
