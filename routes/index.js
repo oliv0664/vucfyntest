@@ -763,14 +763,14 @@ function mailSender(results) {
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'wolter.nielsen@gmail.com',
-            pass: 'nielsen777'
+            user: 'INSERT_YOUR_MAIL_HERE', //wolter.nielsen@gmail.com
+            pass: 'INSERT_PASSWORD'
         }
     });
 
     var mailOptions = {
-        from: 'wolter.nielsen@gmail.com',
-        to: 'oni@vucfyn.dk',
+        from: 'INSERT_MAIL_TO', //wolter.nielsen@gmail.com
+        to: 'INSERT_MAIL_FROM', //oni@vucfyn.dk
         subject: 'Sending Email using Node.js',
         text: JSON.stringify(results)
             //html: '<h1>Testresultater</h1><ul><li>Lærer ID: ' + results.teacherID + '</li><li>Kursist ID: ' + results.studentID + '</li><li>Kursist info: </li><li>dato ' + results.date + '</li><li>er ordblind' + results.is_dyslexic + '</li><li>har ordblindhed i familien ' + results.is_familyDyslexic + '</li><li>modersmål ' + results.mother_tongue + '</li><li>sprog i hjemmet' + results.lang_at_home + '</li><li>Test resultater</li><li>testtype ' + results.tests[0].type + '</li><li>svar 1 ' + results.tests[0].answers[0].answer + '</li><li>point ' + results.tests[0].answers[0].point + '</li><li>tid ' + results.tests[0].answers[0].time + '</li><li>svar 2 ' + results.tests[0].answers[1].answer + '</li><li>point ' + results.tests[0].answers[1].point + '</li><li>tid ' + results.tests[0].answers[1].time + '</li><li>svar 3' + results.tests[0].answers[2].answer + '</li><li>point ' + results.tests[0].answers[2].point + '</li><li>tid ' + results.tests[0].answers[2].time + '</li><li>testtype ' + results.tests[1].type + '</li><li>svar 1 ' + results.tests[1].answers[0].answer + '</li><li>point ' + results.tests[1].answers[0].point + '</li><li>tid ' + results.tests[1].answers[0].time + '</li><li>svar 2 ' + results.tests[1].answers[1].answer + '</li><li>point ' + results.tests[1].answers[1].point + '</li><li>tid ' + results.tests[1].answers[1].time + '</li><li>svar 3' + results.tests[1].answers[2].answer + '</li><li>point ' + results.tests[1].answers[2].point + '</li><li>tid ' + results.tests[1].answers[2].time + '</li><li>testtype ' + results.tests[2].type + '</li><li>svar 1 ' + results.tests[2].answers[0].answer + '</li><li>point ' + results.tests[2].answers[0].point + '</li><li>tid ' + results.tests[2].answers[0].time + '</li><li>svar 2 ' + results.tests[2].answers[1].answer + '</li><li>point ' + results.tests[2].answers[1].point + '</li><li>tid ' + results.tests[2].answers[1].time + '</li><li>svar 3' + results.tests[2].answers[2].answer + '</li><li>point ' + results.tests[2].answers[2].point + '</li><li>tid ' + results.tests[2].answers[2].time + '</li><li>testtype ' + results.tests[3].type + '</li><li>' + results.tests[3].answers.texts[0].time + '</li><li>svar 1 ' + results.tests[3].answers.questions[0].answer + '</li><li>point ' + results.tests[3].answers.questions[0].point + '</li><li>tid ' + results.tests[3].answers.quesitons[0].time + '</li><li>svar 2 ' + results.tests[3].answers.questions[1].answer + '</li><li>point ' + results.tests[3].answers.questions[1].point + '</li><li>tid ' + results.tests[3].answers.quesitons[1].time + '</li><li>svar 3' + results.tests[3].answers.questions[2].answer + '</li><li>point ' + results.tests[3].answers.questions[2].point + '</li><li>tid ' + results.tests[3].answers.questions[2].time + '</li><li>testtype ' + results.tests[4].type + '</li><li>tid ' + results.tests[4].answers[0].time + '</li></ul>'
