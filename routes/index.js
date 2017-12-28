@@ -19,6 +19,10 @@ router.get('/filepicker', function (req, res, next) {
     res.render('filepicker', {
         title: 'Filepicker'
     });
+});router.get('/error', function (req, res, next) {
+    res.render('error', {
+        title: 'page not found'
+    });
 });
 
 //var initials = "oni";
@@ -27,30 +31,33 @@ router.get('/filepicker', function (req, res, next) {
 
 
 /* TEMPLATE */
-router.get('/template', function (req, res) {
-    var db = req.db;
-    var collection = db.get('letter');
-
-    //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
-    //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    collection.find({
-        'initials': initials
-    }, {}, function (e, docs) {
-        var docLenght = docs.length;
-        res.render('template', {
-            "testlist": docs[docLenght - 1],
-            title: 'TEMPLATE'
-        });
-    });
-});
+//router.get('/template', function (req, res) {
+//    var db = req.db;
+//    var collection = db.get('letter');
+//
+//    //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
+//    //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
+//    collection.find({
+//        'initials': initials
+//    }, {}, function (e, docs) {
+//        var docLenght = docs.length;
+//        res.render('template', {
+//            "testlist": docs[docLenght - 1],
+//            title: 'TEMPLATE'
+//        });
+//    });
+//});
 
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET MAIN */
 
 //henter hjemmesiden 'main' 
 
-router.get('/welcome', function (req, res) {
-    res.render('welcome', {
+// hardcoded link 5a3fc35311aedd22b0e3de9d
+//note Luca> maybe make array of all ids and use array.indexof afterwards??
+router.get('/welcome5a3fc35311aedd22b0e3de9d', function (req, res) {
+//TODO : get logic
+	res.render('welcome', {
         title: 'main page'
     });
 });

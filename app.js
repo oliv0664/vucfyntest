@@ -23,7 +23,8 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
-var url;
+var idUrl;
+var idTeacher;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,14 +42,29 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
 	req.db = db;
-	req.getUrl = function () {
-		console.log('you activated a method, good job!');
-	}
-
 	var isWelcome = req.url.slice(0, 8);
 	if (isWelcome === '/welcome') {
-		var url = req.url.slice(8);
-		console.log('pre-index data: ' + url);
+		// get the id reference to the collection docs
+		var idUrl = req.url.slice(8);
+		var collection = db.get('teachers');
+		collection.find({}).then((docs) => {
+			console.log('db data set: \n', docs, );
+			console.log('length of data set is ' + docs.length);
+			// this should be a for-loop with docs.length
+			for (i = 0; i < docs.length; i++) {
+
+				idTeacher = docs[i]._id;
+				console.log('pre-index data: ' + idUrl);
+				console.log('This is the teachers id from the database: ' + idTeacher);
+				if (idUrl == idTeacher) {
+					console.log('there is a match, now redirecting to the correct page');
+				}else {
+					console.log('there is no match, redirect to error');
+				}
+			}
+		});
+
+
 	};
 	next();
 });
