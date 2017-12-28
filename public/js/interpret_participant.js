@@ -9,8 +9,8 @@ var d = new Date();
 var startTime;
 var checkpoint;
 
-$(function () {
-    $('#start').click(function () {
+$(function() {
+    $('#start').click(function() {
         startTime = d.getTime();
         checkpoint = startTime;
 
@@ -29,14 +29,14 @@ $(function () {
         type: 'button',
         id: 'audioControl',
         value: 'Afspil'
-    }).click(function () {
+    }).click(function() {
         $audioFile[0].play();
     });
 
     $('#subsection').prepend($audioControl);
 
 
-    $('#form').bind('submit', function (event) {
+    $('#form').bind('submit', function(event) {
         event.preventDefault(); //this will prevent the default submit
 
 
@@ -60,7 +60,7 @@ $(function () {
 
 
             console.log('Luca tests the answer: ' + answer);
-            console.log('Luca tests test1: ' + test1Selected);
+            //console.log('Luca tests test1: ' + test1Selected);
 
 
             var correct = data.content.questions[j].rightAnswer;
@@ -140,7 +140,7 @@ function nextText(countT) {
         type: 'button',
         id: 'audioControl' + countT,
         value: 'Afspil'
-    }).click(function () {
+    }).click(function() {
         $audioFile[0].play();
 
         if (audioCountT > 0) {
@@ -180,7 +180,7 @@ function nextText(countT) {
         console.log(countT);
         countT++;
         $nextButton
-            .click(function () {
+            .click(function() {
                 console.log(countT);
                 nextT(countT);
             });
@@ -188,7 +188,7 @@ function nextText(countT) {
     } else {
 
         $nextButton
-            .click(function () {
+            .click(function() {
                 nextQuestion(countQ);
             });
         $('#subsubsection').append($nextButton);
@@ -261,7 +261,7 @@ function nextQuestion(countQ) {
         type: 'button',
         id: 'audioControlQ' + countQ,
         value: 'Afspil'
-    }).click(function () {
+    }).click(function() {
         $audioFile[0].play();
 
         if (audiocountQ > 0) {
@@ -342,7 +342,7 @@ function nextQuestion(countQ) {
             .append($nextQuestionButton)
             .append('<br>');
         $nextQuestionButton
-            .click(function () {
+            .click(function() {
                 nextQ()
             });
     } else {

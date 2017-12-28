@@ -4,22 +4,25 @@ var router = express.Router();
 var path = require('path');
 var formidable = require('formidable');
 var fs = require('fs');
+var nodemailer = require('nodemailer');
+
 var initials;
 var teacherModules = [];
 var studentModules = [];
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', function(req, res, next) {
     res.render('index', {
         title: 'Express'
     });
     teacherModules = [];
 });
 
-router.get('/filepicker', function (req, res, next) {
+router.get('/filepicker', function(req, res, next) {
     res.render('filepicker', {
         title: 'Filepicker'
     });
-});router.get('/error', function (req, res, next) {
+});
+router.get('/error', function(req, res, next) {
     res.render('error', {
         title: 'page not found'
     });
@@ -55,15 +58,38 @@ router.get('/filepicker', function (req, res, next) {
 
 // hardcoded link 5a3fc35311aedd22b0e3de9d
 //note Luca> maybe make array of all ids and use array.indexof afterwards??
-router.get('/welcome5a3fc35311aedd22b0e3de9d', function (req, res) {
-//TODO : get logic
-	res.render('welcome', {
+router.get('/welcome5a3fc35311aedd22b0e3de9d', function(req, res) {
+    //TODO : get logic
+    res.render('welcome', {
         title: 'main page'
     });
 });
 
+var teacherID = '5a3fc35311aedd22b0e3de9d';
+var studentID;
+router.post('/welcome_addinfo', function(req, res) {
+    var db = req.db;
 
-router.post('/index_addinfo', function (req, res) {
+    studentID = req.body.id;
+
+    var collection = db.get('students');
+
+    collection.insert({
+        "teacherID": teacherID,
+        "studentID": studentID
+    }, function(err, doc) {
+        if (err) {
+            res.send("There was a problem adding the information to the database.");
+        } else {
+            res.redirect('startpage'); //"worddictate_participant"
+            //studentModules.shift();
+        }
+    });
+});
+
+var studentModules = ['worddictate_participant', 'nonsense_participant', 'clozetest_participant', 'interpret_participant', 'letter_participant'];
+
+router.post('/index_addinfo', function(req, res) {
     // Set our internal DB variable
     var db = req.db;
     // the array MUST be emptied so that no duplicates are psuhed in
@@ -101,7 +127,7 @@ router.post('/index_addinfo', function (req, res) {
         "initials": initials,
         "totalTests": teacherModules.length,
         "tests": []
-    }, function (err, doc) {
+    }, function(err, doc) {
         if (err) {
             // If it failed, return error
             res.send("There was a problem adding the information to the database.");
@@ -119,14 +145,14 @@ router.post('/index_addinfo', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET WORDDICTATE */
 
 //henter hjemmesiden 'worddictate_teacher' 
-router.get('/worddictate_teacher', function (req, res) {
+router.get('/worddictate_teacher', function(req, res) {
     res.render('worddictate_teacher', {
         title: 'Orddiktat'
     });
 });
 
 
-router.post('/worddictate_addinfo', function (req, res) {
+router.post('/worddictate_addinfo', function(req, res) {
     // Set our internal DB variable
     var db = req.db;
     // Get our form values. These rely on the "name" attributes 
@@ -149,7 +175,7 @@ router.post('/worddictate_addinfo', function (req, res) {
             }
         }
 
-    }, function (err, doc) {
+    }, function(err, doc) {
         if (err) {
             // If it failed, return error
             res.send("There was a problem adding the information to the database.");
@@ -166,14 +192,14 @@ router.post('/worddictate_addinfo', function (req, res) {
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET NONSENSE*/
 
-router.get('/nonsense_teacher', function (req, res) {
+router.get('/nonsense_teacher', function(req, res) {
     res.render('nonsense_teacher', {
         title: 'Vrøvleord'
     });
 });
 
 
-router.post('/nonsense_addinfo', function (req, res) {
+router.post('/nonsense_addinfo', function(req, res) {
     var db = req.db;
 
     var file = req.body.file;
@@ -190,7 +216,7 @@ router.post('/nonsense_addinfo', function (req, res) {
                 "content": JSON.parse(content)
             }
         }
-    }, function (err, doc) {
+    }, function(err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
@@ -206,14 +232,14 @@ router.post('/nonsense_addinfo', function (req, res) {
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET CLOZETEST*/
 
-router.get('/clozetest_teacher', function (req, res) {
+router.get('/clozetest_teacher', function(req, res) {
     res.render('clozetest_teacher', {
         title: 'Clozetest'
     });
 });
 
 
-router.post('/clozetest_addinfo', function (req, res) {
+router.post('/clozetest_addinfo', function(req, res) {
     // Set our internal DB variable
     var db = req.db;
     // Get our form values. These rely on the "name" attributes 
@@ -233,7 +259,7 @@ router.post('/clozetest_addinfo', function (req, res) {
                 "content": JSON.parse(content)
             }
         }
-    }, function (err, doc) {
+    }, function(err, doc) {
         if (err) {
             // If it failed, return error
             res.send("There was a problem adding the information to the database.");
@@ -252,14 +278,14 @@ router.post('/clozetest_addinfo', function (req, res) {
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET INTERPRET*/
 
-router.get('/interpret_teacher', function (req, res) {
+router.get('/interpret_teacher', function(req, res) {
     res.render('interpret_teacher', {
         title: 'Tekstforståelse'
     });
 });
 
 
-router.post('/interpret_addinfo', function (req, res) {
+router.post('/interpret_addinfo', function(req, res) {
     // Set our internal DB variable
     var db = req.db;
     // Get our form values. These rely on the "name" attributes 
@@ -280,7 +306,7 @@ router.post('/interpret_addinfo', function (req, res) {
                 "content": JSON.parse(content)
             }
         }
-    }, function (err, doc) {
+    }, function(err, doc) {
         if (err) {
             // If it failed, return error
             res.send("There was a problem adding the information to the database.");
@@ -298,14 +324,14 @@ router.post('/interpret_addinfo', function (req, res) {
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET LETTER*/
 
-router.get('/letter_teacher', function (req, res) {
+router.get('/letter_teacher', function(req, res) {
     res.render('letter_teacher', {
         title: 'Brev'
     });
 });
 
 
-router.post('/letter_addinfo', function (req, res) {
+router.post('/letter_addinfo', function(req, res) {
     var db = req.db;
 
     var file = req.body.file;
@@ -321,10 +347,10 @@ router.post('/letter_addinfo', function (req, res) {
                 "file": file,
                 "content": [{
                     "time": time
-        }]
+                }]
             }
         }
-    }, function (err, doc) {
+    }, function(err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
@@ -339,14 +365,14 @@ router.post('/letter_addinfo', function (req, res) {
 
 /* NEXTPAGE ER EN DUMMY DER SENDER DIG VIDERE TIL KURSISTSIDEN*/
 
-router.get('/nextpage', function (req, res) {
+router.get('/nextpage', function(req, res) {
     res.render('nextpage', {
         title: 'Nextpage'
     });
 });
 
 
-router.post('/nextpage', function (req, res) {
+router.post('/nextpage', function(req, res) {
     res.redirect(studentModules[0]);
     studentModules.shift();
     console.log('next module should be ' + studentModules[0]);
@@ -366,19 +392,19 @@ router.post('/nextpage', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET STARTPAGE */
 
 //henter hjemmesiden 'startpage' 
-router.get('/startpage', function (req, res) {
+router.get('/startpage', function(req, res) {
     res.render('startpage', {
         title: 'Startside'
     });
 });
 
 
-router.post('/startpage_addinfo', function (req, res) {
+router.post('/startpage_addinfo', function(req, res) {
     var db = req.db;
 
     var date = req.body.date_input;
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
+    //var firstname = req.body.firstname;
+    //var lastname = req.body.lastname;
     var dys = req.body.dys_select;
     var fam = req.body.fam_select;
     var tong = req.body.tong_input;
@@ -386,18 +412,22 @@ router.post('/startpage_addinfo', function (req, res) {
 
     var collection = db.get('students');
 
-    collection.insert({
-        "id": initials,
-        "date": date,
-        "firstname": firstname,
-        "lastname": lastname,
-        "is_dyslexic": dys,
-        "is_familyDyslexic": fam,
-        "mother_tongue": tong,
-        "lang_at_home": home,
-        "time": "12:00:00",
-        "tests": []
-    }, function (err, doc) {
+    collection.update({
+        "studentID": studentID
+    }, {
+        $set: {
+            //"id": initials,
+            "date": date,
+            //"firstname": firstname,
+            //"lastname": lastname,
+            "is_dyslexic": dys,
+            "is_familyDyslexic": fam,
+            "mother_tongue": tong,
+            "lang_at_home": home,
+            //"time": "12:00:00",
+            "tests": []
+        }
+    }, function(err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
@@ -414,16 +444,17 @@ var g_moduleCount = 0;
 /* ALLE FUNKTIONER DER ER TILKNYTTET WORDDICTATE */
 
 //henter 'worddictate_participant' og finder data i databasen, svarende til de indtastede initialer
-router.get('/worddictate_participant', function (req, res) {
+router.get('/worddictate_participant', function(req, res) {
     var db = req.db;
     var collection = db.get('teachers');
-
+    console.log("studentModules[0]: " + studentModules[0]);
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     collection.findOne({
-        'initials': initials
-    }, function (e, docs) {
-        console.log('test data from db: ' + docs.tests[g_moduleCount]);
+        _id: teacherID
+            //'initials': initials   //5a3fc35311aedd22b0e3de9d
+    }, function(e, docs) {
+        console.log('test data from db: ' + docs.tests[0].content[0].line1);
         res.render('worddictate_participant', {
             "data": docs.tests[g_moduleCount],
             title: 'worddictate_participant'
@@ -433,7 +464,7 @@ router.get('/worddictate_participant', function (req, res) {
 });
 
 
-router.post('/worddictate_addanswer', function (req, res) {
+router.post('/worddictate_addanswer', function(req, res) {
     var db = req.db;
 
     var answers = req.body.answers;
@@ -441,7 +472,7 @@ router.post('/worddictate_addanswer', function (req, res) {
     var collection = db.get('students');
 
     collection.update({
-        "id": initials
+        "studentID": studentID
     }, {
         "$push": {
             "tests": {
@@ -449,11 +480,11 @@ router.post('/worddictate_addanswer', function (req, res) {
                 "answers": JSON.parse(answers)
             }
         }
-    }, function (err, doc) {
+    }, function(err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect(studentModules[0]); //"worddictate_participant"
+            res.redirect(studentModules[0]); //"nonsense_participant"
             studentModules.shift();
         }
     });
@@ -464,16 +495,16 @@ router.post('/worddictate_addanswer', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET NONSENSE */
 
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
-router.get('/nonsense_participant', function (req, res) {
+router.get('/nonsense_participant', function(req, res) {
     var db = req.db;
     var collection = db.get('teachers');
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     collection.findOne({
-        'initials': initials
-    }, function (e, docs) {
-        console.log(docs.tests[g_moduleCount]);
+        _id: teacherID
+    }, function(e, docs) {
+        //console.log(docs.tests[g_moduleCount]);
         res.render('nonsense_participant', {
             "data": docs.tests[g_moduleCount],
             title: 'nonsense_participant'
@@ -483,7 +514,7 @@ router.get('/nonsense_participant', function (req, res) {
 });
 
 
-router.post('/nonsense_addanswer', function (req, res) {
+router.post('/nonsense_addanswer', function(req, res) {
     var db = req.db;
 
     var answers = req.body.answers;
@@ -491,7 +522,7 @@ router.post('/nonsense_addanswer', function (req, res) {
     var collection = db.get('students');
 
     collection.update({
-        "id": initials
+        "studentID": studentID
     }, {
         "$push": {
             "tests": {
@@ -499,11 +530,11 @@ router.post('/nonsense_addanswer', function (req, res) {
                 "answers": JSON.parse(answers)
             }
         }
-    }, function (err, doc) {
+    }, function(err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect(studentModules[0]); //"worddictate_participant"
+            res.redirect(studentModules[0]); //"clozetest_participant"
             studentModules.shift();
         }
     });
@@ -514,16 +545,16 @@ router.post('/nonsense_addanswer', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET CLOZETEST */
 
 //henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
-router.get('/clozetest_participant', function (req, res) {
+router.get('/clozetest_participant', function(req, res) {
     var db = req.db;
     var collection = db.get('teachers');
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     collection.findOne({
-        'initials': initials
-    }, function (e, docs) {
-        console.log(docs.tests[g_moduleCount]);
+        _id: teacherID
+    }, function(e, docs) {
+        //console.log(docs.tests[g_moduleCount]);
         res.render('clozetest_participant', {
             "data": docs.tests[g_moduleCount],
             title: 'clozetest_participant'
@@ -533,7 +564,7 @@ router.get('/clozetest_participant', function (req, res) {
 });
 
 
-router.post('/clozetest_addanswer', function (req, res) {
+router.post('/clozetest_addanswer', function(req, res) {
     var db = req.db;
 
     var answers = req.body.answers;
@@ -541,7 +572,7 @@ router.post('/clozetest_addanswer', function (req, res) {
     var collection = db.get('students');
 
     collection.update({
-        "id": initials
+        "studentID": studentID
     }, {
         "$push": {
             "tests": {
@@ -549,11 +580,11 @@ router.post('/clozetest_addanswer', function (req, res) {
                 "answers": JSON.parse(answers)
             }
         }
-    }, function (err, doc) {
+    }, function(err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect(studentModules[0]); //"worddictate_participant"
+            res.redirect(studentModules[0]); //"interpret_participant"
             studentModules.shift();
         }
     });
@@ -564,16 +595,16 @@ router.post('/clozetest_addanswer', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET INTERPRET */
 
 //henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
-router.get('/interpret_participant', function (req, res) {
+router.get('/interpret_participant', function(req, res) {
     var db = req.db;
     var collection = db.get('teachers');
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     collection.findOne({
-        'initials': initials
-    }, function (e, docs) {
-        console.log(docs.tests[g_moduleCount]);
+        _id: teacherID
+    }, function(e, docs) {
+        //console.log(docs.tests[g_moduleCount]);
         res.render('interpret_participant', {
             "data": docs.tests[g_moduleCount],
             title: 'interpret_participant'
@@ -583,15 +614,15 @@ router.get('/interpret_participant', function (req, res) {
 });
 
 
-router.post('/interpret_addanswer', function (req, res) {
+router.post('/interpret_addanswer', function(req, res) {
     var db = req.db;
 
     var answers = req.body.answers;
-    console.log("non parsed " + answers);
-    console.log("parsed " + JSON.parse(answers));
+    //console.log("non parsed " + answers);
+    //console.log("parsed " + JSON.parse(answers));
     var collection = db.get('students');
     collection.update({
-        "id": initials
+        "studentID": studentID
     }, {
         "$push": {
             "tests": {
@@ -599,11 +630,11 @@ router.post('/interpret_addanswer', function (req, res) {
                 "answers": JSON.parse(answers)
             }
         }
-    }, function (err, doc) {
+    }, function(err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect(studentModules[0]); //"worddictate_participant"
+            res.redirect(studentModules[0]); //"letter_participant"
             studentModules.shift();
         }
     });
@@ -614,15 +645,15 @@ router.post('/interpret_addanswer', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET LETTER */
 
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
-router.get('/letter_participant', function (req, res) {
+router.get('/letter_participant', function(req, res) {
     var db = req.db;
     var collection = db.get('teachers');
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     collection.findOne({
-        'initials': initials
-    }, function (e, docs) {
+        _id: teacherID
+    }, function(e, docs) {
         res.render('letter_participant', {
             "data": docs.tests[g_moduleCount],
             title: 'letter_participant'
@@ -631,8 +662,7 @@ router.get('/letter_participant', function (req, res) {
     });
 });
 
-
-router.post('/letter_addanswer', function (req, res) {
+router.post('/letter_addanswer', function(req, res) {
     var db = req.db;
 
     var answers = req.body.answers;
@@ -640,7 +670,7 @@ router.post('/letter_addanswer', function (req, res) {
     var collection = db.get('students');
 
     collection.update({
-        "id": initials
+        "studentID": studentID
     }, {
         "$push": {
             "tests": {
@@ -648,7 +678,7 @@ router.post('/letter_addanswer', function (req, res) {
                 "answers": JSON.parse(answers)
             }
         }
-    }, function (err, doc) {
+    }, function(err, doc) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
@@ -657,19 +687,28 @@ router.post('/letter_addanswer', function (req, res) {
     });
 });
 
-router.get('/finalpage', function (req, res) {
-    res.render('finalpage', {
-        title: 'finalpage'
+router.get('/finalpage', function(req, res) {
+    var db = req.db;
+    var collection = db.get('students');
+    collection.findOne({
+        "studentID": studentID
+    }, function(e, docs) {
+
+        mailSender(docs);
+
+        res.render('finalpage', {
+            title: 'finalpage'
+        });
     });
 });
 // TEEEEEEEEEEEEEEEEEEEEST FILE SYSTEM
-router.get('/upload', function (req, res) {
+router.get('/upload', function(req, res) {
     res.render('upload', {
         title: 'Filesystem'
     });
 });
 
-router.post('/upload', function (req, res) {
+router.post('/upload', function(req, res) {
 
     var soundTrack;
     var db = req.db;
@@ -683,19 +722,19 @@ router.post('/upload', function (req, res) {
 
     // every time a file has been uploaded successfully,
     // rename it to it's orignal name
-    form.on('file', function (field, file) {
+    form.on('file', function(field, file) {
         soundTrack = file;
         console.log('###########', JSON.stringify(file), '##########');
         fs.rename(file.path, path.join(form.uploadDir, "1"));
     });
 
     // log any errors that occur
-    form.on('error', function (err) {
+    form.on('error', function(err) {
         console.log('An error has occured: \n' + err);
     });
 
     // once all the files have been uploaded, send a response to the client
-    form.on('end', function () {
+    form.on('end', function() {
         // this is the callback, it can be populated with data eventually 
         var p = JSON.stringify(soundTrack);
         res.end(p);
@@ -704,7 +743,7 @@ router.post('/upload', function (req, res) {
         console.log('STRRRRIIIIIIING', JSON.stringify(soundTrack));
         collection.insert({
             "audio": p
-        }, function (err, doc) {
+        }, function(err, doc) {
             if (err) {
                 res.send("There was a problem adding the information to the database.");
             }
@@ -716,5 +755,35 @@ router.post('/upload', function (req, res) {
 
 });
 
+
+
+
+function mailSender(results) {
+    console.log(results);
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'wolter.nielsen@gmail.com',
+            pass: 'nielsen777'
+        }
+    });
+
+    var mailOptions = {
+        from: 'wolter.nielsen@gmail.com',
+        to: 'oni@vucfyn.dk',
+        subject: 'Sending Email using Node.js',
+        text: JSON.stringify(results)
+            //html: '<h1>Testresultater</h1><ul><li>Lærer ID: ' + results.teacherID + '</li><li>Kursist ID: ' + results.studentID + '</li><li>Kursist info: </li><li>dato ' + results.date + '</li><li>er ordblind' + results.is_dyslexic + '</li><li>har ordblindhed i familien ' + results.is_familyDyslexic + '</li><li>modersmål ' + results.mother_tongue + '</li><li>sprog i hjemmet' + results.lang_at_home + '</li><li>Test resultater</li><li>testtype ' + results.tests[0].type + '</li><li>svar 1 ' + results.tests[0].answers[0].answer + '</li><li>point ' + results.tests[0].answers[0].point + '</li><li>tid ' + results.tests[0].answers[0].time + '</li><li>svar 2 ' + results.tests[0].answers[1].answer + '</li><li>point ' + results.tests[0].answers[1].point + '</li><li>tid ' + results.tests[0].answers[1].time + '</li><li>svar 3' + results.tests[0].answers[2].answer + '</li><li>point ' + results.tests[0].answers[2].point + '</li><li>tid ' + results.tests[0].answers[2].time + '</li><li>testtype ' + results.tests[1].type + '</li><li>svar 1 ' + results.tests[1].answers[0].answer + '</li><li>point ' + results.tests[1].answers[0].point + '</li><li>tid ' + results.tests[1].answers[0].time + '</li><li>svar 2 ' + results.tests[1].answers[1].answer + '</li><li>point ' + results.tests[1].answers[1].point + '</li><li>tid ' + results.tests[1].answers[1].time + '</li><li>svar 3' + results.tests[1].answers[2].answer + '</li><li>point ' + results.tests[1].answers[2].point + '</li><li>tid ' + results.tests[1].answers[2].time + '</li><li>testtype ' + results.tests[2].type + '</li><li>svar 1 ' + results.tests[2].answers[0].answer + '</li><li>point ' + results.tests[2].answers[0].point + '</li><li>tid ' + results.tests[2].answers[0].time + '</li><li>svar 2 ' + results.tests[2].answers[1].answer + '</li><li>point ' + results.tests[2].answers[1].point + '</li><li>tid ' + results.tests[2].answers[1].time + '</li><li>svar 3' + results.tests[2].answers[2].answer + '</li><li>point ' + results.tests[2].answers[2].point + '</li><li>tid ' + results.tests[2].answers[2].time + '</li><li>testtype ' + results.tests[3].type + '</li><li>' + results.tests[3].answers.texts[0].time + '</li><li>svar 1 ' + results.tests[3].answers.questions[0].answer + '</li><li>point ' + results.tests[3].answers.questions[0].point + '</li><li>tid ' + results.tests[3].answers.quesitons[0].time + '</li><li>svar 2 ' + results.tests[3].answers.questions[1].answer + '</li><li>point ' + results.tests[3].answers.questions[1].point + '</li><li>tid ' + results.tests[3].answers.quesitons[1].time + '</li><li>svar 3' + results.tests[3].answers.questions[2].answer + '</li><li>point ' + results.tests[3].answers.questions[2].point + '</li><li>tid ' + results.tests[3].answers.questions[2].time + '</li><li>testtype ' + results.tests[4].type + '</li><li>tid ' + results.tests[4].answers[0].time + '</li></ul>'
+    };
+
+    transporter.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            console.log("Mail ERROR");
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+}
 
 module.exports = router;

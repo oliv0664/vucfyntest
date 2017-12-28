@@ -1,17 +1,18 @@
 {
     var totalLineCount;
-    var count;
+    var count = 0;
     var data;
     var audioCount = 0;
     var endTime;
     var timer;
     var x;
+    var checkpoint;
 
-    $(function () {
-        $('#start').click(function () {
+    $(function() {
+        $('#start').click(function() {
             setTime();
 
-            endTime = startTime + timer;
+            endTime = checkpoint + timer;
             nextLine(count);
             x = setInterval(countdown, 1000);
             this.remove();
@@ -28,7 +29,7 @@
             type: 'button',
             id: 'audioControl' + count,
             value: 'Afspil'
-        }).click(function () {
+        }).click(function() {
             $audioFile[0].play();
 
             if (audioCount > 0) {
@@ -44,7 +45,7 @@
 
 
 
-        $('#form').bind('submit', function (event) {
+        $('#form').bind('submit', function(event) {
             event.preventDefault(); //this will prevent the default submit
 
             var answers = [];
@@ -107,7 +108,7 @@
         $timestamp = $('<input/>').attr({
             type: 'hidden',
             id: 'timestamp' + count
-            //name: 'timestamp'
+                //name: 'timestamp'
         });
 
 
@@ -123,7 +124,7 @@
             id: 'saveButton',
             type: 'button',
             value: 'Gem'
-        }).click(function () {
+        }).click(function() {
             save()
         });
 
@@ -148,7 +149,7 @@
 
 
     function lockTextfield() {
-        $('#input' + count).attr({
+        $('#answer' + count).attr({
             readonly: 'readonly',
             id: 'lockedField'
         });

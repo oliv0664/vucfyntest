@@ -7,8 +7,8 @@
     var startTime;
     var checkpoint;
 
-    $(function () {
-        $('#start').click(function () {
+    $(function() {
+        $('#start').click(function() {
             startTime = d.getTime();
             checkpoint = startTime;
 
@@ -27,7 +27,7 @@
             type: 'button',
             id: 'audioControl',
             value: 'Afspil'
-        }).click(function () {
+        }).click(function() {
             $audioFile[0].play();
         });
 
@@ -35,7 +35,7 @@
 
 
 
-        $('#form').bind('submit', function (event) {
+        $('#form').bind('submit', function(event) {
             setTime();
 
             event.preventDefault(); //this will prevent the default submit
@@ -70,10 +70,11 @@
         });
     });
 
+
     function initializeTest(data) {
 
         this.data = data;
-
+        console.log(data);
         totalLineCount = data.content.length;
         count = 0;
     }
@@ -121,7 +122,7 @@
             type: 'button',
             id: 'audioControl' + count,
             value: 'Afspil'
-        }).click(function () {
+        }).click(function() {
             $audioFile[0].play();
 
             if (audioCount > 0) {
@@ -152,7 +153,7 @@
 
 
 
-        $('#answer' + count).one('keyup', function () {
+        $('#answer' + count).one('keyup', function() {
             $nextButton = $('<button/>').attr({
                 class: 'h2size',
                 id: 'button' + count
@@ -160,7 +161,7 @@
 
             if ((count + 1) < totalLineCount) {
                 $nextButton
-                    .click(function () {
+                    .click(function() {
                         next();
                     })
                     .text('Næste');
