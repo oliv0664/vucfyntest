@@ -12,7 +12,7 @@ var url = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb'
 
 var db = monk(url);
 db.then(() => {
-	console.log('Connected correctly to server')
+    console.log('Connected correctly to server')
 });
 
 
@@ -35,38 +35,38 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-	extended: true
+    extended: true
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
-	req.db = db;
-	var isWelcome = req.url.slice(0, 8);
-	if (isWelcome === '/welcome') {
-		// get the id reference to the collection docs
-		var idUrl = req.url.slice(8);
-		var collection = db.get('teachers');
-		collection.find({}).then((docs) => {
-			console.log('db data set: \n', docs, );
-			console.log('length of data set is ' + docs.length);
-			// this should be a for-loop with docs.length
-			for (i = 0; i < docs.length; i++) {
+    req.db = db;
+    var isWelcome = req.url.slice(0, 8);
+    if (isWelcome === '/welcome') {
+        // get the id reference to the collection docs
+        var idUrl = req.url.slice(8);
+        var collection = db.get('teachers');
+        collection.find({}).then((docs) => {
+            console.log('db data set: \n', docs);
+            console.log('length of data set is ' + docs.length);
+            // this should be a for-loop with docs.length
+            for (i = 0; i < docs.length; i++) {
 
-				idTeacher = docs[i]._id;
-				console.log('pre-index data: ' + idUrl);
-				console.log('This is the teachers id from the database: ' + idTeacher);
-				if (idUrl == idTeacher) {
-					console.log('there is a match, now redirecting to the correct page');
-				}else {
-					console.log('there is no match, redirect to error');
-				}
-			}
-		});
+                idTeacher = docs[i]._id;
+                console.log('pre-index data: ' + idUrl);
+                console.log('This is the teachers id from the database: ' + idTeacher);
+                if (idUrl == idTeacher) {
+                    console.log('there is a match, now redirecting to the correct page');
+                } else {
+                    console.log('there is no match, redirect to error');
+                }
+            }
+        });
 
 
-	};
-	next();
+    };
+    next();
 });
 
 
@@ -75,20 +75,20 @@ app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-	var err = new Error('Not Found');
-	err.status = 404;
-	next(err);
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handler
 app.use(function (err, req, res, next) {
-	// set locals, only providing error in development
-	res.locals.message = err.message;
-	res.locals.error = req.app.get('env') === 'development' ? err : {};
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-	// render the error page
-	res.status(err.status || 500);
-	res.render('error');
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
 });
 
 

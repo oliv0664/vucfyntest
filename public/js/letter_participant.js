@@ -8,8 +8,8 @@
     var x;
     var checkpoint;
 
-    $(function() {
-        $('#start').click(function() {
+    $(function () {
+        $('#start').click(function () {
             setTime();
 
             endTime = checkpoint + timer;
@@ -29,7 +29,7 @@
             type: 'button',
             id: 'audioControl' + count,
             value: 'Afspil'
-        }).click(function() {
+        }).click(function () {
             $audioFile[0].play();
 
             if (audioCount > 0) {
@@ -45,35 +45,36 @@
 
 
 
-        $('#form').bind('submit', function(event) {
+        $('#form').bind('submit', function (event) {
             event.preventDefault(); //this will prevent the default submit
 
             var answers = [];
-            for (var i = 0; i <= count; i++) {
-                var answer = $('#answer' + i).val();
-                var point = 0;
-                if (answer != null) {
-                    point = 1;
-                }
-
-                var time = $('#timestamp' + i).val();
-
-
-                var object = {
-                    "answer": answer,
-                    "point": point,
-                    "time": time
-                }
-
-                answers.push(object);
+            //            for (var i = 0; i <= count; i++) {
+            var answer = $('#answer').val();
+            console.log(answer);
+            var point = 0;
+            if (answer != null) {
+                point = 1;
             }
+
+            var time = $('#timestamp' + i).val();
+
+
+            var object = {
+                "answer": answer,
+                "point": point,
+                "time": time
+            }
+
+            answers.push(object);
+            //            }
 
             $('#answers').val(JSON.stringify(answers));
 
 
 
 
-            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
+            //            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
         });
     });
 
@@ -95,7 +96,7 @@
         $lineInput = $('<textarea/>')
             .attr({
                 class: 'h2size',
-                id: 'answer' + count,
+                id: 'answer',
                 //name: 'userinput',
                 placeholder: 'Skriv brev'
             })
@@ -108,7 +109,7 @@
         $timestamp = $('<input/>').attr({
             type: 'hidden',
             id: 'timestamp' + count
-                //name: 'timestamp'
+            //name: 'timestamp'
         });
 
 
@@ -124,7 +125,7 @@
             id: 'saveButton',
             type: 'button',
             value: 'Gem'
-        }).click(function() {
+        }).click(function () {
             save()
         });
 
