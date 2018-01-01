@@ -58,14 +58,14 @@ router.get('/error', function (req, res, next) {
 
 // hardcoded link 5a3fc35311aedd22b0e3de9d
 //note Luca> maybe make array of all ids and use array.indexof afterwards??
-router.get('/welcome5a3fc35311aedd22b0e3de9d', function (req, res) {
+router.get('/welcome5a48e3365624c71b54834fef', function (req, res) {
     //TODO : get logic
     res.render('welcome', {
         title: 'main page'
     });
 });
 
-var teacherID = '5a3fc35311aedd22b0e3de9d';
+var teacherID = '5a48e3365624c71b54834fef';
 var studentID;
 router.post('/welcome_addinfo', function (req, res) {
     var db = req.db;
@@ -459,7 +459,7 @@ router.get('/worddictate_participant', function (req, res) {
     }, function (e, docs) {
         console.log('test data from db: ' + docs.tests[0].content[0].line1);
         res.render('worddictate_participant', {
-            "data": docs.tests[g_moduleCount],
+            "data": docs.tests[0],
             title: 'worddictate_participant'
         });
         g_moduleCount++;
@@ -512,7 +512,7 @@ router.get('/nonsense_participant', function (req, res) {
     }, function (e, docs) {
         //console.log(docs.tests[g_moduleCount]);
         res.render('nonsense_participant', {
-            "data": docs.tests[g_moduleCount],
+            "data": docs.tests[1],
             title: 'nonsense_participant'
         });
         g_moduleCount++;
@@ -565,7 +565,7 @@ router.get('/clozetest_participant', function (req, res) {
     }, function (e, docs) {
         //console.log(docs.tests[g_moduleCount]);
         res.render('clozetest_participant', {
-            "data": docs.tests[g_moduleCount],
+            "data": docs.tests[2],
             title: 'clozetest_participant'
         });
         g_moduleCount++;
@@ -618,7 +618,7 @@ router.get('/interpret_participant', function (req, res) {
     }, function (e, docs) {
         //console.log(docs.tests[g_moduleCount]);
         res.render('interpret_participant', {
-            "data": docs.tests[g_moduleCount],
+            "data": docs.tests[3],
             title: 'interpret_participant'
         });
         g_moduleCount++;
@@ -670,7 +670,7 @@ router.get('/letter_participant', function (req, res) {
         _id: teacherID
     }, function (e, docs) {
         res.render('letter_participant', {
-            "data": docs.tests[g_moduleCount],
+            "data": docs.tests[4],
             title: 'letter_participant'
         });
         g_moduleCount++;
