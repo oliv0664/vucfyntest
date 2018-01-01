@@ -791,13 +791,13 @@ function mailSender(mailTo, results) {
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'wolter.nielsen@gmail.com', //wolter.nielsen@gmail.com
-            pass: 'nielsen777'
+            user: 'vucfyn.diktat.test@gmail.com', //wolter.nielsen@gmail.com
+            pass: 'Gmailvucfyntest2018'
         }
     });
 
     var mailOptions = {
-        from: 'wolter.nielsen@gmail.com', //wolter.nielsen@gmail.com
+        from: 'vucfyn.diktat.test@gmail.com', //wolter.nielsen@gmail.com
         to: mailTo, //oni@vucfyn.dk
         subject: 'screeningtest resultater',
         text: JSON.stringify(results)
