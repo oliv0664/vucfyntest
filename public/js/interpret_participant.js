@@ -115,15 +115,15 @@ function nextText(countT) {
     console.log("start of nextText: " + countT);
     console.log("totaltextcount: " + totalTextCount);
     // indsætter det første linjestykke
-    $textP1 = $('<nobr/>')
+    $textP1 = $('<p></p>')
         .attr({
             class: 'h2size'
         })
-        .text(data.content.texts[countT].text)
-        .css({
-            'width': '70vw',
-            'word-wrap': 'break-word'
-        });
+        .text(data.content.texts[countT].text).css({
+		'width': '50vw',
+		'height': '30vh',
+		'overflow-y': 'scroll'
+	});
 
     /*$audioControl = $('<audio controls></audio>')
         .append('</source>')
