@@ -122,7 +122,9 @@ function nextText(countT) {
         .text(data.content.texts[countT].text).css({
 		'width': '50vw',
 		'height': '30vh',
-		'overflow-y': 'scroll'
+		'overflow-y': 'scroll',
+		'border': 'solid green',
+		'padding': '10px'
 	});
 
     /*$audioControl = $('<audio controls></audio>')

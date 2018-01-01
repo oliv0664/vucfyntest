@@ -724,7 +724,8 @@ router.post('/send_mail', function (req, res) {
     var mail = req.body.mail;
     console.log(mail);
     
-    mailSender(mail, testResult)
+    mailSender(mail, testResult);
+	res.redirect("finalpage");
 });
 
 
