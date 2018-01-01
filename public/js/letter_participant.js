@@ -150,7 +150,7 @@
 
 
 	function lockTextfield() {
-		$('#answer' + count).attr({
+		$('#answer').attr({
 			readonly: 'readonly',
 			id: 'lockedField'
 		});

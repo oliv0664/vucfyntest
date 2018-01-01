@@ -119,7 +119,11 @@ function nextText(countT) {
         .attr({
             class: 'h2size'
         })
-        .text(data.content.texts[countT].text);
+        .text(data.content.texts[countT].text)
+        .css({
+            'width': '70vw',
+            'word-wrap': 'break-word'
+        });
 
     /*$audioControl = $('<audio controls></audio>')
         .append('</source>')
