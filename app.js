@@ -12,6 +12,8 @@ var monk = require('monk');
 var url = 'localhost:27017/vucfyntest'
 //var url ='mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb'
 
+
+
 var db = monk(url);
 db.then(() => {
     console.log('Connected correctly to server')
