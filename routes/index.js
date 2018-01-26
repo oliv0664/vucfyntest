@@ -58,14 +58,14 @@ router.get('/error', function (req, res, next) {
 
 // hardcoded link 5a3fc35311aedd22b0e3de9d
 //note Luca> maybe make array of all ids and use array.indexof afterwards??
-router.get('/welcome5a48e3365624c71b54834fef', function (req, res) {
+router.get('/welcome5a6b2b95f6db701cb4220429', function (req, res) {
     //TODO : get logic
     res.render('welcome', {
         title: 'main page'
     });
 });
 
-var teacherID = '5a48e3365624c71b54834fef';
+var teacherID = '5a6b2b95f6db701cb4220429';
 var studentID;
 router.post('/welcome_addinfo', function (req, res) {
     var db = req.db;
@@ -398,17 +398,48 @@ router.get('/startpage', function (req, res) {
     });
 });
 
-
 router.post('/startpage_addinfo', function (req, res) {
     var db = req.db;
-
-    var date = req.body.date_input;
+    console.log(req.body); 
     var firstname = req.body.firstname;
     var lastname = req.body.lastname;
-    var dys = req.body.dys_select;
-    var fam = req.body.fam_select;
-    var tong = req.body.tong_input;
-    var home = req.body.home_input;
+    var age = req.body.age;
+    var mothertong_dk = req.body.mothertong_dk;
+    var tong_input = req.body.tong_input;
+    var years_in_dk = req.body.years_in_dk;
+    var edu_in_dk = req.body.edu_in_dk;
+    var pass_test = req.body.pass_test;
+    var eg_test = req.body.eg_test;
+
+   
+
+    var speciel_edu = req.body.speciel_edu;
+    var speciel_edu_adult = req.body.speciel_edu_adult;
+    var eg_edu = req.body.eg_edu;
+
+    var years_in_edu = req.body.years_in_edu;
+    var years_in_edu_home = req.body.years_in_edu_home;
+    var exam_finish = req.body.exam_finish;
+    var eg_exam = req.body.eg_exam;
+    var eg_exam_country = req.body.eg_exam_country;
+    var edu_finish = req.body.edu_finish;
+    var eg_edu_finish = req.body.eg_edu_finish;
+    var eg_edu_finish_country = req.body.eg_edu_finish_country;
+    var read_write_con = req.body.read_write_con;
+    var eg_con = req.body.eg_con;
+
+    var in_job = req.body.in_job;
+    var eg_job = req.body.eg_job;
+    var read_write_in_job = req.body.read_write_in_job;
+    var eg_read_write_in_job = req.body.eg_read_write_in_job;
+    var read_in_job = req.body.read_in_job;
+    var write_in_job = req.body.write_in_job;
+    var lang_in_job = req.body.lang_in_job;
+
+    var why_fvu = req.body.why_fvu;
+
+    var improvement = req.body.improvement;
+    var eg_improvement = req.body.eg_improvement;
 
     var collection = db.get('students');
 
@@ -417,13 +448,38 @@ router.post('/startpage_addinfo', function (req, res) {
     }, {
         $set: {
             //"id": initials,
-            "date": date,
             "firstname": firstname,
             "lastname": lastname,
-            "is_dyslexic": dys,
-            "is_familyDyslexic": fam,
-            "mother_tongue": tong,
-            "lang_at_home": home,
+            "age": age,
+            "mothertong_dk": mothertong_dk,
+            "tong_input": tong_input,
+            "years_in_dk": years_in_dk,
+            "edu_in_dk": edu_in_dk,
+            "pass_test": pass_test,
+            "eg_test": eg_test,
+            "speciel_edu": speciel_edu,
+            "speciel_edu_adult": speciel_edu_adult,
+            "eg_edu": eg_edu,
+            "years_in_edu": years_in_edu,
+            "years_in_edu_home": years_in_edu_home,
+            "exam_finish": exam_finish,
+            "eg_exam": eg_exam,
+            "eg_exam_country": eg_exam_country,
+            "edu_finish": edu_finish,
+            "eg_edu_finish": eg_edu_finish,
+            "eg_edu_finish_country": eg_edu_finish_country,
+            "read_write_con": read_write_con,
+            "eg_con": eg_con,
+            "in_job": in_job,
+            "yeareg_jobs_in_dk": eg_job,
+            "read_write_in_job": read_write_in_job,
+            "eg_read_write_in_job": eg_read_write_in_job,
+            "read_in_job": read_in_job,
+            "write_in_job": write_in_job,
+            "lang_in_job": lang_in_job,
+            "why_fvu": why_fvu,
+            "improvement": improvement,
+            "eg_improvement": eg_improvement,
             //"time": "12:00:00",
             "tests": []
         }
@@ -431,9 +487,11 @@ router.post('/startpage_addinfo', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
+            console.log("######## student modules: " + studentModules); 
             res.redirect(
                 "worddictate_participant"
-                //                studentModules[0]
+                 
+                //studentModules[0]
             );
             studentModules.shift();
         }
