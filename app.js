@@ -4,11 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var authorizeLink = require('./routes/authorizelink.js');
+
 
 var mongo = require('mongodb');
 var monk = require('monk');
-//var url = 'localhost:27017/vucfyntest'
-var url = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb'
+var url = 'localhost:27017/vucfyntest'
+//var url ='mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb'
 
 var db = monk(url);
 db.then(() => {
@@ -51,16 +53,22 @@ app.use(function (req, res, next) {
             console.log('db data set: \n', docs);
             console.log('length of data set is ' + docs.length);
             // this should be a for-loop with docs.length
+            var match = false;
             for (i = 0; i < docs.length; i++) {
 
                 idTeacher = docs[i]._id;
-                console.log('pre-index data: ' + idUrl);
-                console.log('This is the teachers id from the database: ' + idTeacher);
+                //                console.log('pre-index data: ' + idUrl);
+                //                console.log('This is the teachers id from the database: ' + idTeacher);
                 if (idUrl == idTeacher) {
+                    // transfer the id to the index page somehow
+                    //send idTeacher to index(); 
+                    match = true;
                     console.log('there is a match, now redirecting to the correct page');
-                } else {
-                    console.log('there is no match, redirect to error');
+                    //                    authorizeLink.storeId(idTeacher);
                 }
+            }
+            if (!match) {
+                console.log('there is no match, redirect to error');
             }
         });
 

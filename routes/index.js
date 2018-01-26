@@ -5,6 +5,7 @@ var path = require('path');
 var formidable = require('formidable');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
+var authorizeLink = require('./authorizelink.js');
 
 var initials;
 var teacherModules = [];
@@ -55,17 +56,21 @@ router.get('/error', function (req, res, next) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET MAIN */
 
 //henter hjemmesiden 'main' 
+console.log(authorizeLink.getId());
 
-// hardcoded link 5a3fc35311aedd22b0e3de9d
-//note Luca> maybe make array of all ids and use array.indexof afterwards??
-router.get('/welcome5a48e3365624c71b54834fef', function (req, res) {
-    //TODO : get logic
+//note Luca> getId burde måske have en callback function som andet parameter, så den venter indtil koden fra app.js og authorizeLink.js er done. 
+router.get('/welcome' + authorizeLink.getId(), function (req, res) {
     res.render('welcome', {
         title: 'main page'
     });
+    //TODO : get logic
+    var doc = db.get('teachers').findOne({
+        _id: teacherID
+    });
+    console.log('THIS IS LUCATEST: ' + doc);
+    //    var temparray = collection
 });
 
-var teacherID = '5a48e3365624c71b54834fef';
 var studentID;
 router.post('/welcome_addinfo', function (req, res) {
     var db = req.db;
@@ -703,7 +708,7 @@ router.post('/letter_addanswer', function (req, res) {
     });
 });
 
-var testResult; 
+var testResult;
 router.get('/finalpage', function (req, res) {
     var db = req.db;
     var collection = db.get('students');
@@ -711,7 +716,7 @@ router.get('/finalpage', function (req, res) {
         "studentID": studentID
     }, function (e, docs) {
 
-        testResult = docs; 
+        testResult = docs;
 
         res.render('finalpage', {
             title: 'finalpage'
@@ -723,9 +728,9 @@ router.get('/finalpage', function (req, res) {
 router.post('/send_mail', function (req, res) {
     var mail = req.body.mail;
     console.log(mail);
-    
+
     mailSender(mail, testResult);
-	res.redirect("finalpage");
+    res.redirect("finalpage");
 });
 
 
