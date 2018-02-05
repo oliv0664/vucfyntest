@@ -5,7 +5,6 @@ var path = require('path');
 var formidable = require('formidable');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
-var authorizeLink = require('./authorizelink.js');
 
 var initials;
 var teacherModules = [];
@@ -56,10 +55,17 @@ router.get('/error', function (req, res, next) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET MAIN */
 
 //henter hjemmesiden 'main' 
-console.log("FIRST " + authorizeLink.getId());
+//console.log("FIRST " + authorizeLink.getId());
+
+function getId() {
+    var id = '5a785e4b3867e72b94b2baba';
+    return id;
+}
+
+
 
 //note Luca> getId burde måske have en callback function som andet parameter, så den venter indtil koden fra app.js og authorizeLink.js er done. 
-router.get('/welcome' + authorizeLink.getId(), function (req, res) {
+router.get('/welcome' + getId(), function (req, res) {
     //TODO : get logic
     //    var doc = db.get('teachers').findOne({
     //        _id: teacherID
