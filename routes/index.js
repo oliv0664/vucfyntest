@@ -529,7 +529,7 @@ router.get('/worddictate_participant', function (req, res) {
         //_id: teacherID
         initials: 'nytest3' //5a3fc35311aedd22b0e3de9d
     }, function (e, docs) {
-        console.log('test data from db: ' + docs.tests[0].content[0].line1);
+        //        console.log('test data from db: ' + docs.tests[0].content[0].line1);
         res.render('worddictate_participant', {
             "data": docs.tests[0],
             title: 'worddictate_participant'
