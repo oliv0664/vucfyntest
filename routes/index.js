@@ -56,7 +56,7 @@ router.get('/error', function (req, res, next) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET MAIN */
 
 //henter hjemmesiden 'main' 
-console.log(authorizeLink.getId());
+console.log("FIRST " + authorizeLink.getId());
 
 //note Luca> getId burde måske have en callback function som andet parameter, så den venter indtil koden fra app.js og authorizeLink.js er done. 
 router.get('/welcome' + authorizeLink.getId(), function (req, res) {
@@ -71,8 +71,10 @@ router.get('/welcome' + authorizeLink.getId(), function (req, res) {
     //    var temparray = collection
 });
 
-//var teacherID = '5a6b2b95f6db701cb4220429';
-var studentID;
+
+var teacherID = '5a785e4b3867e72b94b2baba';
+var studentID = 'test';
+
 router.post('/welcome_addinfo', function (req, res) {
     var db = req.db;
 
@@ -93,7 +95,7 @@ router.post('/welcome_addinfo', function (req, res) {
     });
 });
 
-var studentModules = ['worddictate_participant', 'nonsense_participant', 'clozetest_participant', 'interpret_participant', 'letter_participant'];
+var studentModules = ['worddictate_participant', 'letter_participant']; //'nonsense_participant', 'clozetest_participant', 'interpret_participant', 
 
 router.post('/index_addinfo', function (req, res) {
     // Set our internal DB variable
@@ -495,9 +497,9 @@ router.post('/startpage_addinfo', function (req, res) {
         } else {
             console.log("######## student modules: " + studentModules);
             res.redirect(
-                "worddictate_participant"
+                //"worddictate_participant"
 
-                //studentModules[0]
+                studentModules[0]
             );
             studentModules.shift();
         }
@@ -518,8 +520,8 @@ router.get('/worddictate_participant', function (req, res) {
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     collection.findOne({
-        _id: teacherID
-        //'initials': initials   //5a3fc35311aedd22b0e3de9d
+        //_id: teacherID
+        initials: 'nytest3'   //5a3fc35311aedd22b0e3de9d
     }, function (e, docs) {
         console.log('test data from db: ' + docs.tests[0].content[0].line1);
         res.render('worddictate_participant', {
@@ -533,7 +535,7 @@ router.get('/worddictate_participant', function (req, res) {
 
 router.post('/worddictate_addanswer', function (req, res) {
     var db = req.db;
-
+    console.log(' ************* ' + studentID); 
     var answers = req.body.answers;
 
     var collection = db.get('students');
@@ -552,8 +554,8 @@ router.post('/worddictate_addanswer', function (req, res) {
             res.send("There was a problem adding the information to the database.");
         } else {
             res.redirect(
-                "nonsense_participant"
-                //                studentModules[0]
+                //"nonsense_participant"
+                studentModules[0]
             );
             studentModules.shift();
         }
@@ -605,8 +607,8 @@ router.post('/nonsense_addanswer', function (req, res) {
             res.send("There was a problem adding the information to the database.");
         } else {
             res.redirect(
-                "clozetest_participant"
-                //                studentModules[0]
+                //"clozetest_participant"
+                studentModules[0]
             );
             studentModules.shift();
         }
@@ -658,8 +660,8 @@ router.post('/clozetest_addanswer', function (req, res) {
             res.send("There was a problem adding the information to the database.");
         } else {
             res.redirect(
-                "interpret_participant"
-                //                studentModules[0]
+                //"interpret_participant"
+                studentModules[0]
             );
             studentModules.shift();
         }
@@ -711,8 +713,8 @@ router.post('/interpret_addanswer', function (req, res) {
             res.send("There was a problem adding the information to the database.");
         } else {
             res.redirect(
-                "letter_participant"
-                //                studentModules[0]
+                //"letter_participant"
+                studentModules[0]
             );
             studentModules.shift();
         }
@@ -731,7 +733,8 @@ router.get('/letter_participant', function (req, res) {
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     collection.findOne({
-        _id: teacherID
+        //_id: teacherID
+        initials: 'nytest3'
     }, function (e, docs) {
         res.render('letter_participant', {
             "data": docs.tests[4],
@@ -783,6 +786,16 @@ router.get('/finalpage', function (req, res) {
     });
 });
 
+router.get('/getAllData', function (req, res) {
+    console.log('initials test: ' + initials);
+    var db = req.db;
+    var collection = db.get('teachers');
+    collection.findOne({"initials": initials},function(e, docs){
+
+        console.log('Who am I? ', docs._id);
+        res.send(JSON.stringify(docs._id));
+    });
+});
 
 router.post('/send_mail', function (req, res) {
     var mail = req.body.mail;

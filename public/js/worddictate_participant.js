@@ -6,8 +6,12 @@
     var d = new Date();
     var startTime;
     var checkpoint;
+    var audiofiles = ['../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav'];
 
     $(function() {
+
+        createAudio(audiofiles); 
+
         $('#start').click(function() {
             startTime = d.getTime();
             checkpoint = startTime;
@@ -19,7 +23,7 @@
 
         //lydfil til at afspille opgavebeskrivelsen
         $audioFile = $('<audio/>').attr({
-            src: '../images/aaaah.wav' //data.file
+            src: '../audio/0.wav' //data.file
         });
 
         $audioControl = $('<input/>').attr({
@@ -107,14 +111,14 @@
             .append('</source>')
             .attr({
                 id: 'soundSrc' + count,
-                src: '../images/aaaah.wav'
+                src: '../audio/0.wav'
             }); 
 
         $label = $('<label/>').text(testlist.files[count]);*/
 
 
         $audioFile = $('<audio/>').attr({
-            src: '../images/aaaah.wav' //data.content[count].file
+            src: '../audio/0.wav' //data.content[count].file
         });
 
         $audioControl = $('<input/>').attr({

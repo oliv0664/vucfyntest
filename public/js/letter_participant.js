@@ -4,9 +4,9 @@
 	var data;
 	var audioCount = 0;
 	var endTime;
-	var timer;
+	var timer = 900000; //skal laves om så det kommer fra serveren
 	var x;
-	var checkpoint;
+	var checkpoint = 0;
 
 	$(function () {
 		$('#start').click(function () {
@@ -50,7 +50,7 @@
 
 			var answers = [];
 			//            for (var i = 0; i <= count; i++) {
-			var answer = $('#answer').val();
+			var answer = $('#lockedField').val();
 			console.log(answer);
 			var point = 0;
 			if (answer != null) {
@@ -78,6 +78,8 @@
 		});
 	});
 
+
+	//hele denne function bliver slet ikke kaldt..
 	function initializeTest(data) {
 
 		this.data = data;
@@ -154,6 +156,7 @@
 			readonly: 'readonly',
 			id: 'lockedField'
 		});
+		clearInterval(x);
 	}
 
 

@@ -44,6 +44,7 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 app.use(function (req, res, next) {
     req.db = db;
     var isWelcome = req.url.slice(0, 8);
