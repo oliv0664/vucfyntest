@@ -60,14 +60,14 @@ console.log("FIRST " + authorizeLink.getId());
 
 //note Luca> getId burde måske have en callback function som andet parameter, så den venter indtil koden fra app.js og authorizeLink.js er done. 
 router.get('/welcome' + authorizeLink.getId(), function (req, res) {
+    //TODO : get logic
+    //    var doc = db.get('teachers').findOne({
+    //        _id: teacherID
+    //    });
+    //console.log('THIS IS LUCATEST: ');
     res.render('welcome', {
         title: 'main page'
     });
-    //TODO : get logic
-    var doc = db.get('teachers').findOne({
-        _id: teacherID
-    });
-    console.log('THIS IS LUCATEST: ' + doc);
     //    var temparray = collection
 });
 
@@ -521,7 +521,7 @@ router.get('/worddictate_participant', function (req, res) {
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     collection.findOne({
         //_id: teacherID
-        initials: 'nytest3'   //5a3fc35311aedd22b0e3de9d
+        initials: 'nytest3' //5a3fc35311aedd22b0e3de9d
     }, function (e, docs) {
         console.log('test data from db: ' + docs.tests[0].content[0].line1);
         res.render('worddictate_participant', {
@@ -535,7 +535,7 @@ router.get('/worddictate_participant', function (req, res) {
 
 router.post('/worddictate_addanswer', function (req, res) {
     var db = req.db;
-    console.log(' ************* ' + studentID); 
+    console.log(' ************* ' + studentID);
     var answers = req.body.answers;
 
     var collection = db.get('students');
@@ -790,7 +790,9 @@ router.get('/getAllData', function (req, res) {
     console.log('initials test: ' + initials);
     var db = req.db;
     var collection = db.get('teachers');
-    collection.findOne({"initials": initials},function(e, docs){
+    collection.findOne({
+        "initials": initials
+    }, function (e, docs) {
 
         console.log('Who am I? ', docs._id);
         res.send(JSON.stringify(docs._id));
