@@ -527,9 +527,9 @@ router.get('/worddictate_participant', function (req, res) {
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     collection.findOne({
         //_id: teacherID
-        initials: 'nytest3' //5a3fc35311aedd22b0e3de9d
+        initials: 'TEST2' //5a3fc35311aedd22b0e3de9d
     }, function (e, docs) {
-        console.log('test data from db: ' + docs.tests[0].content[0].line1);
+        //console.log('test data from db: ' + docs.tests[0].content[0].line1);
         res.render('worddictate_participant', {
             "data": docs.tests[0],
             title: 'worddictate_participant'
@@ -740,7 +740,7 @@ router.get('/letter_participant', function (req, res) {
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     collection.findOne({
         //_id: teacherID
-        initials: 'nytest3'
+        initials: 'TEST2'
     }, function (e, docs) {
         res.render('letter_participant', {
             "data": docs.tests[4],

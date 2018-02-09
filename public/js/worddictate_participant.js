@@ -38,15 +38,23 @@
         $('#subsection').prepend($audioControl);
 
 
-
+         
         $('#form').bind('submit', function(event) {
             setTime();
 
             event.preventDefault(); //this will prevent the default submit
 
             var answers = [];
-            for (var i = 0; i <= count; i++) {
+
+            //count sættes til 25, da vi ved i denne test, at der er 25 svar
+            count = 25;
+
+            var len = data.content.length 
+            console.log(len); 
+
+            for (var i = 0; i < len; i++) {
                 var answer = $('#answer' + i).val();
+                console.log("answer: " + answer); 
                 var correct = data.content[i].answer;
                 var point = 0;
                 if (answer == correct) {
