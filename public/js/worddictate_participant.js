@@ -6,7 +6,30 @@
     var d = new Date();
     var startTime;
     var checkpoint;
-    var audiofiles = ['../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav','../audio/0.wav'];
+    var audiofiles = [
+        '../audio/0.wav',
+        '../audio/1.wav',
+        '../audio/2.wav',
+        '../audio/3.wav',
+        '../audio/4.wav',
+        '../audio/5.wav',
+        '../audio/6.wav',
+        '../audio/7.wav',
+        '../audio/8.wav',
+        '../audio/9.wav',
+        '../audio/10.wav',
+        '../audio/11.wav',
+        '../audio/12.wav',
+        '../audio/13.wav',
+        '../audio/14.wav',
+        '../audio/15.wav',
+        '../audio/16.wav',
+        '../audio/17.wav',
+        '../audio/18.wav',
+        '../audio/19.wav',
+        '../audio/20.wav',
+        '../audio/21.wav'
+    ];
 
     $(function() {
 
@@ -22,20 +45,20 @@
 
 
         //lydfil til at afspille opgavebeskrivelsen
-        $audioFile = $('<audio/>').attr({
-            src: '../audio/0.wav' //data.file
+        $audioFile1 = $('<audio/>').attr({
+            src: '../audio/introdiktatfvu.wav' //data.file
         });
 
-        $audioControl = $('<input/>').attr({
+        $audioControl1 = $('<input/>').attr({
             class: 'h2size',
             type: 'button',
             id: 'audioControl',
             value: 'Afspil'
         }).click(function() {
-            $audioFile[0].play();
+            $audioFile1[0].play();
         });
 
-        $('#subsection').prepend($audioControl);
+        $('#subsection').prepend($audioControl1);
 
 
          
