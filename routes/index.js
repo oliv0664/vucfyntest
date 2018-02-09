@@ -527,9 +527,10 @@ router.get('/worddictate_participant', function (req, res) {
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     collection.findOne({
         _id: teacherID
-        //        initials: 'nytest3' //5a3fc35311aedd22b0e3de9d
+        //        initials: 'TEST2' //5a3fc35311aedd22b0e3de9d
     }, function (e, docs) {
         //        console.log('test data from db: ' + docs.tests[0].content[0].line1);
+
         res.render('worddictate_participant', {
             "data": docs.tests[0],
             title: 'worddictate_participant'
@@ -739,8 +740,13 @@ router.get('/letter_participant', function (req, res) {
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     collection.findOne({
+<<<<<<< HEAD
         _id: teacherID
         //        initials: 'nytest3'
+=======
+        //_id: teacherID
+        initials: 'TEST2'
+>>>>>>> develop
     }, function (e, docs) {
         res.render('letter_participant', {
             "data": docs.tests[4],
@@ -873,7 +879,7 @@ router.post('/upload', function (req, res) {
 
 function mailSender(mailTo, results) {
     console.log(results);
-    var transporter = nodemailer.createTransport({
+    var transporter = nodemailer.createTransport("SMTP", {
         service: 'gmail',
         auth: {
             user: 'vucfyn.diktat.test@gmail.com', //wolter.nielsen@gmail.com
