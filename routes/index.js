@@ -740,13 +740,9 @@ router.get('/letter_participant', function (req, res) {
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     collection.findOne({
-<<<<<<< HEAD
         _id: teacherID
-        //        initials: 'nytest3'
-=======
-        //_id: teacherID
-        initials: 'TEST2'
->>>>>>> develop
+        //        initials: 'TEST2'
+
     }, function (e, docs) {
         res.render('letter_participant', {
             "data": docs.tests[4],
