@@ -9,6 +9,7 @@
     var audiofiles = [
         '../audio/0.wav',
         '../audio/1.wav',
+        '../audio/2.wav',
         '../audio/3.wav',
         '../audio/4.wav',
         '../audio/5.wav',
