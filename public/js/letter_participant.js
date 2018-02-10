@@ -21,7 +21,7 @@
 
 		//lydfil til at afspille opgavebeskrivelsen
 		$audioFile = $('<audio/>').attr({
-			src: '../images/aaaah.wav'
+			src: '../audio/brevintro.wav'
 		});
 
 		$audioControl = $('<input/>').attr({
