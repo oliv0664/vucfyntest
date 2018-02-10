@@ -503,11 +503,11 @@ router.post('/startpage_addinfo', function (req, res) {
         } else {
             console.log("######## student modules: " + studentModules);
             res.redirect(
-                //"worddictate_participant"
+                "worddictate_participant"
 
-                studentModules[0]
+//                studentModules[0]
             );
-            studentModules.shift();
+//            studentModules.shift();
         }
     });
 });
@@ -561,10 +561,10 @@ router.post('/worddictate_addanswer', function (req, res) {
             res.send("There was a problem adding the information to the database.");
         } else {
             res.redirect(
-                //"nonsense_participant"
-                studentModules[0]
+                "letter_participant"
+//                studentModules[0]
             );
-            studentModules.shift();
+//            studentModules.shift();
         }
     });
 });
