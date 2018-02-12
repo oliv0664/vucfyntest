@@ -83,22 +83,16 @@ var studentID = 'test';
 
 router.post('/welcome_addinfo', function (req, res) {
     var db = req.db;
-    console.log(req);
     studentID = req.body.id;
-    console.log(studentID); 
     var collection = db.get('students');
-    console.log("third"); 
-    console.log(collection); 
 
     collection.insert({
         "teacherID": teacherID,
         "studentID": studentID
     }, function (err, doc) {
         if (err) {
-            console.log("fourth ERROR"); 
             res.send("There was a problem adding the information to the database.");
         } else {
-            console.log("fourth SUCCESS"); 
             res.redirect('startpage'); //"worddictate_participant"
             //studentModules.shift();
         }
