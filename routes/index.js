@@ -876,15 +876,15 @@ router.post('/upload', function (req, res) {
 function mailSender(mailTo, results) {
     console.log(results);
     var transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: 'outlook',
         auth: {
-            user: 'vucfyn.diktat.test@gmail.com', //wolter.nielsen@gmail.com
-            pass: 'Gmailvucfyntest2018'
+            user: 'vucfyn.test@outlook.dk', //wolter.nielsen@gmail.com
+            pass: 'Outlookvucfyntest2018'
         }
     });
 
     var mailOptions = {
-        from: 'vucfyn.diktat.test@gmail.com', //wolter.nielsen@gmail.com
+        from: 'vucfyn.test@outlook.dk', //wolter.nielsen@gmail.com
         to: mailTo, //oni@vucfyn.dk
         subject: 'screeningtest resultater',
         text: JSON.stringify(results)
