@@ -874,7 +874,7 @@ router.post('/upload', function (req, res) {
 function mailSender(mailTo, results) {
     console.log(results);
     var transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: 'outlook',
         auth: {
             user: 'vucfyn.test@outlook.dk', //vucfyn.diktat.test@gmail.com 
             pass: 'Outlookvucfyntest2018'  //Gmailvucfyntest2018
