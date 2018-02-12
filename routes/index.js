@@ -81,7 +81,7 @@ router.get('/welcome' + getId(), function (req, res) {
 var teacherID = '5a785e4b3867e72b94b2baba';
 var studentID = 'test';
 
-router.post('/welcome_addinfo', function (req, res) {
+router.post('/student_addinfo', function (req, res) {
     var db = req.db;
     studentID = req.body.id;
     var collection = db.get('students');
@@ -885,8 +885,110 @@ function mailSender(mailTo, results) {
         from: 'vucfyn.test@outlook.dk', //vucfyn.diktat.test@gmail.com
         to: mailTo, 
         subject: 'screeningtest resultater',
-        text: JSON.stringify(results)
-        //html: '<h1>Testresultater</h1><ul><li>Lærer ID: ' + results.teacherID + '</li><li>Kursist ID: ' + results.studentID + '</li><li>Kursist info: </li><li>dato ' + results.date + '</li><li>er ordblind' + results.is_dyslexic + '</li><li>har ordblindhed i familien ' + results.is_familyDyslexic + '</li><li>modersmål ' + results.mother_tongue + '</li><li>sprog i hjemmet' + results.lang_at_home + '</li><li>Test resultater</li><li>testtype ' + results.tests[0].type + '</li><li>svar 1 ' + results.tests[0].answers[0].answer + '</li><li>point ' + results.tests[0].answers[0].point + '</li><li>tid ' + results.tests[0].answers[0].time + '</li><li>svar 2 ' + results.tests[0].answers[1].answer + '</li><li>point ' + results.tests[0].answers[1].point + '</li><li>tid ' + results.tests[0].answers[1].time + '</li><li>svar 3' + results.tests[0].answers[2].answer + '</li><li>point ' + results.tests[0].answers[2].point + '</li><li>tid ' + results.tests[0].answers[2].time + '</li><li>testtype ' + results.tests[1].type + '</li><li>svar 1 ' + results.tests[1].answers[0].answer + '</li><li>point ' + results.tests[1].answers[0].point + '</li><li>tid ' + results.tests[1].answers[0].time + '</li><li>svar 2 ' + results.tests[1].answers[1].answer + '</li><li>point ' + results.tests[1].answers[1].point + '</li><li>tid ' + results.tests[1].answers[1].time + '</li><li>svar 3' + results.tests[1].answers[2].answer + '</li><li>point ' + results.tests[1].answers[2].point + '</li><li>tid ' + results.tests[1].answers[2].time + '</li><li>testtype ' + results.tests[2].type + '</li><li>svar 1 ' + results.tests[2].answers[0].answer + '</li><li>point ' + results.tests[2].answers[0].point + '</li><li>tid ' + results.tests[2].answers[0].time + '</li><li>svar 2 ' + results.tests[2].answers[1].answer + '</li><li>point ' + results.tests[2].answers[1].point + '</li><li>tid ' + results.tests[2].answers[1].time + '</li><li>svar 3' + results.tests[2].answers[2].answer + '</li><li>point ' + results.tests[2].answers[2].point + '</li><li>tid ' + results.tests[2].answers[2].time + '</li><li>testtype ' + results.tests[3].type + '</li><li>' + results.tests[3].answers.texts[0].time + '</li><li>svar 1 ' + results.tests[3].answers.questions[0].answer + '</li><li>point ' + results.tests[3].answers.questions[0].point + '</li><li>tid ' + results.tests[3].answers.quesitons[0].time + '</li><li>svar 2 ' + results.tests[3].answers.questions[1].answer + '</li><li>point ' + results.tests[3].answers.questions[1].point + '</li><li>tid ' + results.tests[3].answers.quesitons[1].time + '</li><li>svar 3' + results.tests[3].answers.questions[2].answer + '</li><li>point ' + results.tests[3].answers.questions[2].point + '</li><li>tid ' + results.tests[3].answers.questions[2].time + '</li><li>testtype ' + results.tests[4].type + '</li><li>tid ' + results.tests[4].answers[0].time + '</li></ul>'
+        //text: JSON.stringify(results)
+        html: 
+        `<h1>Testresultater</h1>
+
+        <p>Lærer ID: ` + JSON.stringify(results.teacherID) + `</p>
+        <p>Kursist ID: ` + JSON.stringify(results.studentID) + `</p>
+        <p>Kursist info: </p>
+        
+        <p>HAR DU DANSK SOM MODERSMÅL?` + JSON.stringify(results.mothertong_dk) + `</p>
+        <p>HVAD ER DIT MODERSMÅL ` + JSON.stringify(results.tong_input) + `</p>
+        <p>HVOR LÆNGE HAR DU BOET I DANMARK? ` + JSON.stringify(results.years_in_dk) + `</p>
+        <p>HAR DU FÅET UNDERVISNING I DANSK? ` + JSON.stringify(results.edu_in_dk) + `</p>
+        <p>HAR DU BESTÅET NOGEN PRØVER? ` + JSON.stringify(results.pass_test) + `</p>
+        <p>EVT. HVILKE(N)? ` + JSON.stringify(results.eg_test) + `</p>
+
+        <p>HAR DU MODTAGET SPECIALUNDERVISNING I SKOLEN? ` + JSON.stringify(results.speciel_edu) + `</p>
+        <p>HAR DU MODTAGET SPECIALUNDERVISNING SOM VOKSEN? ` + JSON.stringify(results.speciel_edu_adult) + `</p>
+        <p>EVT. I HVILKE(T) FAG OG HVOR LÆNGE? ` + JSON.stringify(results.eg_edu) + `</p>
+        
+        <p>HVOR LÆNGE HAR DU GÅET I SKOLE? ` + JSON.stringify(results.years_in_edu) + `</p>
+        <p>HVOR LÆNGE HAR DU GÅET I SKOLE I DIT HJEMLAND? ` + JSON.stringify(results.years_in_edu_home) + `</p>
+        <p>HAR DU AFSLUTTENDE EKSAMEN FRA DIN SKOLE? ` + JSON.stringify(results.exam_finish) + `</p>
+        <p>EVT. I HVILKE(N)? ` + JSON.stringify(results.eg_exam) + `</p>
+        <p>FRA HVILKET LAND? ` + JSON.stringify(results.eg_exam_country) + `</p>
+        <p>HAR DU EN UDDANNELSE? ` + JSON.stringify(results.edu_finish) + `</p>
+        <p>EVT. I HVILKE(N)? ` + JSON.stringify(results.eg_edu_finish) + `</p>
+        <p>FRA HVILKET LAND? ` + JSON.stringify(results.eg_edu_finish_country) + `</p>
+        <p>HAR DINE LÆSE- OG STAVEVANSKELIGHEDER HAFT BETYDNING FOR SKOLE OG UDDANNELSE? ` + JSON.stringify(results.read_write_con) + `</p>
+        <p>EVT. PÅ HVILKEN MÅDE? ` + JSON.stringify(results.eg_con) + `</p>
+        <p>ER DU I JOB? ` + JSON.stringify(results.in_job) + `</p>
+        <p>EVT. HVILKET? ` + JSON.stringify(results.eg_job) + `</p>
+        <p>INDGÅR DER LÆSNING ELLER SKRIVNING I DIT JOB? ` + JSON.stringify(results.read_write_in_job) + `</p>
+        <p>EVT. PÅ HVILKEN MÅDE? ` + JSON.stringify(results.eg_read_write_in_job) + `</p>
+        <p>HVORDAN KLARER DU AT LÆSE PÅ JOBBET? ` + JSON.stringify(results.read_in_job) + `</p>
+        <p>HVORDAN KLARER DU AT SKRIVE PÅ JOBBET? ` + JSON.stringify(results.write_in_job) + `</p>
+        <p>HVILKET SPROG TALER DU MEST PÅ DIT JOB? ` + JSON.stringify(results.lang_in_job) + `</p>
+        
+        <p>HVORFOR VIL DU GERNE GÅ TIL FVU-LÆSNING? ` + JSON.stringify(results.why_fvu) + `</p>
+        
+        <p>HVAD VIL DU GERNE BLIVE BEDRE TIL? ` + JSON.stringify(results.improvement) + `</p>
+        <p>ANDET? ` + JSON.stringify(results.eg_improvement) + `</p>
+        
+        <br>
+        
+        <p>Test resultater</p>
+        <p>testtype ` + JSON.stringify(results.tests[0].type) + `</p>
+        <p>svar 1 ` + JSON.stringify(results.tests[0].answers[0].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[0].point) + `</p>
+        <p>svar 2 ` + JSON.stringify(results.tests[0].answers[1].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[1].point) + `</p>
+        <p>svar 3` + JSON.stringify(results.tests[0].answers[2].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[2].point) + `</p>
+        <p>svar 4` + JSON.stringify(results.tests[0].answers[3].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[3].point) + `</p>
+        <p>svar 5` + JSON.stringify(results.tests[0].answers[4].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[4].point) + `</p>
+        <p>svar 6` + JSON.stringify(results.tests[0].answers[5].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[5].point) + `</p>
+        <p>svar 7` + JSON.stringify(results.tests[0].answers[6].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[6].point) + `</p>
+        <p>svar 8` + JSON.stringify(results.tests[0].answers[7].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[7].point) + `</p>
+        <p>svar 9` + JSON.stringify(results.tests[0].answers[8].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[8].point) + `</p>
+        <p>svar 10` + JSON.stringify(results.tests[0].answers[9].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[9].point) + `</p>
+        <p>svar 11` + JSON.stringify(results.tests[0].answers[10].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[10].point) + `</p>
+        <p>svar 12` + JSON.stringify(results.tests[0].answers[11].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[11].point) + `</p>
+        <p>svar 13` + JSON.stringify(results.tests[0].answers[12].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[12].point) + `</p>
+        <p>svar 14` + JSON.stringify(results.tests[0].answers[13].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[13].point) + `</p>
+        <p>svar 15` + JSON.stringify(results.tests[0].answers[14].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[14].point) + `</p>
+        <p>svar 16` + JSON.stringify(results.tests[0].answers[15].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[15].point) + `</p>
+        <p>svar 17` + JSON.stringify(results.tests[0].answers[16].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[16].point) + `</p>
+        <p>svar 18` + JSON.stringify(results.tests[0].answers[17].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[17].point) + `</p>
+        <p>svar 19` + JSON.stringify(results.tests[0].answers[18].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[18].point) + `</p>
+        <p>svar 20` + JSON.stringify(results.tests[0].answers[19].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[19].point) + `</p>
+        <p>svar 21` + JSON.stringify(results.tests[0].answers[20].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[20].point) + `</p>
+        <p>svar 22` + JSON.stringify(results.tests[0].answers[21].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[21].point) + `</p>
+        <p>svar 23` + JSON.stringify(results.tests[0].answers[22].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[22].point) + `</p>
+        <p>svar 24` + JSON.stringify(results.tests[0].answers[23].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[23].point) + `</p>
+        <p>svar 25` + JSON.stringify(results.tests[0].answers[24].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[24].point) + `</p>
+        <p>svar 26` + JSON.stringify(results.tests[0].answers[25].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[0].answers[25].point) + `</p>
+        
+        <br>
+        
+        <p>testtype ` + JSON.stringify(results.tests[1].type) + `</p>
+        <p>svar 1 ` + JSON.stringify(results.tests[1].answers[0].answer) + `</p>
+        <p>point ` + JSON.stringify(results.tests[1].answers[0].point) + `</p>`
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
