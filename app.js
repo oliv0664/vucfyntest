@@ -14,8 +14,12 @@ var url = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb'
 
 
 var db = monk(url);
+
 db.then(() => {
-    console.log('Connected correctly to server')
+    console.log('Connected correctly to server');
+    //    db.get('students').find().then((docs) => {
+    //        console.log(docs[0]);
+    //    });
 });
 
 
@@ -43,42 +47,53 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next) {
+    req.db = db; 
+    next(); 
+}); 
 
-app.use(function (req, res, next) {
-    req.db = db;
-    var isWelcome = req.url.slice(0, 8);
-    if (isWelcome === '/welcome') {
-        // get the id reference to the collection docs
-        var idUrl = req.url.slice(8);
-        var collection = db.get('teachers');
-        collection.find({}).then((docs) => {
-            console.log('db data set: \n', docs);
-            console.log('length of data set is ' + docs.length);
-            // this should be a for-loop with docs.length
-            var match = false;
-            for (i = 0; i < docs.length; i++) {
+checkIdInUrl = function (req, res, next) {
+   var isWelcome = req.url.slice(0, 8);
+   if (isWelcome === '/welcome') {
+       console.log('Checking url for teacher ID...')
+       req.db = db;
+       // get the id reference to the collection docs
+       var idUrl = req.url.slice(8);
+       var collection = db.get('teachers');
+       collection.find({}).then((docs) => {
+        //    console.log('db data set: \n', docs);
+        //    console.log('length of data set is ' + docs.length);
+           // this should be a for-loop with docs.length
+           var match = false;
+           for (i = 0; i < docs.length; i++) {
 
-                idTeacher = docs[i]._id;
-                //                console.log('pre-index data: ' + idUrl);
-                //                console.log('This is the teachers id from the database: ' + idTeacher);
-                if (idUrl == idTeacher) {
-                    // transfer the id to the index page somehow
-                    //send idTeacher to index(); 
-                    match = true;
-                    console.log('there is a match, now redirecting to the correct page');
-                    //                    authorizeLink.storeId(idTeacher);
-                }
-            }
-            if (!match) {
-                console.log('there is no match, redirect to error');
-            }
-        });
+               idTeacher = docs[i]._id;
+               //                console.log('pre-index data: ' + idUrl);
+               //                console.log('This is the teachers id from the database: ' + idTeacher);
+               if (idUrl == idTeacher) {
+                   // transfer the id to the index page somehow
+                   //send idTeacher to index(); 
+                   match = true;
+                   console.log('there is a match, now redirecting to the correct page');
+                   next();
+               }
+           }
+           if (!match) {
+               console.log('there is no match, redirect to error');
+               //res.redirect('/error');
+           }
+       });
 
 
-    };
-    next();
-});
+   } else {
+        req.db = db;
+        next();
+   }
 
+};
+
+
+app.use(checkIdInUrl);
 
 app.use('/', index);
 app.use('/users', users);
