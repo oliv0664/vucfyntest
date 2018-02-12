@@ -14,6 +14,7 @@ var url = 'localhost:27017/vucfyntest'
 
 
 var db = monk(url);
+
 db.then(() => {
     console.log('Connected correctly to server');
     //    db.get('students').find().then((docs) => {

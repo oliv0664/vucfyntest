@@ -83,18 +83,22 @@ var studentID = 'test';
 
 router.post('/welcome_addinfo', function (req, res) {
     var db = req.db;
-
+    console.log(req);
     studentID = req.body.id;
-
+    console.log(studentID); 
     var collection = db.get('students');
+    console.log("third"); 
+    console.log(collection); 
 
     collection.insert({
         "teacherID": teacherID,
         "studentID": studentID
     }, function (err, doc) {
         if (err) {
+            console.log("fourth ERROR"); 
             res.send("There was a problem adding the information to the database.");
         } else {
+            console.log("fourth SUCCESS"); 
             res.redirect('startpage'); //"worddictate_participant"
             //studentModules.shift();
         }
@@ -878,14 +882,14 @@ function mailSender(mailTo, results) {
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'vucfyn.diktat.test@gmail.com', //wolter.nielsen@gmail.com
-            pass: 'Gmailvucfyntest2018'
+            user: 'vucfyn.test@outlook.dk', //vucfyn.diktat.test@gmail.com 
+            pass: 'Outlookvucfyntest2018'  //Gmailvucfyntest2018
         }
     });
 
     var mailOptions = {
-        from: 'vucfyn.diktat.test@gmail.com', //wolter.nielsen@gmail.com
-        to: mailTo, //oni@vucfyn.dk
+        from: 'vucfyn.test@outlook.dk', //vucfyn.diktat.test@gmail.com
+        to: mailTo, 
         subject: 'screeningtest resultater',
         text: JSON.stringify(results)
         //html: '<h1>Testresultater</h1><ul><li>Lærer ID: ' + results.teacherID + '</li><li>Kursist ID: ' + results.studentID + '</li><li>Kursist info: </li><li>dato ' + results.date + '</li><li>er ordblind' + results.is_dyslexic + '</li><li>har ordblindhed i familien ' + results.is_familyDyslexic + '</li><li>modersmål ' + results.mother_tongue + '</li><li>sprog i hjemmet' + results.lang_at_home + '</li><li>Test resultater</li><li>testtype ' + results.tests[0].type + '</li><li>svar 1 ' + results.tests[0].answers[0].answer + '</li><li>point ' + results.tests[0].answers[0].point + '</li><li>tid ' + results.tests[0].answers[0].time + '</li><li>svar 2 ' + results.tests[0].answers[1].answer + '</li><li>point ' + results.tests[0].answers[1].point + '</li><li>tid ' + results.tests[0].answers[1].time + '</li><li>svar 3' + results.tests[0].answers[2].answer + '</li><li>point ' + results.tests[0].answers[2].point + '</li><li>tid ' + results.tests[0].answers[2].time + '</li><li>testtype ' + results.tests[1].type + '</li><li>svar 1 ' + results.tests[1].answers[0].answer + '</li><li>point ' + results.tests[1].answers[0].point + '</li><li>tid ' + results.tests[1].answers[0].time + '</li><li>svar 2 ' + results.tests[1].answers[1].answer + '</li><li>point ' + results.tests[1].answers[1].point + '</li><li>tid ' + results.tests[1].answers[1].time + '</li><li>svar 3' + results.tests[1].answers[2].answer + '</li><li>point ' + results.tests[1].answers[2].point + '</li><li>tid ' + results.tests[1].answers[2].time + '</li><li>testtype ' + results.tests[2].type + '</li><li>svar 1 ' + results.tests[2].answers[0].answer + '</li><li>point ' + results.tests[2].answers[0].point + '</li><li>tid ' + results.tests[2].answers[0].time + '</li><li>svar 2 ' + results.tests[2].answers[1].answer + '</li><li>point ' + results.tests[2].answers[1].point + '</li><li>tid ' + results.tests[2].answers[1].time + '</li><li>svar 3' + results.tests[2].answers[2].answer + '</li><li>point ' + results.tests[2].answers[2].point + '</li><li>tid ' + results.tests[2].answers[2].time + '</li><li>testtype ' + results.tests[3].type + '</li><li>' + results.tests[3].answers.texts[0].time + '</li><li>svar 1 ' + results.tests[3].answers.questions[0].answer + '</li><li>point ' + results.tests[3].answers.questions[0].point + '</li><li>tid ' + results.tests[3].answers.quesitons[0].time + '</li><li>svar 2 ' + results.tests[3].answers.questions[1].answer + '</li><li>point ' + results.tests[3].answers.questions[1].point + '</li><li>tid ' + results.tests[3].answers.quesitons[1].time + '</li><li>svar 3' + results.tests[3].answers.questions[2].answer + '</li><li>point ' + results.tests[3].answers.questions[2].point + '</li><li>tid ' + results.tests[3].answers.questions[2].time + '</li><li>testtype ' + results.tests[4].type + '</li><li>tid ' + results.tests[4].answers[0].time + '</li></ul>'
