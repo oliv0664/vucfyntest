@@ -863,8 +863,8 @@ function mailSender(mailTo, results) {
     var html = 
     `<h1>Testresultater</h1>
     <p>Lærer ID: ` + results.teacherID + `</p>
-    <table>
-    <tr border="1">`; 
+    <table border="1">
+    <tr>`; 
 
     for(var i=1; i<Object.keys(results).length-1; i++) {
         html += `<td>`+Object.keys(results)[i]+`</td>`

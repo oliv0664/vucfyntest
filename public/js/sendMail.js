@@ -16,8 +16,8 @@ $(function () {
                     alert('Der skete en fejl');
                 }
             })
-//            .done(function (dataStr) {
-////                alert('Email er nu sendt til ' + mailRecipient);
-//            });
+           .done(function (dataStr) {
+               alert('Email er nu sendt til ' + mailRecipient);
+           });
     });
 })
