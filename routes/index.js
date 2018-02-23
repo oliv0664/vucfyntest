@@ -28,10 +28,6 @@ router.get('/error', function (req, res, next) {
     });
 });
 
-//var initials = "oni";
-/*      HER ER ALLE TEACHER SIDERNE       */
-
-
 
 /* TEMPLATE */
 //router.get('/template', function (req, res) {
@@ -52,30 +48,13 @@ router.get('/error', function (req, res, next) {
 //});
 
 
-/* ALLE FUNKTIONER DER ER TILKNYTTET MAIN */
-
-//henter hjemmesiden 'main' 
-//console.log("FIRST " + authorizeLink.getId());
-
 function getId() {
+    
     var id = '5a785e4b3867e72b94b2baba';
+   console.log('getID is running'); 
     return id;
+   
 }
-
-
-
-//note Luca> getId burde måske have en callback function som andet parameter, så den venter indtil koden fra app.js og authorizeLink.js er done. 
-router.get('/welcome' + getId(), function (req, res) {
-    //TODO : get logic
-    //    var doc = db.get('teachers').findOne({
-    //        _id: teacherID
-    //    });
-    //console.log('THIS IS LUCATEST: ');
-    res.render('welcome', {
-        title: 'main page'
-    });
-    //    var temparray = collection
-});
 
 
 var teacherID = '5a785e4b3867e72b94b2baba';
