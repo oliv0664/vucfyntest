@@ -12,11 +12,21 @@
 </head>
 
 <body>
-    <p>Dette er en midlertidig slutside. Her kan du sende testresultaterne til din underviser. Indtast mailen på din underviser herunder.</p>
-    <form id="form" action="/send_mail" method="post">
+     <div id="header">
+        <img class="header" id="head_1" src="images/VUC_logo.png" height="100">
+        <h3 class="header" id="head_2">Du er nu færdig med testen</h3>
+         
+    </div>
+        <form id="form" action="/send_mail" method="post">
+    <p>Dette er en midlertidig slutside. </p>
+    <p>Her kan du sende testresultaterne til din underviser. Indtast mailen på din underviser her:
         <input type="text" name="mail">
         <input type="submit">
+            
+            </p>
     </form>
+<!--    Dette er udgandstpunktet til fileuploader-->
+<!--
     <p>Filuploaderen virker ikke endnu</p>
     <p> kig i chrome dev tools console efter upload</p>
     <div class="container">
@@ -25,6 +35,7 @@
             <input id="upload-input" type="file" name="uploads[]">
         </div>
     </div>
+-->
 
 
 
