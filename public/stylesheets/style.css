@@ -144,3 +144,24 @@
         top: 5px; 
         padding-right: 5px; 
     }
+
+
+    .green, .grey {
+        border: none;
+
+        font-size: 1.17em;
+        /* height: 1.5em; */
+        font-weight: bold;
+        margin-bottom: 5px; 
+        margin-right: 0.5vw; 
+        display: inline-block;
+    }
+
+    .green {
+        background-color: #019732; 
+      
+    }
+
+    .grey {
+        background-color: rgb(84, 84, 84); 
+    }

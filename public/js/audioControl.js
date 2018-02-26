@@ -13,12 +13,14 @@ function createAudio(audiofilesArray) {
         var aCount = 2;
 
         //audiocontrol for each audiofiles
-        $audioControl = $('<input/>').attr({
-            class: 'h3size',
-            type: 'button',
-            id: 'audioControl' + i,
-            value: 'Afspil: ' + aCount
-        }).click(function () {
+        $audioControl = $('<input/>')
+            .attr({
+                class: 'green',
+                type: 'button',
+                id: 'audioControl' + i,
+                value: 'Afspil: ' + aCount
+            })
+            .click(function () {
 
             if(this.value == "Afspil: 0") { 
                 return; 
@@ -41,7 +43,8 @@ function createAudio(audiofilesArray) {
 
                 //check if button has been clicked
                 if (this.value == "Afspil: 1") {
-                    this.value = "Afspil: 0";  
+                    this.value = "Afspil: 0";   
+                    changeColor(i); 
                 } else {
                     this.value = "Afspil: 1";
                 }
@@ -61,4 +64,9 @@ function createAudio(audiofilesArray) {
         
     });
 
+}
+
+
+function changeColor(i) {
+    $('#audioControl' + i).removeClass('green').addClass('grey'); 
 }
