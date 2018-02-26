@@ -42,6 +42,7 @@
             var answers = [];
             for (var i = 0; i <= count; i++) {
                 var answer = $('#answer' + i).val();
+                answer.trim();
                 /*
                  *Hvis der skal laves score til clozetest
                  *var correct = data.content[i].answer;
@@ -80,7 +81,6 @@
 
         totalLineCount = data.content.length;
         count = 0;
-        console.log(data);
 
     }
 

@@ -11,7 +11,6 @@
         $('#start').click(function () {
             startTime = d.getTime();
             checkpoint = startTime;
-            console.log(startTime);
 
             nextLine(count);
             this.remove();
@@ -52,6 +51,7 @@
             var answers = [];
             for (var i = 0; i <= count; i++) {
                 var answer = $('#answer' + i).val();
+                answer.trim();
                 var correct = data.content[i].answer;
                 var point = 0;
                 if (answer == correct) {

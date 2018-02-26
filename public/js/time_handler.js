@@ -14,6 +14,7 @@ function setCheckpoint() {
     console.log(minutes);
     var seconds = Math.floor((distance / 1000) % 60);
     console.log(seconds);
+    if(seconds.toString().length < 2) { seconds = "0" + seconds }
     $('#timestamp' + count).val(minutes + "m " + seconds + "s");
     checkpoint = now;
 }

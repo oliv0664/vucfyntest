@@ -50,7 +50,7 @@
         });
 
         $audioControl1 = $('<input/>').attr({
-            class: 'h2size',
+            class: 'h3size',
             type: 'button',
             id: 'audioControl',
             value: 'Afspil'
@@ -58,7 +58,12 @@
             $audioFile1[0].play();
         });
 
-        $('#subsection').prepend($audioControl1);
+        var img = $('<img>').attr({
+            src: 'images/audio.png',
+            class: 'img'
+        });
+
+        $('#subsection').prepend($audioControl1).prepend(img);
 
 
          
@@ -73,11 +78,10 @@
             count = 25;
 
             var len = data.content.length 
-            console.log(len); 
 
             for (var i = 0; i < len; i++) {
                 var answer = $('#answer' + i).val();
-                console.log("answer: " + answer); 
+                answer.trim(); 
                 var correct = data.content[i].answer;
                 var point = 0;
                 if (answer == correct) {
@@ -109,7 +113,6 @@
     function initializeTest(data) {
 
         this.data = data;
-        console.log(data);
         totalLineCount = data.content.length;
         count = 0;
     }
