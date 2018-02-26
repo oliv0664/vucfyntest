@@ -25,7 +25,7 @@
 		});
 
 		$audioControl = $('<input/>').attr({
-			class: 'h2size',
+			class: 'h3size',
 			type: 'button',
 			id: 'audioControl' + count,
 			value: 'Afspil'
@@ -41,7 +41,12 @@
 			//playAudio($audioFile);  
 		});
 
-		$('#subsection').prepend($audioControl);
+		var img = $('<img>').attr({
+			src: 'images/audio.png',
+			class: 'img'
+		}); 
+
+		$('#subsection').prepend($audioControl).prepend(img);
 
 
 
@@ -51,7 +56,6 @@
 			var answers = [];
 			//            for (var i = 0; i <= count; i++) {
 			var answer = $('#lockedField').val();
-			console.log(answer);
 			var point = 0;
 			if (answer != null) {
 				point = 1;
@@ -97,7 +101,7 @@
 
 		$lineInput = $('<textarea/>')
 			.attr({
-				class: 'h2size',
+				class: 'h3size',
 				id: 'answer',
 				//name: 'userinput',
 				placeholder: 'Skriv brev'
@@ -123,7 +127,7 @@
 
 
 		$submit = $('<input/>').attr({
-			class: 'h2size',
+			class: 'h3size',
 			id: 'saveButton',
 			type: 'button',
 			value: 'Gem'

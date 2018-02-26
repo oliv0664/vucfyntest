@@ -1,6 +1,7 @@
 var audioArray = [];
 var audioIsPlaying = false;
 
+
 function createAudio(audiofilesArray) {
 
     $('p').each(function (i) {
@@ -9,15 +10,19 @@ function createAudio(audiofilesArray) {
         audioArray[i] = $('<audio/>').attr('src', audiofilesArray[i]);
 
         // a counter for checking amount of clicked
-        var aCount = 0;
+        var aCount = 2;
 
         //audiocontrol for each audiofiles
         $audioControl = $('<input/>').attr({
-            class: 'h2size',
+            class: 'h3size',
             type: 'button',
             id: 'audioControl' + i,
             value: 'Afspil: ' + aCount
         }).click(function () {
+
+            if(this.value == "Afspil: 0") { 
+                return; 
+            } 
 
             //when clicked, set boolean to false
             audioIsPlaying = false; 
@@ -36,14 +41,24 @@ function createAudio(audiofilesArray) {
 
                 //check if button has been clicked
                 if (this.value == "Afspil: 1") {
-                    this.remove();
+                    this.value = "Afspil: 0";  
                 } else {
                     this.value = "Afspil: 1";
                 }
             }
         });
-        $(this).prepend($audioControl);
+        var img = $('<img>').attr({
+            src: 'images/audio.png',
+            class: 'img'
+        });
 
+        $(this)
+            .prepend($audioControl)
+            .prepend(img);
+
+
+
+        
     });
 
 }

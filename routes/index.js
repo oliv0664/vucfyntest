@@ -6,6 +6,8 @@ var formidable = require('formidable');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
 
+var mailSender = require('./../public/js/email_handler'); 
+
 var initials;
 var teacherModules = [];
 var studentModules = [];
@@ -764,7 +766,6 @@ router.get('/finalpage', function (req, res) {
     }, function (e, docs) {
 
         testResult = docs;
-        console.log(Object.keys(testResult).length); 
 
         res.render('finalpage', {
             title: 'finalpage'
@@ -788,7 +789,10 @@ router.get('/getAllData', function (req, res) {
 router.post('/send_mail', function (req, res) {
     var mail = req.body.mail;
     console.log(mail);
-    mailSender(mail, testResult);
+
+    var msg = mailSender.htmlBuilder(testResult); 
+    mailSender.sendMail(mail, msg);
+    
     res.redirect("finalpage");
 });
 
@@ -850,73 +854,9 @@ router.post('/upload', function (req, res) {
 
 
 
-function mailSender(mailTo, results) {
-    //console.log(results);
-    var transporter = nodemailer.createTransport({
-        service: 'outlook',
-        auth: {
-            user: 'vucfyn.test@outlook.dk', //vucfyn.diktat.test@gmail.com 
-            pass: 'Outlookvucfyntest2018'  //Gmailvucfyntest2018
-        }
-    });
-
-    var html = 
-    `<h1>Testresultater</h1>
-    <p>Lærer ID: ` + results.teacherID + `</p>
-    <table border="1">
-    <tr>`; 
-
-    for(var i=1; i<Object.keys(results).length-1; i++) {
-        html += `<td>`+Object.keys(results)[i]+`</td>`
-    }
-
-    for(var i=0; i<results.tests.length; i++) {
-        html += `<td>`+Object.keys(results.tests[i])[0]+`</td>`
-        for(var j=0; j<results.tests[i].answers.length; j++) {
-            html += `<td>svar `+j+`</td>`
-        }   
-    }
-    
-    html += 
-    `</tr>`;
-    `<tr>`
-
-    var arr = []; 
-    for(var key in results) { arr.push(key) }
-    
-    for(var i=1; i<Object.keys(results).length-1; i++) {
-        html += `<td>`+results[arr[i]]+`</td>`;
-    }
-
-    for(var i=0; i<results.tests.length; i++) {
-        html += `<td>`+results.tests[i].type+`</td>`
-        for(var j=0; j<results.tests[i].answers.length; j++) {
-            html += `<td>`+results.tests[i].answers[j].answer+`</td>`
-        }   
-    }
-    
-    html += 
-    `</tr>
-    </table>`; 
 
 
-    var mailOptions = {
-        from: 'vucfyn.test@outlook.dk', //vucfyn.diktat.test@gmail.com
-        to: mailTo, 
-        subject: 'screeningtest resultater',
-        //text: JSON.stringify(results)
-        html: html
-        
-    };
 
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            console.log("Mail ERROR");
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
-    });
-}
+
 
 module.exports = router;

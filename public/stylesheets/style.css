@@ -10,21 +10,26 @@
 
     .header {
         display: inline-block;
-        margin-top: 4%;
+        /* margin-top: 4%; */
     }
 
     #head_1 {
-        margin-left: 4%;
     }
 
     #head_2 {
-        vertical-align: top;
-        margin-left: 20px;
+        margin: auto;
+        /* vertical-align: center; */
+        /* margin-left: 20px; */
     }
 
     #head_3 {
-        float: right;
-        margin-right: 4%;
+        position: relative;
+        left: 70%; 
+        /* margin: auto; */
+        /* right: 2px;  */
+        /* float: right; */
+        /* margin-right: 4%;
+        margin-top: 50px;  */
     }
 
 
@@ -35,10 +40,8 @@
     #subsection,
     #subsubsection {}
 
-    #section {}
-
-    #h1_2 {
-        margin-top: 4%;
+    .section {
+        /* margin-left: 2vw;  */
     }
 
     #subsection {}
@@ -59,18 +62,27 @@
         color: #019732;
     }
 
+    #h1_1 {
+        margin-top: 10vh; 
+    }
 
     /* styling af subsection input*/
 
-    .h2size {
-        font-size: 20px;
-        height: 1.5em;
+    .h3size {
+        font-size: 1.17em;
+        /* height: 1.5em; */
         font-weight: bold;
         margin-bottom: 5px; 
+        margin-right: 0.5vw; 
+        display: inline-block;
+    }
+
+    #h1_2 {
+        margin-top: 5vh; 
     }
 
     .inline {
-        display: inline-block;
+        
     }
 
     .fullwidth {
@@ -78,10 +90,17 @@
     }
 
 
+    #thick {
+        font-weight: 900; 
+    }
+
+
     /* styling af bottom */
 
     #bottom {
+        margin-top: 2%; 
         margin-bottom: 4%;
+        margin-left: 2vw; 
     }
 
     .submit {
@@ -90,10 +109,10 @@
 
     }
 
-    input[type=submit] {
+    /* input[type=submit] {
         font-size: 25px;
         height: 1.5em;
-    }
+    } */
 
 
 
@@ -114,4 +133,14 @@
         background-color: rgb(235, 235, 228);
         color: rgb(84, 84, 84);
         padding: 2px 0px;
+    }
+
+
+
+
+    .img {
+        height: 25px;
+        position: relative;
+        top: 5px; 
+        padding-right: 5px; 
     }
