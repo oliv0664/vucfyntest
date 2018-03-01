@@ -49,10 +49,11 @@ module.exports = {
         for(var i=0; i<results.tests.length; i++) {
             html += `<td style="width: 600px">`+Object.keys(results.tests[i])[0]+`</td>`
             for(var j=0; j<results.tests[i].answers.length; j++) {
-                html += `<td style="width: 600px">svar `+j+`</td>
-                    <td>tid</td>`; 
+                html += `<td style="width: 600px">svar `+j+`</td>`;
+                html += `<td>point</td>`; 
             }   
         }
+        html += `<td>tid</td>`;
     
         html += 
             `</tr>`;
@@ -68,7 +69,8 @@ module.exports = {
         for(var i=0; i<results.tests.length; i++) {
             html += `<td style="width: 600px">`+results.tests[i].type+`</td>`
             for(var j=0; j<results.tests[i].answers.length; j++) {
-                html += `<td style="width: 600px">`+results.tests[i].answers[j].answer+`</td>`
+                html += `<td style="width: 600px">`+results.tests[i].answers[j].answer+`</td>
+                <td>` + results.tests[i].answers[j].point + `</td>`
             }   
         }
     
