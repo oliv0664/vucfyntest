@@ -420,11 +420,13 @@ router.post('/startpage_addinfo', function (req, res) {
     var eg_edu_finish_country = req.body.eg_edu_finish_country;
     var read_write_con = req.body.read_write_con;
     var eg_con = req.body.eg_con;
+    console.log("!!!!!! " + eg_con); 
 
     var in_job = req.body.in_job;
     var eg_job = req.body.eg_job;
-    var read_write_in_job = req.body.read_write_in_job;
+    var read_write_in_job = req.body.read_write_in_job; 
     var eg_read_write_in_job = req.body.eg_read_write_in_job;
+    console.log('!!!!!! ' + eg_read_write_in_job);
     var read_in_job = req.body.read_in_job;
     var write_in_job = req.body.write_in_job;
     var lang_in_job = req.body.lang_in_job;
@@ -459,14 +461,14 @@ router.post('/startpage_addinfo', function (req, res) {
             "Evt i hvilke(n)": eg_exam,
             "Fra hvilket land": eg_exam_country,
             "Har du en uddannelse": edu_finish,
-            "Evt hvilke(n)": eg_edu_finish,
-            "Fra hvilket land": eg_edu_finish_country,
+            "Evt hvilken": eg_edu_finish,
+            "Evt fra hvilket land": eg_edu_finish_country,
             "Har dine læse- og stavevanskeligheder haft betydning for skole og uddannelse": read_write_con,
             "Evt på hvilken måde": eg_con,
             "Er du i job": in_job,
             "Evt hvilket": eg_job,
             "Indgår der læsning eller skrivning i dit job": read_write_in_job,
-            "Evt på hvilken måde": eg_read_write_in_job,
+            "Evt hvordan": eg_read_write_in_job,
             "Hvordan klarer du at læse på jobbet": read_in_job,
             "Hvordan klarer du at skrive på jobbet": write_in_job,
             "Hvilket sprog taler du mest på dit job": lang_in_job,
