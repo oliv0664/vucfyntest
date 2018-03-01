@@ -82,7 +82,7 @@
             for (var i = 0; i < len; i++) {
                 var answer = $('#answer' + i).val();
                 answer = answer.trim();
-                answer = answer.toLowerCase();  
+                // answer = answer.toLowerCase();  
                 var correct = data.content[i].answer;
                 var point = 0;
                 if (answer == correct) {
