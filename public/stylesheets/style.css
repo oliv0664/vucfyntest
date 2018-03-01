@@ -82,14 +82,19 @@
         margin-top: 5vh; 
     }
 
-    .inline {
-        
-    }
-
     .fullwidth {
         width: 100%;
     }
 
+
+    input[type='number'] {
+        width: 80px; 
+    }
+
+    textarea {
+        width: 30vw; 
+        height: 10vh; 
+    }
 
     #thick {
         font-weight: 900; 
