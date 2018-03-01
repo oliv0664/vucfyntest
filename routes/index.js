@@ -444,7 +444,7 @@ router.post('/startpage_addinfo', function (req, res) {
             "Fornavn": firstname,
             "Efternavn": lastname,
             "Alder": age,
-            "Har du dansk som modersmål": mothertong_dk,
+            "Har du andet end dansk som modersmål": mothertong_dk,
             "Hvad er dit modersmål": tong_input,
             "Hvor længe har du boet i Danmark": years_in_dk,
             "Har du fået undervisning i dansk": edu_in_dk,
