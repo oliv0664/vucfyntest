@@ -106,7 +106,9 @@
 
                 <div class="fullwidth">
                     <h3 class="h3size">Evt. i hvilke(t) fag og hvor længe?</h3>
-                    <input class="h3size" type="text" id="eg_edu" name="eg_edu" placeholder="Indtast">
+                    <!-- <input class="h3size" type="text" id="eg_edu" name="eg_edu" placeholder="Indtast"> -->
+                    <input type="hidden" id="ed_edu" name="eg_edu"><br>
+                    <textarea class="h3size textarea" placeholder="Indtast"></textarea>
                 </div>
             </div>
 
@@ -159,7 +161,7 @@
 
                     <div class="fullwidth showIfYes">
                         <h3 class="h3size">Evt. i hvilke(n)? fra hvilket land?</h3>
-                        <input class="h3size" type="text" id="eg_edu_finish" name="eg_edu_finish" placeholder="Hvilken eksamen?">
+                        <input class="h3size" type="text" id="eg_edu_finish" name="eg_edu_finish" placeholder="Hvilken uddannelse?">
                         <input class="h3size" type="text" id="eg_edu_finish_country" name="eg_edu_finish_country" placeholder="Hvilket land?">
                     </div>
                 </div>
@@ -176,8 +178,8 @@
                     <div class="fullwidth showIfYes">
                         <h3 class="h3size">Evt. på hvilken måde?</h3>
                         <!-- <input style="height: 100px;" class="h3size" type="text" id="eg_con" name="eg_con" placeholder="Indtast"> -->
+                        <input type="hidden" id="eg_con" name="eg_con"><br>
                         <textarea class="h3size textarea" placeholder="Indtast"></textarea>
-                        <input type="hidden" id="eg_con" name="eg_con">
                     </div>
                 </div>
 
@@ -210,10 +212,10 @@
                     </select>
 
                     <div class="fullwidth showIfYes">
-                        <h3 class="h3size">Evt. på hvilken mååååååååååde?</h3>
+                        <h3 class="h3size">Evt. på hvilken måde?</h3>
                         <!-- <input class="h3size" type="text" id="eg_read_write_in_job" name="eg_read_write_in_job" placeholder="Indtast"> -->
+                        <input type="hidden" id="eg_read_write_in_job" name="eg_read_write_in_job"><br>
                         <textarea class="h3size textarea" placeholder="Indtast"></textarea>
-                        <input type="hidden" id="eg_read_write_in_job" name="eg_read_write_in_job">
                     </div>
                 </div>
 
@@ -257,7 +259,9 @@
 
                 <div class="fullwidth">
                     <h3 class="h3size">Hvorfor vil du gerne gå til fvu-læsning?</h3>
-                    <input class="h3size" type="text" id="why_fvu" name="why_fvu" placeholder="Indtast">
+                    <!-- <input class="h3size" type="text" id="why_fvu" name="why_fvu" placeholder="Indtast"> -->
+                    <input type="hidden" id="why_fvu" name="why_fvu"><br>
+                    <textarea class="h3size textarea" placeholder="Indtast"></textarea>
                 </div>
             </div>
 
@@ -280,7 +284,7 @@
                     <label for="improve4">At stave</label><br>
                     <input type="checkbox" id="improve5"name="improvement" value="grammatik">
                     <label for="improve5">Grammatik</label><br>
-                    <input class="h3size" type="text" id="eg_improvement" name="eg_improvement" placeholder="Andet?">
+                    <input size="50" class="h3size" type="text" id="eg_improvement" name="eg_improvement" placeholder="Andet?">
                 </div>
             </div>
 

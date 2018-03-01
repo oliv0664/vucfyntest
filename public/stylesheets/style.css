@@ -91,6 +91,11 @@
         width: 80px; 
     }
 
+    textarea {
+        width: 30vw; 
+        height: 10vh; 
+    }
+
     #thick {
         font-weight: 900; 
     }
