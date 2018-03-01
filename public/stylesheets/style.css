@@ -72,7 +72,8 @@
         font-size: 1.17em;
         /* height: 1.5em; */
         font-weight: bold;
-        margin-bottom: 5px; 
+        margin-top: 3px; 
+        margin-bottom: 3px;
         margin-right: 0.5vw; 
         display: inline-block;
     }
@@ -159,6 +160,7 @@
 
     .green {
         background-color: #019732; 
+        border-radius: 5px; 
       
     }
 
