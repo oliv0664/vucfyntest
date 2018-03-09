@@ -7,21 +7,99 @@ var bodyParser = require('body-parser');
 
 
 var mongo = require('mongodb');
-var monk = require('monk');
-//var url = 'localhost:27017/vucfyntest'
-var url = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb'
+// var monk = require('monk');
 
+var mongoose = require('mongoose'); 
+var mongoDB = 'mongodb://localhost/vucfyntest'; 
 
-
-var db = monk(url);
-
-db.then(() => {
-    console.log('Connected correctly to server');
-});
-
+var url = 'localhost:27017/vucfyntest'
+//var url = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb'
 
 var Grid = require('gridfs-stream');
 var fs = require('fs');
+
+
+
+// var db = monk(url);
+
+// db.then(() => {
+//     console.log('Connected correctly to server');
+// });
+
+
+
+var options = { useMongoClient: true }; 
+mongoose.connect(mongoDB, options); 
+mongoose.Promise = global.Promise; 
+var db = mongoose.connection; 
+db.on('error', console.error.bind(console, 'MongoDB connection error:')); 
+
+var teacherModel = require('./public/models/teacherModel.js'); 
+
+var teacher_instance = new teacherModel({ initials: 'oni', totalTests: 3, tests: ['a', 'b'] }); 
+
+teacher_instance.save(function(err) {
+    if(err) return handleError(err); 
+    // saved!
+}); 
+
+console.log(teacher_instance); 
+
+
+
+
+Grid.mongo = mongoose.mongo; 
+
+function writeToDB(nameInFolder, nameInDB) {
+    db.once('open', function() {
+        console.log('- Connection Open -'); 
+        var gfs = Grid(db.db); 
+
+        var filePath = path.join(__dirname, 'public/readFrom/' + nameInFolder); 
+
+        var writestream = gfs.createWriteStream({
+            filename: nameInDB
+        }); 
+
+        fs.createReadStream(filePath).pipe(writestream); 
+
+        writestream.on('close', function(file) {
+            console.log(file.filename + ' Written to DB'); 
+        }); 
+    }); 
+}
+
+
+// ****** REMEMBER! .mp4 extension on the filenames!! ********
+function readFromDB(nameInFolder, nameInDB) {
+    db.once('open', function() {
+        console.log('- Connection Open -'); 
+        var gfs = Grid(db.db); 
+
+        var fs_write_stream = fs.createWriteStream(path.join(__dirname, 'public/writeTo/' + nameInFolder));
+
+        var readstream = gfs.createReadStream({
+            filename: nameInDB
+        });
+        
+        readstream.pipe(fs_write_stream); 
+        fs_write_stream.on('close', function() {
+            console.log('File has been written fully!'); 
+        }); 
+    }); 
+}
+
+
+// @param (file name from the folder, filename to be called in the db)
+// remember .mp4 file extension!
+// writeToDB('morslilledreng.mp4', 'new_video.mp4'); 
+
+
+// @param (file name to be called in folder, filename in the db)
+// remember .mp4 file extension!
+// readFromDB('video_with_my_name.mp4', 'new_video.mp4'); 
+
+
 
 var index = require('./routes/index');
 var users = require('./routes/users');
