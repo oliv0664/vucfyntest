@@ -7,6 +7,7 @@ var fs = require('fs');
 var nodemailer = require('nodemailer');
 
 var mailSender = require('./../public/js/email_handler'); 
+var teacherClass = require('./../public/models/teacherSchema.js');
 
 var teacherID;
 var studentID;
@@ -117,7 +118,17 @@ router.post('/index_addinfo', function (req, res) {
 
     // TODO MONGOOSE 1
 //    var collection = db.get('teachers');
-//
+
+    teacherClass.findOneAndUpdate({ initials: initials },
+        {
+            //$set {}
+        },
+        { upsert: true },
+        function(err, user) {
+            if(err) res.send(err); 
+        }
+    );
+
 //    // Submit to the DB
 //    collection.insert({
 //        "initials": initials,

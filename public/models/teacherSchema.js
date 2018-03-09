@@ -15,5 +15,5 @@ var teacherSchema = new Schema({
 }); 
 
 
-var teacherClass = mongoose.model('new_teachers', teacherSchema);
+var teacherClass = mongoose.model('teachers', teacherSchema);
 module.exports = teacherClass;
