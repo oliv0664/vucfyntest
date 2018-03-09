@@ -7,10 +7,10 @@ var bodyParser = require('body-parser');
 
 
 var mongo = require('mongodb');
-var monk = require('monk');
+//var monk = require('monk');
 
-var mongoose = require('mongoose'); 
-var mongoDB = 'mongodb://localhost/vucfyntest'; 
+var mongoose = require('mongoose');
+var mongoDB = 'mongodb://localhost/vucfyntest';
 
 // var url = 'localhost:27017/vucfyntest'
 //var url = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb'
@@ -28,11 +28,14 @@ var fs = require('fs');
 
 
 
-var options = { useMongoClient: true }; 
-mongoose.connect(mongoDB, options); 
-mongoose.Promise = global.Promise; 
-var db = mongoose.connection; 
-db.on('error', console.error.bind(console, 'MongoDB connection error:')); 
+var options = {
+    useMongoClient: true
+};
+mongoose.connect(mongoDB, options);
+mongoose.Promise = global.Promise;
+var db = mongoose.connection;
+db.on('connected', function(){console.log('connected correctly to db.')});
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
 
@@ -40,54 +43,58 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
 //get file with database model/schema for teachers 
-var teacherModel = require('./public/models/teacherModel.js'); 
+var teacherModel = require('./public/models/teacherModel.js');
 
 
 
 //example of save and retrieve from db 
 // //save new instance of the teachermodel, with specific input 
-// var teacher_instance = new teacherModel({ initials: 'oni', totalTests: 3, tests: ['a', 'b', 'c'] }); 
+var teacher_instance = new teacherModel({
+    initials: 'oni',
+    totalTests: 3,
+    tests: ['a', 'b', 'c']
+});
 
 
-// //save the teachers instance to database 
-// teacher_instance.save(function(err) {
-//     if(err) return handleError(err); 
-//     // saved!
-// }); 
+//save the teachers instance to database 
+//teacher_instance.save(function (err) {
+//    if (err) return handleError(err);
+//    // saved!
+//});
 
-// console.log(teacher_instance); 
+//console.log(teacher_instance);
+//
+//console.log("#########");
+//
+//teacherModel.find(function (err, teachers) {
+//    if (err) return console.error(err);
+//    console.log(teachers);
+//})
 
-// console.log("#########"); 
-
-// teacherModel.find(function (err, teachers) {
-//     if (err) return console.error(err);
-//     console.log(teachers);
-//   })
 
 
-
-Grid.mongo = mongoose.mongo; 
+Grid.mongo = mongoose.mongo;
 
 
 
 //saves file to db, from folder called "readFrom"
 function writeToDB(nameInFolder, nameInDB) {
-    db.once('open', function() {
-        console.log('- Connection Open -'); 
-        var gfs = Grid(db.db); 
+    db.once('open', function () {
+        console.log('- Connection Open -');
+        var gfs = Grid(db.db);
 
-        var filePath = path.join(__dirname, 'public/readFrom/' + nameInFolder); 
+        var filePath = path.join(__dirname, 'public/readFrom/' + nameInFolder);
 
         var writestream = gfs.createWriteStream({
             filename: nameInDB
-        }); 
+        });
 
-        fs.createReadStream(filePath).pipe(writestream); 
+        fs.createReadStream(filePath).pipe(writestream);
 
-        writestream.on('close', function(file) {
-            console.log(file.filename + ' Written to DB'); 
-        }); 
-    }); 
+        writestream.on('close', function (file) {
+            console.log(file.filename + ' Written to DB');
+        });
+    });
 }
 
 
@@ -95,21 +102,21 @@ function writeToDB(nameInFolder, nameInDB) {
 //retrieves file from db, to folder called "writeTo"
 // ****** REMEMBER! .mp4 extension on the filenames!! ********
 function readFromDB(nameInFolder, nameInDB) {
-    db.once('open', function() {
-        console.log('- Connection Open -'); 
-        var gfs = Grid(db.db); 
+    db.once('open', function () {
+        console.log('- Connection Open -');
+        var gfs = Grid(db.db);
 
         var fs_write_stream = fs.createWriteStream(path.join(__dirname, 'public/writeTo/' + nameInFolder));
 
         var readstream = gfs.createReadStream({
             filename: nameInDB
         });
-        
-        readstream.pipe(fs_write_stream); 
-        fs_write_stream.on('close', function() {
-            console.log('File has been written fully!'); 
-        }); 
-    }); 
+
+        readstream.pipe(fs_write_stream);
+        fs_write_stream.on('close', function () {
+            console.log('File has been written fully!');
+        });
+    });
 }
 
 
@@ -120,12 +127,11 @@ function readFromDB(nameInFolder, nameInDB) {
 
 // @param (file name to be called in folder, filename in the db)
 // remember .mp4 file extension!
-// readFromDB('video_with_my_name.mp4', 'new_video.mp4'); 
+// readFromDB('video_yourname.mp4', 'new_video.mp4'); 
 
 
 
 var index = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 var idUrl;
@@ -154,8 +160,11 @@ checkIdInUrl = function (req, res, next) {
     var isWelcome = req.url.slice(0, 8);
     if (isWelcome === '/welcome') {
         // begin interception
-        console.log('Checking url for teacher ID...')
+//        console.log('Checking url for teacher ID...')
         req.db = db;
+        console.log('Checking db for entries');
+        User.find()
+        
         var idUrl = req.url.slice(8);
         var collection = db.get('teachers');
 
@@ -168,8 +177,7 @@ checkIdInUrl = function (req, res, next) {
                 idTeacher = docs[i]._id;
 
                 if (idUrl == idTeacher) {
-                    // transfer the idTeacher to the index page somehow?!
-
+                    app.set('idTeacher',idTeacher);
                     match = true;
                     console.log('there is a match, now redirecting to the correct page');
                     res.render('welcome', {
@@ -196,7 +204,7 @@ checkIdInUrl = function (req, res, next) {
 app.use(checkIdInUrl);
 
 app.use('/', index);
-app.use('/users', users);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

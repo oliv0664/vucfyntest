@@ -8,9 +8,12 @@ var nodemailer = require('nodemailer');
 
 var mailSender = require('./../public/js/email_handler'); 
 
+var teacherID;
+var studentID;
 var initials;
 var teacherModules = [];
 var studentModules = [];
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
     res.render('index', {
@@ -59,12 +62,12 @@ function getId() {
 }
 
 
-var teacherID = '5a785e4b3867e72b94b2baba';
-var studentID = 'test';
 
-router.post('/student_addinfo', function (req, res) {
+router.post('/welcome_addinfo', function (req, res) {
     var db = req.db;
     studentID = req.body.id;
+    teacherID = req.app.get('idTeacher');
+    console.log(teacherID);
     var collection = db.get('students');
 
     collection.insert({
