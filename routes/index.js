@@ -52,14 +52,14 @@ router.get('/error', function (req, res, next) {
 
 function getId() {
     
-    var id = '5a785e4b3867e72b94b2baba';
+    var id = '5aa23dd2734d1d3717fd5630';  //nyt ID fra master 2 deployment
    console.log('getID is running'); 
     return id;
    
 }
 
 
-var teacherID = '5a785e4b3867e72b94b2baba';
+var teacherID = '5aa23dd2734d1d3717fd5630';
 var studentID = 'test';
 
 router.post('/student_addinfo', function (req, res) {
@@ -787,9 +787,9 @@ router.get('/getAllData', function (req, res) {
 });
 
 router.post('/send_mail', function (req, res) {
-    var mail = req.body.mail;
-    console.log(mail);
-
+    // var mail = req.body.mail;
+    // console.log(mail);
+    var mail = 'fuvirk@vucfyn.dk'; 
     var msg = mailSender.htmlBuilder(testResult); 
     mailSender.sendMail(mail, msg);
     
