@@ -7,12 +7,12 @@ var bodyParser = require('body-parser');
 
 
 var mongo = require('mongodb');
-// var monk = require('monk');
+var monk = require('monk');
 
 var mongoose = require('mongoose'); 
 var mongoDB = 'mongodb://localhost/vucfyntest'; 
 
-var url = 'localhost:27017/vucfyntest'
+// var url = 'localhost:27017/vucfyntest'
 //var url = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb'
 
 var Grid = require('gridfs-stream');
@@ -34,22 +34,43 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection; 
 db.on('error', console.error.bind(console, 'MongoDB connection error:')); 
 
+
+
+
+
+
+//get file with database model/schema for teachers 
 var teacherModel = require('./public/models/teacherModel.js'); 
 
-var teacher_instance = new teacherModel({ initials: 'oni', totalTests: 3, tests: ['a', 'b'] }); 
 
-teacher_instance.save(function(err) {
-    if(err) return handleError(err); 
-    // saved!
-}); 
 
-console.log(teacher_instance); 
+//example of save and retrieve from db 
+// //save new instance of the teachermodel, with specific input 
+// var teacher_instance = new teacherModel({ initials: 'oni', totalTests: 3, tests: ['a', 'b', 'c'] }); 
 
+
+// //save the teachers instance to database 
+// teacher_instance.save(function(err) {
+//     if(err) return handleError(err); 
+//     // saved!
+// }); 
+
+// console.log(teacher_instance); 
+
+// console.log("#########"); 
+
+// teacherModel.find(function (err, teachers) {
+//     if (err) return console.error(err);
+//     console.log(teachers);
+//   })
 
 
 
 Grid.mongo = mongoose.mongo; 
 
+
+
+//saves file to db, from folder called "readFrom"
 function writeToDB(nameInFolder, nameInDB) {
     db.once('open', function() {
         console.log('- Connection Open -'); 
@@ -70,6 +91,8 @@ function writeToDB(nameInFolder, nameInDB) {
 }
 
 
+
+//retrieves file from db, to folder called "writeTo"
 // ****** REMEMBER! .mp4 extension on the filenames!! ********
 function readFromDB(nameInFolder, nameInDB) {
     db.once('open', function() {
