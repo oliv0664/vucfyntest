@@ -789,7 +789,7 @@ router.get('/getAllData', function (req, res) {
 router.post('/send_mail', function (req, res) {
     // var mail = req.body.mail;
     // console.log(mail);
-    var mail = 'fuvirk@vucfyn.dk'; 
+    var mail = 'mmr@vucfyn.dk'; 
     var msg = mailSender.htmlBuilder(testResult); 
     mailSender.sendMail(mail, msg);
     
