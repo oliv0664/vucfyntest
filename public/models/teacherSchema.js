@@ -9,13 +9,11 @@ var Schema = mongoose.Schema;
 var teacherSchema = new Schema({
     
 	initials: String, 
-    
 	totalTests: Number,
+	tests: { type: Array, "default": [] }
     
-	tests: []
-
 }); 
 
 
-
-module.exports = mongoose.model('new_teachers', teacherSchema);
+var teacherClass = mongoose.model('new_teachers', teacherSchema);
+module.exports = teacherClass;
