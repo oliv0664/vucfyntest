@@ -121,31 +121,27 @@ router.post('/index_addinfo', function (req, res) {
 
     teacherClass.findOneAndUpdate({ initials: initials },
         {
-            //$set {}
+            $push : {
+                tests: [
+                    {
+                        date: new Date(),
+                        totalModules: teacherModules.length-1,
+                        modules: []
+                    }
+                ]
+            }
         },
         { upsert: true },
         function(err, user) {
             if(err) res.send(err); 
+            else {
+                res.redirect(teacherModules[0]);
+                teacherModules.shift();
+                console.log('next module should be ' + teacherModules[0]);
+                
+            }
         }
     );
-
-//    // Submit to the DB
-//    collection.insert({
-//        "initials": initials,
-//        "totalTests": teacherModules.length,
-//        "tests": []
-//    }, function (err, doc) {
-//        if (err) {
-//            // If it failed, return error
-//            res.send("There was a problem adding the information to the database.");
-//        } else {
-//            
-            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS IMPLEMENTED
-//        }
-//    });
-            res.redirect(teacherModules[0]);
-            teacherModules.shift();
-            console.log('next module should be ' + teacherModules[0]);
 });
 
 
@@ -163,6 +159,31 @@ router.get('/worddictate_teacher', function (req, res) {
 router.post('/worddictate_addinfo', function (req, res) {
     
     // TODO MONGOOSE 2
+    teacherClass.findOneAndUpdate({ initials: initials },
+        {
+            $push: {
+                modules: [
+                    {
+
+                        type: "orddiktat",
+                        audio: "hejhej",
+                        content: []
+                    }
+                ]
+            
+            } 
+        },
+        { upsert: true },
+        function(err, user) {
+            if(err) res.send(err); 
+            else {
+                res.redirect(teacherModules[0]);
+                teacherModules.shift();
+                console.log('next module should be ' + teacherModules[0]);
+                
+            }
+        }
+    );
     // Set our internal DB variable
 //    var db = req.db;
 //    // Get our form values. These rely on the "name" attributes 
@@ -195,10 +216,10 @@ router.post('/worddictate_addinfo', function (req, res) {
 //            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS IMPLEMENTED
 //        }
 //        
-//    });
-            res.redirect(teacherModules[0]);
-            teacherModules.shift();
-            console.log('next module should be ' + teacherModules[0]);
+// //    });
+//             res.redirect(teacherModules[0]);
+//             teacherModules.shift();
+//             console.log('next module should be ' + teacherModules[0]);
 });
 
 
