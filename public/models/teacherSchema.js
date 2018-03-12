@@ -17,20 +17,22 @@ var moduleSchema = new Schema({
 
 
 
+
 var teacherSchema = new Schema({
     
 	initials: String, 
 	totalTests: Number,
-	tests: {
+	tests: [{
 		date: Date,
 		totalModules: Number,
 		modules: [moduleSchema]
-	}
+	}]
     
 }); 
 
 
 
 var teacherClass = mongoose.model('teachers', teacherSchema);
+// var moduleClass = mongoose.model('teachers', moduleSchema); 
 
 module.exports = teacherClass;

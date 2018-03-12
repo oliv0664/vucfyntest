@@ -119,29 +119,44 @@ router.post('/index_addinfo', function (req, res) {
     // TODO MONGOOSE 1
 //    var collection = db.get('teachers');
 
-    teacherClass.findOneAndUpdate({ initials: initials },
-        {
-            $push : {
-                tests: [
-                    {
-                        date: new Date(),
-                        totalModules: teacherModules.length-1,
-                        modules: []
-                    }
-                ]
-            }
-        },
-        { upsert: true },
-        function(err, user) {
-            if(err) res.send(err); 
-            else {
-                res.redirect(teacherModules[0]);
-                teacherModules.shift();
-                console.log('next module should be ' + teacherModules[0]);
-                
-            }
+    // teacherClass.findOneAndUpdate({ initials: initials },
+    //     {
+    //         $push : {
+    //             tests: [
+    //                 {
+    //                     date: new Date(),
+    //                     totalModules: teacherModules.length-1,
+    //                     modules: []
+    //                 }
+    //             ]
+    //         }
+    //     },
+    //     { upsert: true },
+    //     function(err, user) {
+    //         if(err) res.send(err); 
+    //         else {
+    //             res.redirect(teacherModules[0]);
+    
+    //         }
+    //     }
+    // );
+    
+    var teacherTest = new teacherClass({
+        initials: initials,
+        totalTests: teacherModules.length-1,
+        tests: []
+    }); 
+    
+    teacherTest.save(function(err) {
+        if(err) return handleError(err); 
+        else {
+            res.redirect(teacherModules[0])
+            teacherModules.shift();
+            console.log('next module should be ' + teacherModules[0]);
         }
-    );
+    }); 
+
+
 });
 
 
@@ -159,31 +174,32 @@ router.get('/worddictate_teacher', function (req, res) {
 router.post('/worddictate_addinfo', function (req, res) {
     
     // TODO MONGOOSE 2
-    teacherClass.findOneAndUpdate({ initials: initials },
-        {
-            $push: {
-                modules: [
-                    {
-
-                        type: "orddiktat",
-                        audio: "hejhej",
-                        content: []
-                    }
-                ]
+    // teacherClass.findOneAndUpdate({ initials: initials },
+    //     {
+    //         $push: {
+    //             modules: [
+    //                 {
+    //                     type: "orddiktat",
+    //                     audio: "hejhej",
+    //                     content: []
+    //                 }
+    //             ]
             
-            } 
-        },
-        { upsert: true },
-        function(err, user) {
-            if(err) res.send(err); 
-            else {
-                res.redirect(teacherModules[0]);
-                teacherModules.shift();
-                console.log('next module should be ' + teacherModules[0]);
+    //         } 
+    //     },
+    //     { upsert: true },
+    //     function(err, user) {
+    //         if(err) res.send(err); 
+    //         else {
+    //             res.redirect(teacherModules[0]);
+    //             teacherModules.shift();
+    //             console.log('next module should be ' + teacherModules[0]);
                 
-            }
-        }
-    );
+    //         }
+    //     }
+    // );
+
+
     // Set our internal DB variable
 //    var db = req.db;
 //    // Get our form values. These rely on the "name" attributes 
