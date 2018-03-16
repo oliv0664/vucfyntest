@@ -187,3 +187,17 @@
     .grey {
         background-color: rgb(84, 84, 84); 
     }
+
+
+
+    #opgave {
+        
+    }
+
+    #svar {
+        padding-left: 200px;  
+    }
+
+    #opgave, #svar {
+        display: inline; 
+    }

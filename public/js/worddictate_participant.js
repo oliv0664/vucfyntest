@@ -74,20 +74,26 @@
 
             var answers = [];
 
-            //count sættes til 25, da vi ved i denne test, at der er 25 svar
-            count = 25;
+            //count sættes til 27, da vi ved i denne test, at der er 27 svar
+            count = 27;
 
-            var len = data.content.length 
-
-            for (var i = 0; i < len; i++) {
-                var answer = $('#answer' + i).val();
-                answer = answer.trim();
+            // var len = data.content.length; 
+            var answer; 
+            for (var i = 0; i < count; i++) {
+                switch(i) {
+                    case 7, 8: 
+                        answer = $('#answer' + i).val();
+                        answer = answer.trim();
+                        break; 
+                    default:
+                    answer = $('input[name=answer'+i+']:checked').val(); 
+                }
+                console.log("answer: " + answer);
                 // answer = answer.toLowerCase();  
                 var correct = data.content[i].answer;
                 var point = 0;
-                if (answer == correct) {
-                    point = 1;
-                }
+
+                if (answer == correct) { point = 1;}
 
                 var time = $('#timestamp' + i).val();
 
