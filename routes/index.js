@@ -766,6 +766,13 @@ router.get('/finalpage', function (req, res) {
     }, function (e, docs) {
 
         testResult = docs;
+        
+        // Dette stykke kode er rykket op fra POST finalpage
+        // Da denne test i Master2, skal maile automatisk
+        var mail = 'mmr@vucfyn.dk'; 
+        var msg = mailSender.htmlBuilder(testResult); 
+        mailSender.sendMail(mail, msg);
+        // Slut på kode stykke 
 
         res.render('finalpage', {
             title: 'finalpage'
@@ -789,9 +796,6 @@ router.get('/getAllData', function (req, res) {
 router.post('/send_mail', function (req, res) {
     // var mail = req.body.mail;
     // console.log(mail);
-    var mail = 'mmr@vucfyn.dk'; 
-    var msg = mailSender.htmlBuilder(testResult); 
-    mailSender.sendMail(mail, msg);
     
     res.redirect("finalpage");
 });
