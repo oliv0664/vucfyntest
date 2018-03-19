@@ -53,7 +53,7 @@ module.exports = {
                 html += `<td>point</td>`; 
             }   
         }
-        html += `<td>tid</td>`;
+        // html += `<td>tid</td>`;
     
         html += 
             `</tr>`;
@@ -74,12 +74,12 @@ module.exports = {
             }   
         }
     
-        var time = timeConverter(results.tests[1].answers[0].time); 
+        // var time = timeConverter(results.tests[1].answers[0].time); 
 
-        html +=
-            `<td style="width: 600px">`+ time +`</td>
-            </tr>
-            </table>`;
+        // html +=
+        //     `<td style="width: 600px">`+ time +`</td>
+        //     </tr>
+        //     </table>`;
     
         return html; 
     

@@ -1,255 +1,65 @@
-{
-    var totalLineCount;
-    var count;
-    var data;
-    var audioCount = 0;
-    var d = new Date();
-    var startTime;
-    var checkpoint;
-    var audiofiles = [
-        '../audio/0.wav',
-        '../audio/1.wav',
-        '../audio/2.wav',
-        '../audio/3.wav',
-        '../audio/4.wav',
-        '../audio/5.wav',
-        '../audio/6.wav',
-        '../audio/7.wav',
-        '../audio/8.wav',
-        '../audio/9.wav',
-        '../audio/10.wav',
-        '../audio/11.wav',
-        '../audio/12.wav',
-        '../audio/13.wav',
-        '../audio/14.wav',
-        '../audio/15.wav',
-        '../audio/16.wav',
-        '../audio/17.wav',
-        '../audio/18.wav',
-        '../audio/19.wav',
-        '../audio/20.wav',
-        '../audio/21.wav'
-    ];
+function initializeTest(data) {
 
     $(function() {
 
-        createAudio(audiofiles); 
+        $('#back').hide(); 
 
-        $('#start').click(function() {
-            startTime = d.getTime();
-            checkpoint = startTime;
+        var parts = [];
 
-            nextLine(count);
-            this.remove();
-        });
+        var $1 = $('#første_del');
+        var $2 = $('#anden_del'); 
+        var $3 = $('#tredje_del'); 
+        var $4 = $('#fjerde_del');
+        var $5 = $('#femte_del'); 
 
+        parts.push($2, $3, $4, $5);  
+        parts.forEach(function(e) { e.hide(); });
+        parts.unshift($1); 
 
-        //lydfil til at afspille opgavebeskrivelsen
-        $audioFile1 = $('<audio/>').attr({
-            src: '../audio/introdiktatfvu.wav' //data.file
-        });
+        var count = 0; 
 
-        $audioControl1 = $('<input/>').attr({
-            class: 'h3size',
-            type: 'button',
-            id: 'audioControl',
-            value: 'Afspil'
-        }).click(function() {
-            $audioFile1[0].play();
-        });
+        $('#next').click(function() {
+            $('#back').show();
 
-        var img = $('<img>').attr({
-            src: 'images/audio.png',
-            class: 'img'
-        });
-
-        $('#subsection').prepend($audioControl1).prepend(img);
-
-
-         
-        $('#form').bind('submit', function(event) {
-            setTime();
-
-            event.preventDefault(); //this will prevent the default submit
-
-            var answers = [];
-
-            //count sættes til 27, da vi ved i denne test, at der er 27 svar
-            count = 27;
-
-            // var len = data.content.length; 
-            var answer; 
-            for (var i = 0; i < count; i++) {
-                switch(i) {
-                    case 7, 8: 
-                        answer = $('#answer' + i).val();
-                        answer = answer.trim();
-                        break; 
-                    default:
-                    answer = $('input[name=answer'+i+']:checked').val(); 
-                }
-                console.log("answer: " + answer);
-                // answer = answer.toLowerCase();  
-                var correct = data.content[i].answer;
-                var point = 0;
-
-                if (answer == correct) { point = 1;}
-
-                var time = $('#timestamp' + i).val();
-
-
-                var object = {
-                    "answer": answer,
-                    "point": point,
-                    "time": time
-                }
-
-                answers.push(object);
+            parts[count].hide(); 
+            count++; 
+            if(count == parts.length) { createSubmit(); } else {
+                parts[count].show(); 
             }
 
-            $('#answers').val(JSON.stringify(answers));
+        }); 
+        
+        
+        $('#back').click(function() {
+
+            if(count < parts.length) { 
+                parts[count].hide(); 
+            } else {
+                $('#done').remove(); 
+                $('#next').show(); 
+            } 
+            count--; 
+            parts[count].show(); 
+            
+            if(count == 0) { $('#back').hide(); } 
+        }); 
 
 
 
+        function createSubmit() {
+            $('#next').hide();
 
-            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
-        });
-    });
-
-
-    function initializeTest(data) {
-
-        this.data = data;
-        totalLineCount = data.content.length;
-        count = 0;
-    }
-
-
-    function nextLine(count) {
-        // indsætter det første linjestykke
-        $lineP1 = $('<nobr/>')
-            .attr({
-                class: 'h2size'
-            })
-            .text(data.content[count].line1);
-
-        $lineInput = $('<input/>').attr({
-            class: 'h2size',
-            id: 'answer' + count,
-            //name: 'userinput',
-            placeholder: 'Indsæt ord'
-        });
-
-
-        $lineP2 = $('<nobr/>')
-            .attr({
-                class: 'h2size'
-            })
-            .text(data.content[count].line2);
-
-
-        /*$audioControl = $('<audio controls></audio>')
-            .append('</source>')
-            .attr({
-                id: 'soundSrc' + count,
-                src: '../audio/0.wav'
+            $submit = $('<input>').attr({
+                class: 'h3size',
+                type: 'submit',
+                value: 'Færdig'
             }); 
 
-        $label = $('<label/>').text(testlist.files[count]);*/
+            $text = $('<p>').text('Du er nu færdig! Klik på Færdig');
 
-
-        $audioFile = $('<audio/>').attr({
-            src: data.content[count].file
-        });
-
-        $audioControl = $('<input/>').attr({
-            class: 'h2size',
-            type: 'button',
-            id: 'audioControl' + count,
-            value: 'Afspil'
-        }).click(function() {
-            $audioFile[0].play();
-
-            if (audioCount > 0) {
-                this.remove();
-                audioCount = 0;
-            } else {
-                audioCount++;
-            }
-            //playAudio($audioFile);  
-        });
-
-        $timestamp = $('<input/>').attr({
-            type: 'hidden',
-            id: 'timestamp' + count,
-            //name: 'timestamp'
-        });
-
-
-        // tilføjer alle elementer til siden 
-        $('#subsection')
-            .append($lineP1)
-            .append($lineInput)
-            .append($lineP2)
-            .append($audioControl)
-            //            .append($label)
-            .append($timestamp)
-            .append('<br>');
-
-
-
-        $('#answer' + count).one('keyup', function() {
-            $nextButton = $('<button/>').attr({
-                class: 'h2size',
-                id: 'button' + count
-            });
-
-            if ((count + 1) < totalLineCount) {
-                $nextButton
-                    .click(function() {
-                        next();
-                    })
-                    .text('Næste');
-                $('#subsubsection').append($nextButton);
-
-            } else {
-                $submit = $('<input/>').attr({
-                    type: 'submit'
-                });
-
-                $('#bottom').append($submit);
-            }
-
-
-        });
-    }
-
-
-    /*function playAudio(audioFile) {
-        audioFile[0].play();
-    }*/
-
-
-    function next() {
-        setTime();
-
-        $('#audioControl' + count).remove();
-        audioCount = 0;
-
-        count++;
-
-        nextLine(count);
-
-        $('#subsubsection').empty();
-    }
-
-
-    function setTime() {
-        var d = new Date();
-        var timestamp = (d.getTime() - checkpoint);
-        $('#timestamp' + count).val(timestamp);
-        checkpoint = d.getTime();
-    }
-
-
+            $done = $('<div>').attr('id', 'done');
+            $done.append($text).append($submit);
+            $('#bottom').append($done); 
+        }
+    });
 }

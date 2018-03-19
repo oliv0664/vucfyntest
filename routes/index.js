@@ -61,10 +61,12 @@ function getId() {
 
 var teacherID = '5aa695f7ecb6082f88c5cfe0';
 var studentID = 'test';
+var studentModules = ['worddictate_participant', 'finalpage']; //'nonsense_participant', 'clozetest_participant', 'interpret_participant', 
 
 router.post('/student_addinfo', function (req, res) {
     var db = req.db;
-    studentID = req.body.id;
+    studentID = req.body.id.trim();
+    studentID = "s" + studentID; 
     var collection = db.get('students');
 
     collection.insert({
@@ -80,7 +82,6 @@ router.post('/student_addinfo', function (req, res) {
     });
 });
 
-var studentModules = ['worddictate_participant']; //'nonsense_participant', 'clozetest_participant', 'interpret_participant', 
 
 router.post('/index_addinfo', function (req, res) {
     // Set our internal DB variable
@@ -394,45 +395,49 @@ router.get('/startpage', function (req, res) {
 router.post('/startpage_addinfo', function (req, res) {
     var db = req.db;
     console.log(req.body);
-    var firstname = req.body.firstname;
-    var lastname = req.body.lastname;
-    var age = req.body.age;
-    var mothertong_dk = req.body.mothertong_dk;
-    var tong_input = req.body.tong_input;
-    var years_in_dk = req.body.years_in_dk;
-    var edu_in_dk = req.body.edu_in_dk;
-    var pass_test = req.body.pass_test;
-    var eg_test = req.body.eg_test;
+    var name = req.body.name; 
+    var student_number = req.body.student_number; 
+    var institution = req.body.institution; 
+    var date = req.body.date; 
+    // var firstname = req.body.firstname;
+    // var lastname = req.body.lastname;
+    // var age = req.body.age;
+    // var mothertong_dk = req.body.mothertong_dk;
+    // var tong_input = req.body.tong_input;
+    // var years_in_dk = req.body.years_in_dk;
+    // var edu_in_dk = req.body.edu_in_dk;
+    // var pass_test = req.body.pass_test;
+    // var eg_test = req.body.eg_test;
 
 
 
-    var speciel_edu = req.body.speciel_edu;
-    var speciel_edu_adult = req.body.speciel_edu_adult;
-    var eg_edu = req.body.eg_edu;
+    // var speciel_edu = req.body.speciel_edu;
+    // var speciel_edu_adult = req.body.speciel_edu_adult;
+    // var eg_edu = req.body.eg_edu;
 
-    var years_in_edu = req.body.years_in_edu;
-    var years_in_edu_home = req.body.years_in_edu_home;
-    var exam_finish = req.body.exam_finish;
-    var eg_exam = req.body.eg_exam;
-    var eg_exam_country = req.body.eg_exam_country;
-    var edu_finish = req.body.edu_finish;
-    var eg_edu_finish = req.body.eg_edu_finish;
-    var eg_edu_finish_country = req.body.eg_edu_finish_country;
-    var read_write_con = req.body.read_write_con;
-    var eg_con = req.body.eg_con;
+    // var years_in_edu = req.body.years_in_edu;
+    // var years_in_edu_home = req.body.years_in_edu_home;
+    // var exam_finish = req.body.exam_finish;
+    // var eg_exam = req.body.eg_exam;
+    // var eg_exam_country = req.body.eg_exam_country;
+    // var edu_finish = req.body.edu_finish;
+    // var eg_edu_finish = req.body.eg_edu_finish;
+    // var eg_edu_finish_country = req.body.eg_edu_finish_country;
+    // var read_write_con = req.body.read_write_con;
+    // var eg_con = req.body.eg_con;
 
-    var in_job = req.body.in_job;
-    var eg_job = req.body.eg_job;
-    var read_write_in_job = req.body.read_write_in_job; 
-    var eg_read_write_in_job = req.body.eg_read_write_in_job;
-    var read_in_job = req.body.read_in_job;
-    var write_in_job = req.body.write_in_job;
-    var lang_in_job = req.body.lang_in_job;
+    // var in_job = req.body.in_job;
+    // var eg_job = req.body.eg_job;
+    // var read_write_in_job = req.body.read_write_in_job; 
+    // var eg_read_write_in_job = req.body.eg_read_write_in_job;
+    // var read_in_job = req.body.read_in_job;
+    // var write_in_job = req.body.write_in_job;
+    // var lang_in_job = req.body.lang_in_job;
 
-    var why_fvu = req.body.why_fvu;
+    // var why_fvu = req.body.why_fvu;
 
-    var improvement = req.body.improvement;
-    var eg_improvement = req.body.eg_improvement;
+    // var improvement = req.body.improvement;
+    // var eg_improvement = req.body.eg_improvement;
 
     var collection = db.get('students');
 
@@ -440,39 +445,43 @@ router.post('/startpage_addinfo', function (req, res) {
         "studentID": studentID
     }, {
         $set: {
+            "Navn": name,
+            "Kursistnummer": student_number,
+            "Uddannelsesinstitution": institution,
+            "Dato": date,
             //"id": initials,
-            "Fornavn": firstname,
-            "Efternavn": lastname,
-            "Alder": age,
-            "Har du andet end dansk som modersmål": mothertong_dk,
-            "Hvad er dit modersmål": tong_input,
-            "Hvor længe har du boet i Danmark": years_in_dk,
-            "Har du fået undervisning i dansk": edu_in_dk,
-            "Har du bestået nogen prøver": pass_test,
-            "Evt hvilke(n)": eg_test,
-            "Har du modtaget specialundervisningen i skolen": speciel_edu,
-            "Har du modtaget specialundervisning som voksen": speciel_edu_adult,
-            "Evt i hvilke(t) fag og hvor længe": eg_edu,
-            "Hvor længe har du gået i skole": years_in_edu,
-            "Hvor længe har du gået i skole i dit hjemland": years_in_edu_home,
-            "Har du afsluttende eksamen fra din skole": exam_finish,
-            "Evt i hvilke(n)": eg_exam,
-            "Fra hvilket land": eg_exam_country,
-            "Har du en uddannelse": edu_finish,
-            "Evt hvilken": eg_edu_finish,
-            "Evt fra hvilket land": eg_edu_finish_country,
-            "Har dine læse- og stavevanskeligheder haft betydning for skole og uddannelse": read_write_con,
-            "Evt på hvilken måde": eg_con,
-            "Er du i job": in_job,
-            "Evt hvilket": eg_job,
-            "Indgår der læsning eller skrivning i dit job": read_write_in_job,
-            "Evt hvordan": eg_read_write_in_job,
-            "Hvordan klarer du at læse på jobbet": read_in_job,
-            "Hvordan klarer du at skrive på jobbet": write_in_job,
-            "Hvilket sprog taler du mest på dit job": lang_in_job,
-            "Hvorfor vil du gerne gå til FVU-læsning": why_fvu,
-            "Hvad vil du gerne blive bedre til": improvement,
-            "Andet": eg_improvement,
+            // "Fornavn": firstname,
+            // "Efternavn": lastname,
+            // "Alder": age,
+            // "Har du andet end dansk som modersmål": mothertong_dk,
+            // "Hvad er dit modersmål": tong_input,
+            // "Hvor længe har du boet i Danmark": years_in_dk,
+            // "Har du fået undervisning i dansk": edu_in_dk,
+            // "Har du bestået nogen prøver": pass_test,
+            // "Evt hvilke(n)": eg_test,
+            // "Har du modtaget specialundervisningen i skolen": speciel_edu,
+            // "Har du modtaget specialundervisning som voksen": speciel_edu_adult,
+            // "Evt i hvilke(t) fag og hvor længe": eg_edu,
+            // "Hvor længe har du gået i skole": years_in_edu,
+            // "Hvor længe har du gået i skole i dit hjemland": years_in_edu_home,
+            // "Har du afsluttende eksamen fra din skole": exam_finish,
+            // "Evt i hvilke(n)": eg_exam,
+            // "Fra hvilket land": eg_exam_country,
+            // "Har du en uddannelse": edu_finish,
+            // "Evt hvilken": eg_edu_finish,
+            // "Evt fra hvilket land": eg_edu_finish_country,
+            // "Har dine læse- og stavevanskeligheder haft betydning for skole og uddannelse": read_write_con,
+            // "Evt på hvilken måde": eg_con,
+            // "Er du i job": in_job,
+            // "Evt hvilket": eg_job,
+            // "Indgår der læsning eller skrivning i dit job": read_write_in_job,
+            // "Evt hvordan": eg_read_write_in_job,
+            // "Hvordan klarer du at læse på jobbet": read_in_job,
+            // "Hvordan klarer du at skrive på jobbet": write_in_job,
+            // "Hvilket sprog taler du mest på dit job": lang_in_job,
+            // "Hvorfor vil du gerne gå til FVU-læsning": why_fvu,
+            // "Hvad vil du gerne blive bedre til": improvement,
+            // "Andet": eg_improvement,
             //"time": "12:00:00",
             "tests": []
         }
@@ -482,9 +491,9 @@ router.post('/startpage_addinfo', function (req, res) {
         } else {
             console.log("######## student modules: " + studentModules);
             res.redirect(
-                // "worddictate_participant"
+                "worddictate_participant"
 
-               studentModules[0]
+            //    studentModules[0]
             );
            studentModules.shift();
         }
@@ -521,13 +530,13 @@ router.get('/worddictate_participant', function (req, res) {
 
 
 router.post('/worddictate_addanswer', function (req, res) {
-    console.log("post"); 
+
     var evaluator = require('./../public/js/evaluate');
-    console.log("1");
+
     var db = req.db;
-    // var answers = req.body.answers;
+    
     var answers = evaluator.evaluateWorddictate(req.body, getData); 
-    console.log("INDEX " + answers); 
+ 
     var collection = db.get('students');
 
     collection.update({
@@ -544,8 +553,8 @@ router.post('/worddictate_addanswer', function (req, res) {
             res.send("There was a problem adding the information to the database.");
         } else {
             res.redirect(
-                // "letter_participant"
-               studentModules[0]
+                "finalpage"
+            //    studentModules[0]
             );
            studentModules.shift();
         }
@@ -772,11 +781,8 @@ router.get('/finalpage', function (req, res) {
         testResult = docs;
 
         // dette stykke er rykket op fra send_mail, så den sender automatisk
-        var mail = "mmr@vucfyn.dk";
-        var msg = mailSender.htmlBuilder(testResult); 
-        mailSender.sendMail(mail, msg);
         // slut på stykke
-
+        
         res.render('finalpage', {
             title: 'finalpage'
         });
@@ -790,16 +796,19 @@ router.get('/getAllData', function (req, res) {
     collection.findOne({
         "initials": initials
     }, function (e, docs) {
-
+        
         console.log('Who am I? ', docs._id);
         res.send(JSON.stringify(docs._id));
     });
 });
 
 router.post('/send_mail', function (req, res) {
-    // var mail = req.body.mail;
+    var mail = req.body.mail;
     
     // her er et stykke kode rykket op til finalpage 
+    // var mail = "mmr@vucfyn.dk";
+    var msg = mailSender.htmlBuilder(testResult); 
+    mailSender.sendMail(mail, msg);
 
     res.redirect("finalpage");
 });

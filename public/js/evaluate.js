@@ -1,49 +1,62 @@
 module.exports = {
 
     evaluateWorddictate: function(postData, getData) { 
-        console.log("1.5 " + JSON.stringify(postData)); 
-        console.log("2: " + getData.tests[0].content[0].answer); 
         var answers = [];
+        var count = getData.tests[0].content.length; //50
         
-        //count sættes til 27, da vi ved i denne test, at der er 27 svar
-        count = 27;
-
         var temp = []; 
+        var index;
+        var previousIndex = 0; 
         for(var key in postData) {
-            temp.push(postData[key]);  
+            
+            index = JSON.parse(key.slice(6)); 
+            var obj = {
+                "index": index,
+                "value": postData[key]
+            }
+                           
+            var difference = index - previousIndex;  
+
+            for(var i=1; i<difference; i++) {
+
+                var emptyObj = {
+                    "index": (previousIndex + i),
+                    "value": "Svar mangler"
+                }
+                temp.push(emptyObj); 
+            }
+
+            previousIndex = index; 
+            temp.push(obj);  
         }
+
         
-        // var len = data.content.length; 
-        var answer; 
         for (var i = 0; i < count; i++) {
-        // for(var key in postData) {
-            // if(!postData.hasOwnProperty(key)) continue; 
-            answer = JSON.stringify(temp[i]); 
-            answer = answer.trim();
+            var answer = "svar mangler"; 
+            var id = null;
+
+            if(i < temp.length){   
+                answer = temp[i].value; 
+                id = temp[i].index; 
+                answer = answer.trim();
+
+                if(answer == "") answer = "Svar mangler"; 
+            }
             
-            console.log("EVALUATOR answer: " + answer);
-            // answer = answer.toLowerCase();  
-            var correct = JSON.stringify(getData.tests[0].content[i].answer);
-            console.log("correct: " + correct); 
+            var correct;
+            if(id != null) {
+                correct = getData.tests[0].content[id].answer;
+            }
+
             var point = 0;
-            
-            if (answer == correct) { point = 1;}
-            console.log("point: " + point); 
-            // var time = $('#timestamp' + i).val();
-            
+            if (answer == correct) { point = 1; }
             
             var object = {
                 "answer": answer,
                 "point": point
-                // "time": time
             }
             answers.push(object);
-            console.log("push" + i);
         }
-        console.log(answers); 
         return answers; 
-
     }
-
-
 }
