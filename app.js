@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var ready = false;
-
+var teacherClass = require('./public/models/teacherSchema.js');
 var mongo = require('mongodb');
 //var monk = require('monk');
 
@@ -385,10 +385,9 @@ checkIdInUrl = function (req, res, next) {
 //        console.log('Checking url for teacher ID...')
         req.db = db;
         console.log('Checking db for entries');
-        User.find()
+        var collection = teacherClass.find();
         
         var idUrl = req.url.slice(8);
-        var collection = db.get('teachers');
 
         // get the id reference to the collection docs
         collection.find({}).then((docs) => {

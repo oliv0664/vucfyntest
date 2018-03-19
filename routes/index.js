@@ -6,7 +6,7 @@ var formidable = require('formidable');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
 
-var mailSender = require('./../public/js/email_handler'); 
+var mailSender = require('./../public/js/email_handler');
 var teacherClass = require('./../public/models/teacherSchema.js');
 
 var teacherID;
@@ -55,11 +55,11 @@ router.get('/error', function (req, res, next) {
 
 
 function getId() {
-    
+
     var id = '5a785e4b3867e72b94b2baba';
-   console.log('getID is running'); 
+    console.log('getID is running');
     return id;
-   
+
 }
 
 
@@ -78,13 +78,13 @@ router.post('/welcome_addinfo', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect('startpage'); 
+            res.redirect('startpage');
             //"worddictate_participant"
             //studentModules.shift();
         }
     });
 });
- 
+
 
 router.post('/index_addinfo', function (req, res) {
     // Set our internal DB variable
@@ -116,50 +116,34 @@ router.post('/index_addinfo', function (req, res) {
     console.log(teacherModules);
     console.log(studentModules);
 
-    // TODO MONGOOSE 1
-//    var collection = db.get('teachers');
-
-    // teacherClass.findOneAndUpdate({ initials: initials },
-    //     {
-    //         $push : {
-    //             tests: [
-    //                 {
-    //                     date: new Date(),
-    //                     totalModules: teacherModules.length-1,
-    //                     modules: []
-    //                 }
-    //             ]
-    //         }
-    //     },
-    //     { upsert: true },
-    //     function(err, user) {
-    //         if(err) res.send(err); 
-    //         else {
-    //             res.redirect(teacherModules[0]);
-    
-    //         }
-    //     }
-    // );
-    
     var teacherTest = new teacherClass({
         initials: initials,
-        totalTests: teacherModules.length-1,
+        totalTests: 1,
         tests: []
-    }); 
-    
-    teacherTest.save(function(err) {
-        if(err) return handleError(err); 
-        else {
-            res.redirect(teacherModules[0])
-            teacherModules.shift();
-            console.log('next module should be ' + teacherModules[0]);
+    });
+
+    teacherClass.findOneAndUpdate({
+            initials: initials
+        }, {
+            $set: {
+                initials: initials,
+                "totalTests": 1,
+                "tests": []
+            }
+        }, {
+            upsert: true
+        },
+        function (err, user) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.redirect(teacherModules[0])
+                teacherModules.shift();
+                console.log('next module should be ' + teacherModules[0]);
+            }
         }
-    }); 
-
-
+    );
 });
-
-
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET WORDDICTATE */
 
@@ -172,70 +156,80 @@ router.get('/worddictate_teacher', function (req, res) {
 
 
 router.post('/worddictate_addinfo', function (req, res) {
-    
+
     // TODO MONGOOSE 2
-    // teacherClass.findOneAndUpdate({ initials: initials },
-    //     {
-    //         $push: {
-    //             modules: [
-    //                 {
-    //                     type: "orddiktat",
-    //                     audio: "hejhej",
-    //                     content: []
-    //                 }
-    //             ]
-            
-    //         } 
-    //     },
-    //     { upsert: true },
-    //     function(err, user) {
-    //         if(err) res.send(err); 
-    //         else {
-    //             res.redirect(teacherModules[0]);
-    //             teacherModules.shift();
-    //             console.log('next module should be ' + teacherModules[0]);
-                
-    //         }
-    //     }
-    // );
+    var lines = req.body.lines;
+    //var files = req.body.files;
+    var file = req.body.file;
+    var content = req.body.content;
+
+    var module = {
+
+        type: "orddiktat",
+        audio: "hejhej",
+        content: content
+
+    };
+    teacherClass.findOneAndUpdate({
+            initials: initials
+        }, {
+            $push: {
+                tests: [
+                    {
+                        date: new Date().toISOString,
+                        totalModules: teacherModules.length - 1,
+                        modules: [module]
+                    }
+                 ]
+            }
+        }, {
+            upsert: true
+        },
+        function (err, user) {
+            if (err) res.send(err);
+            else {
+                res.redirect(teacherModules[0]);
+                teacherModules.shift();
+                console.log('next module should be ' + teacherModules[0]);
+
+            }
+        }
+    );
 
 
     // Set our internal DB variable
-//    var db = req.db;
-//    // Get our form values. These rely on the "name" attributes 
-//    //var lines = req.body.lines;
-//    //var files = req.body.files;
-//    var file = req.body.file;
-//    var content = req.body.content;
-//
-//    // Set our collection
-//    var collection = db.get('teachers');
-//    // Submit to the DB
-//    collection.update({
-//        "initials": initials
-//    }, {
-//        "$push": {
-//            "tests": {
-//                "type": "orddiktat",
-//                "file": file,
-//                "content": JSON.parse(content)
-//            }
-//        }
-//
-//    }, function (err, doc) {
-//        if (err) {
-//            // If it failed, return error
-//            res.send("There was a problem adding the information to the database.");
-//        } else {
-//            // And forward to success page
-        // TODO MONGOOSE 2
-//            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS IMPLEMENTED
-//        }
-//        
-// //    });
-//             res.redirect(teacherModules[0]);
-//             teacherModules.shift();
-//             console.log('next module should be ' + teacherModules[0]);
+    //    var db = req.db;
+    //    // Get our form values. These rely on the "name" attributes 
+    //  
+    //
+    //    // Set our collection
+    //    var collection = db.get('teachers');
+    //    // Submit to the DB
+    //    collection.update({
+    //        "initials": initials
+    //    }, {
+    //        "$push": {
+    //            "tests": {
+    //                "type": "orddiktat",
+    //                "file": file,
+    //                "content": JSON.parse(content)
+    //            }
+    //        }
+    //
+    //    }, function (err, doc) {
+    //        if (err) {
+    //            // If it failed, return error
+    //            res.send("There was a problem adding the information to the database.");
+    //        } else {
+    //            // And forward to success page
+    // TODO MONGOOSE 2
+    //            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS IMPLEMENTED
+    //        }
+    //        
+    // //    });
+    //             res.redirect(teacherModules[0]);
+    //             teacherModules.shift();
+    //             console.log('next module should be ' + teacherModules[0]);
 });
 
 
@@ -250,34 +244,34 @@ router.get('/nonsense_teacher', function (req, res) {
 
 
 router.post('/nonsense_addinfo', function (req, res) {
-    
-//    // TODO MONGOOSE 3
-//    var db = req.db;
-//
-//    var file = req.body.file;
-//    var content = req.body.content;
-//
-//    var collection = db.get('teachers');
-//    collection.update({
-//        "initials": initials
-//    }, {
-//        "$push": {
-//            "tests": {
-//                "type": "vrøvleord",
-//                "file": file,
-//                "content": JSON.parse(content)
-//            }
-//        }
-//    }, function (err, doc) {
-//        if (err) {
-//            res.send("There was a problem adding the information to the database.");
-//        } else {
-////            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS
-//        }
-//    });
-            res.redirect(teacherModules[0]); 
-            teacherModules.shift();
-            console.log('next module should be ' + teacherModules[0]);
+
+    //    // TODO MONGOOSE 3
+    //    var db = req.db;
+    //
+    //    var file = req.body.file;
+    //    var content = req.body.content;
+    //
+    //    var collection = db.get('teachers');
+    //    collection.update({
+    //        "initials": initials
+    //    }, {
+    //        "$push": {
+    //            "tests": {
+    //                "type": "vrøvleord",
+    //                "file": file,
+    //                "content": JSON.parse(content)
+    //            }
+    //        }
+    //    }, function (err, doc) {
+    //        if (err) {
+    //            res.send("There was a problem adding the information to the database.");
+    //        } else {
+    ////            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS
+    //        }
+    //    });
+    res.redirect(teacherModules[0]);
+    teacherModules.shift();
+    console.log('next module should be ' + teacherModules[0]);
 });
 
 
@@ -293,41 +287,41 @@ router.get('/clozetest_teacher', function (req, res) {
 
 
 router.post('/clozetest_addinfo', function (req, res) {
-    
-//    // TODO MONGOOSE 4
-//    // Set our internal DB variable
-//    var db = req.db;
-//    // Get our form values. These rely on the "name" attributes 
-//    var file = req.body.file;
-//    var content = req.body.content;
-//
-//    // Set our collection
-//    var collection = db.get('teachers');
-//    // Submit to the DB
-//    collection.update({
-//        "initials": initials
-//    }, {
-//        "$push": {
-//            "tests": {
-//                "type": "clozetest",
-//                "file": file,
-//                "content": JSON.parse(content)
-//            }
-//        }
-//    }, function (err, doc) {
-//        if (err) {
-//            // If it failed, return error
-//            res.send("There was a problem adding the information to the database.");
-//        } else {
-//            // And forward to success page
-////            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS
-//
-//
-//        }
-//    });
-            res.redirect(teacherModules[0]);
-            teacherModules.shift();
-            console.log('next module should be ' + teacherModules[0]);
+
+    //    // TODO MONGOOSE 4
+    //    // Set our internal DB variable
+    //    var db = req.db;
+    //    // Get our form values. These rely on the "name" attributes 
+    //    var file = req.body.file;
+    //    var content = req.body.content;
+    //
+    //    // Set our collection
+    //    var collection = db.get('teachers');
+    //    // Submit to the DB
+    //    collection.update({
+    //        "initials": initials
+    //    }, {
+    //        "$push": {
+    //            "tests": {
+    //                "type": "clozetest",
+    //                "file": file,
+    //                "content": JSON.parse(content)
+    //            }
+    //        }
+    //    }, function (err, doc) {
+    //        if (err) {
+    //            // If it failed, return error
+    //            res.send("There was a problem adding the information to the database.");
+    //        } else {
+    //            // And forward to success page
+    ////            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS
+    //
+    //
+    //        }
+    //    });
+    res.redirect(teacherModules[0]);
+    teacherModules.shift();
+    console.log('next module should be ' + teacherModules[0]);
 });
 
 
@@ -342,38 +336,38 @@ router.get('/interpret_teacher', function (req, res) {
 
 router.post('/interpret_addinfo', function (req, res) {
     // TODO MONGOOSE 5
-//    // Set our internal DB variable
-//    var db = req.db;
-//    // Get our form values. These rely on the "name" attributes 
-//    var file = req.body.file;
-//    var content = req.body.content;
-//    console.log(content);
-//    // Set our collection
-//    var collection = db.get('teachers');
-//
-//    // Submit to the DB
-//    collection.update({
-//        "initials": initials
-//    }, {
-//        "$push": {
-//            "tests": {
-//                "type": "tekstforståelse",
-//                "file": file,
-//                "content": JSON.parse(content)
-//            }
-//        }
-//    }, function (err, doc) {
-//        if (err) {
-//            // If it failed, return error
-//            res.send("There was a problem adding the information to the database.");
-//        } else {
-//            // And forward to success page
-////            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS
-//        }
-//    });
-            res.redirect(teacherModules[0]);
-            teacherModules.shift();
-            console.log('next module should be ' + teacherModules[0]);
+    //    // Set our internal DB variable
+    //    var db = req.db;
+    //    // Get our form values. These rely on the "name" attributes 
+    //    var file = req.body.file;
+    //    var content = req.body.content;
+    //    console.log(content);
+    //    // Set our collection
+    //    var collection = db.get('teachers');
+    //
+    //    // Submit to the DB
+    //    collection.update({
+    //        "initials": initials
+    //    }, {
+    //        "$push": {
+    //            "tests": {
+    //                "type": "tekstforståelse",
+    //                "file": file,
+    //                "content": JSON.parse(content)
+    //            }
+    //        }
+    //    }, function (err, doc) {
+    //        if (err) {
+    //            // If it failed, return error
+    //            res.send("There was a problem adding the information to the database.");
+    //        } else {
+    //            // And forward to success page
+    ////            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS
+    //        }
+    //    });
+    res.redirect(teacherModules[0]);
+    teacherModules.shift();
+    console.log('next module should be ' + teacherModules[0]);
 });
 
 
@@ -389,36 +383,36 @@ router.get('/letter_teacher', function (req, res) {
 
 
 router.post('/letter_addinfo', function (req, res) {
-    
-//    // TODO MONGOOSE 6
-//    var db = req.db;
-//
-//    var file = req.body.file;
-//    var time = req.body.time;
-//
-//    var collection = db.get('teachers');
-//    collection.update({
-//        "initials": initials
-//    }, {
-//        "$push": {
-//            "tests": {
-//                "type": "brev",
-//                "file": file,
-//                "content": [{
-//                    "time": time
-//                }]
-//            }
-//        }
-//    }, function (err, doc) {
-//        if (err) {
-//            res.send("There was a problem adding the information to the database.");
-//        } else {
-////            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS
-//        }
-//    });
-            res.redirect(teacherModules[0]);
-            teacherModules.shift();
-            console.log('next module should be ' + teacherModules[0]);
+
+    //    // TODO MONGOOSE 6
+    //    var db = req.db;
+    //
+    //    var file = req.body.file;
+    //    var time = req.body.time;
+    //
+    //    var collection = db.get('teachers');
+    //    collection.update({
+    //        "initials": initials
+    //    }, {
+    //        "$push": {
+    //            "tests": {
+    //                "type": "brev",
+    //                "file": file,
+    //                "content": [{
+    //                    "time": time
+    //                }]
+    //            }
+    //        }
+    //    }, function (err, doc) {
+    //        if (err) {
+    //            res.send("There was a problem adding the information to the database.");
+    //        } else {
+    ////            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS
+    //        }
+    //    });
+    res.redirect(teacherModules[0]);
+    teacherModules.shift();
+    console.log('next module should be ' + teacherModules[0]);
 });
 
 
@@ -490,7 +484,7 @@ router.post('/startpage_addinfo', function (req, res) {
 
     var in_job = req.body.in_job;
     var eg_job = req.body.eg_job;
-    var read_write_in_job = req.body.read_write_in_job; 
+    var read_write_in_job = req.body.read_write_in_job;
     var eg_read_write_in_job = req.body.eg_read_write_in_job;
     var read_in_job = req.body.read_in_job;
     var write_in_job = req.body.write_in_job;
@@ -545,11 +539,15 @@ router.post('/startpage_addinfo', function (req, res) {
         }
     }, function (err, doc) {
         if (err) {
+
             res.send("There was a problem adding the information to the database.");
+
         } else {
+
             console.log("######## student modules: " + studentModules);
             res.redirect(studentModules[0]);
             studentModules.shift();
+
         }
     });
 });
@@ -841,9 +839,9 @@ router.post('/send_mail', function (req, res) {
     var mail = req.body.mail;
     console.log(mail);
 
-    var msg = mailSender.htmlBuilder(testResult); 
+    var msg = mailSender.htmlBuilder(testResult);
     mailSender.sendMail(mail, msg);
-    
+
     res.redirect("finalpage");
 });
 
