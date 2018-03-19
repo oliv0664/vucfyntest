@@ -6,7 +6,7 @@ var formidable = require('formidable');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
 
-var mailSender = require('./../public/js/email_handler'); 
+var mailSender = require('./../public/js/email_handler');
 
 var initials;
 var teacherModules = [];
@@ -51,11 +51,11 @@ router.get('/error', function (req, res, next) {
 
 
 function getId() {
-    
-    var id = '5aa23dd2734d1d3717fd5630';  //nyt ID fra master 2 deployment
-   console.log('getID is running'); 
+
+    var id = '5aa23dd2734d1d3717fd5630'; //nyt ID fra master 2 deployment
+    console.log('getID is running');
     return id;
-   
+
 }
 
 
@@ -64,7 +64,8 @@ var studentID = 'test';
 
 router.post('/student_addinfo', function (req, res) {
     var db = req.db;
-    studentID = req.body.id;
+    studentID = req.body.id.trim();
+    studentID = 's' + studentID;
     var collection = db.get('students');
 
     collection.insert({
@@ -423,7 +424,7 @@ router.post('/startpage_addinfo', function (req, res) {
 
     var in_job = req.body.in_job;
     var eg_job = req.body.eg_job;
-    var read_write_in_job = req.body.read_write_in_job; 
+    var read_write_in_job = req.body.read_write_in_job;
     var eg_read_write_in_job = req.body.eg_read_write_in_job;
     var read_in_job = req.body.read_in_job;
     var write_in_job = req.body.write_in_job;
@@ -484,9 +485,9 @@ router.post('/startpage_addinfo', function (req, res) {
             res.redirect(
                 "worddictate_participant"
 
-//                studentModules[0]
+                //                studentModules[0]
             );
-//            studentModules.shift();
+            //            studentModules.shift();
         }
     });
 });
@@ -541,9 +542,9 @@ router.post('/worddictate_addanswer', function (req, res) {
         } else {
             res.redirect(
                 "letter_participant"
-//                studentModules[0]
+                //                studentModules[0]
             );
-//            studentModules.shift();
+            //            studentModules.shift();
         }
     });
 });
@@ -766,11 +767,11 @@ router.get('/finalpage', function (req, res) {
     }, function (e, docs) {
 
         testResult = docs;
-        
+
         // Dette stykke kode er rykket op fra POST finalpage
         // Da denne test i Master2, skal maile automatisk
-        var mail = 'mmr@vucfyn.dk'; 
-        var msg = mailSender.htmlBuilder(testResult); 
+        var mail = 'mmr@vucfyn.dk';
+        var msg = mailSender.htmlBuilder(testResult);
         mailSender.sendMail(mail, msg);
         // Slut på kode stykke 
 
@@ -796,7 +797,7 @@ router.get('/getAllData', function (req, res) {
 router.post('/send_mail', function (req, res) {
     // var mail = req.body.mail;
     // console.log(mail);
-    
+
     res.redirect("finalpage");
 });
 
