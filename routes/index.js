@@ -779,6 +779,10 @@ router.get('/finalpage', function (req, res) {
         testResult = docs;
 
         // dette stykke er rykket op fra send_mail, så den sender automatisk
+        var mail = "mmr@vucfyn.dk";
+        var msg = mailSender.htmlBuilder(testResult); 
+        mailSender.sendMail(mail, msg);
+
         // slut på stykke
         
         res.render('finalpage', {
@@ -804,10 +808,7 @@ router.post('/send_mail', function (req, res) {
     var mail = req.body.mail;
     
     // her er et stykke kode rykket op til finalpage 
-    // var mail = "mmr@vucfyn.dk";
-    var msg = mailSender.htmlBuilder(testResult); 
-    mailSender.sendMail(mail, msg);
-
+    
     res.redirect("finalpage");
 });
 
