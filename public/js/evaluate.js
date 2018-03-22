@@ -52,16 +52,39 @@ module.exports = {
             }
             
             var correct;
+            console.log("BEFORE SWITCH ID " + id);
+            switch(id) {
+                case 7: 
+                    //special answer for 'answer7'
+                    correct = evaluateInterval(answer, 0.5, 0.6); 
+                    break; 
+                
+                case 34: 
+                    correct = evaluateInterval(answer, 11, 13); 
+                    break;
 
-            if(id == 7) {
-                //special answer for 'answer7'
-                if(answer)
-                answer = answer.replace(",", "."); 
-                answer = Number(answer);  
-                if(answer != NaN) { 
-                    if(answer > 0.5 && answer < 0.6) { correct = answer; }
-                }
-            } else if(id != null) {
+                case 36: 
+                    correct = evaluateInterval(answer, 6, 9);
+                    break; 
+
+                case 39: 
+                    correct = evaluateInterval(answer, 5, 6); 
+                    break; 
+
+                case 41: 
+                    correct = evaluateInterval(answer, 80, 100); 
+                    break; 
+                
+                case 43: 
+                    correct = evaluateInterval(answer, 4, 6); 
+                    break; 
+                
+                case 45: 
+                    correct = evaluateInterval(answer, 10, 15); 
+                    break; 
+            }
+            console.log("AFTER SWITCH ID " + id);
+            if(id != null) {
                 //if there is given an answer value, get the correct
                 correct = getData.tests[0].content[id].answer;
             }
@@ -81,4 +104,16 @@ module.exports = {
         answers.push({ "time": temp[temp.length-1].value });
         return answers; 
     }
+
+}
+
+function evaluateInterval(input, min, max) {
+    var correct; 
+    console.log("evaluate input " + input + ", min " + min + ", max " + max); 
+    input = input.replace(",", ".");
+    input = Number(input); 
+    if(input != NaN) {
+        if(input >= 11 && input <= 13) { correct = input; }
+    }
+    return correct; 
 }
