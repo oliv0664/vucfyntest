@@ -48,10 +48,11 @@ module.exports = {
     
         for(var i=0; i<results.tests.length; i++) {
             html += `<td style="width: 600px">`+Object.keys(results.tests[i])[0]+`</td>`
-            for(var j=0; j<results.tests[i].answers.length; j++) {
+            for(var j=0; j<results.tests[i].answers.length-1; j++) {
                 html += `<td style="width: 600px">svar `+j+`</td>`;
                 html += `<td>point</td>`; 
             }   
+            html += "<td style='width: 600px'>tid</td>"
         }
         // html += `<td>tid</td>`;
     
@@ -68,10 +69,11 @@ module.exports = {
     
         for(var i=0; i<results.tests.length; i++) {
             html += `<td style="width: 600px">`+results.tests[i].type+`</td>`
-            for(var j=0; j<results.tests[i].answers.length; j++) {
+            for(var j=0; j<results.tests[i].answers.length-1; j++) {
                 html += `<td style="width: 600px">`+results.tests[i].answers[j].answer+`</td>
                 <td>` + results.tests[i].answers[j].point + `</td>`
             }   
+            html += '<td style="width: 600px">'+timeConverter(results.tests[i].answers[50].time)+'</td>';
         }
     
         // var time = timeConverter(results.tests[1].answers[0].time); 

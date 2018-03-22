@@ -1,7 +1,7 @@
     /* styling af alt */
 
     * {
-        font-family: arial black;
+        font-family: Verdana black;
     }
 
     /* styling af page_header */
@@ -15,9 +15,11 @@
         /* margin-top: 4%; */
     }
 
-    #head_1 {
-                
+    #head {
+        width: 50vw; 
+        float: left;
     }
+
     #test1{
         width: 50%
     }
@@ -48,18 +50,16 @@
         /* text-align: right; */
         position: relative;
         bottom: 2vh;
-    left: 8vw;
+        left: 8vw;
     }
 
 
 
     /* styling og positionering af body og subsection*/
 
-    #section,
-    #subsection,
-    #subsubsection {}
 
     .section {
+        overflow: hidden;
         /* margin-left: 2vw;  */
     }
 
@@ -125,7 +125,7 @@
     #bottom {
         margin-top: 2%; 
         margin-bottom: 4%;
-        margin-left: 2vw; 
+        /* margin-left: 2vw;  */
     }
 
     .submit {
@@ -195,13 +195,15 @@
 
 
     .opgave {
-        
+        color: #019732;
+        font-size: 1.2em; 
     }
     
     .svar { 
         padding-bottom: 20px;
     }
 
-    .opgave, .svar {
+    .svar input[type=radio] {
+        float: left;
     }
 

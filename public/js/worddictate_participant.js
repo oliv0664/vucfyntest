@@ -2,6 +2,9 @@ function initializeTest(data) {
 
     $(function() {
 
+        var d = new Date(); 
+        var start_time = d.getTime(); 
+
         $('#back').hide(); 
 
         var parts = [];
@@ -19,18 +22,22 @@ function initializeTest(data) {
         var count = 0; 
 
         $('#next').click(function() {
+            window.scrollTo(0,0); 
             $('#back').show();
 
             parts[count].hide(); 
             count++; 
+           
             if(count == parts.length) { createSubmit(); } else {
                 parts[count].show(); 
+                if(count == parts.length-1) { $('#next').val("Færdig") }
             }
 
         }); 
         
         
         $('#back').click(function() {
+            $('#next').val("Næste"); 
 
             if(count < parts.length) { 
                 parts[count].hide(); 
@@ -46,16 +53,21 @@ function initializeTest(data) {
 
 
 
-        function createSubmit() {
+        function createSubmit() { 
+            var d2 = new Date(); 
+            var end_time = d2.getTime() - start_time;
+            $('#hidden').val(end_time);  
+
             $('#next').hide();
+            $('#back').hide(); 
 
             $submit = $('<input>').attr({
                 class: 'h3size',
                 type: 'submit',
-                value: 'Færdig'
+                value: 'Slut'
             }); 
 
-            $text = $('<p>').text('Du er nu færdig! Klik på Færdig');
+            $text = $('<p>').text('Du er nu færdig! Klik på Slut');
 
             $done = $('<div>').attr('id', 'done');
             $done.append($text).append($submit);

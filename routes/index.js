@@ -396,7 +396,6 @@ router.post('/startpage_addinfo', function (req, res) {
     var db = req.db;
     console.log(req.body);
     var name = req.body.name; 
-    var student_number = req.body.student_number; 
     var institution = req.body.institution; 
     var date = req.body.date; 
     // var firstname = req.body.firstname;
@@ -446,8 +445,7 @@ router.post('/startpage_addinfo', function (req, res) {
     }, {
         $set: {
             "Navn": name,
-            "Kursistnummer": student_number,
-            "Uddannelsesinstitution": institution,
+            "Arbejdsplads": institution,
             "Dato": date,
             //"id": initials,
             // "Fornavn": firstname,
@@ -535,8 +533,8 @@ router.post('/worddictate_addanswer', function (req, res) {
 
     var db = req.db;
     
-    var answers = evaluator.evaluateWorddictate(req.body, getData); 
- 
+    var answers = evaluator.evaluateWorddictate(req.body, getData);
+
     var collection = db.get('students');
 
     collection.update({
@@ -544,7 +542,7 @@ router.post('/worddictate_addanswer', function (req, res) {
     }, {
         "$push": {
             "tests": {
-                "type": "orddiktat",
+                "type": "fvu matematik",
                 "answers": answers
             }
         }
