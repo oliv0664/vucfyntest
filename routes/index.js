@@ -779,7 +779,7 @@ router.get('/finalpage', function (req, res) {
         testResult = docs;
 
         // dette stykke er rykket op fra send_mail, så den sender automatisk
-        var mail = "mmr@vucfyn.dk";
+        var mail = "oni@vucfyn.dk";
         var msg = mailSender.htmlBuilder(testResult); 
         mailSender.sendMail(mail, msg);
 
