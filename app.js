@@ -380,7 +380,7 @@ app.use(function (req, res, next) {
 
 checkIdInUrl = function (req, res, next) {
     var isWelcome = req.url.slice(0, 8);
-    if (isWelcome === '/welcome') {
+    if (isWelcome === '/welcome' && req.url != '/welcome_addinfo') {
         // begin interception
 //        console.log('Checking url for teacher ID...')
         req.db = db;
