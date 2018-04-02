@@ -6,9 +6,11 @@ var formidable = require('formidable');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
 
+
 var mailSender = require('./../public/js/email_handler');
 var teacherClass = require('./../public/models/teacherSchema.js');
 var studentClass = require('./../public/models/studentSchema.js');
+var mongoHandler = require('./../public/js/mongoHandler.js'); 
 
 var teacherID;
 var studentID;
@@ -172,45 +174,80 @@ router.get('/worddictate_teacher', function (req, res) {
 
 
 router.post('/worddictate_addinfo', function (req, res) {
-
     // TODO MONGOOSE 2
-    var lines = req.body.lines;
+    // var lines = req.body.lines;
     //var files = req.body.files;
-    var file = req.body.file;
+    // var file = req.body.file;
+    
+    
+    //this code uploads all files from view to readFrom folder
+    //then it uploads all files to MongoDB
+    //mangler en bedre navngivning af filer i DB, så de kan findes igen 
+    var files = []; 
+    var form = new formidable.IncomingForm(); 
+    form.parse(req);
+    form.on('fileBegin', function(name, file) {
+        file.path = 'public/readFrom/' + file.name; 
+    }); 
+    
+    form.on('file', function(name, file) {
+        files.push([file]); 
+        console.log('Uploaded ' + file.name);     
+    });
+
+    form.on('end', function() {
+        console.log("FILES ", files);
+
+        for(var i=0; i<files.length; i++) {
+            var fileUpload = files[i][0].name; 
+            console.log("FILEUPLOAD " + fileUpload);
+            var mongo = require('../public/js/MongoHandler');
+            //this function also removes the files from the readFrom folder
+            mongo.writeToDB(fileUpload, fileUpload);  
+        }
+
+       
+    });
+     
+    
+
+    //this is the content from the teacher test
+    //this should be saved in mongoDB 'teachers' collection 
     var content = req.body.content;
 
-    var module = {
+    res.redirect('worddictate_teacher'); 
+    // var module = {
 
-        type: "orddiktat",
-        audio: "hejhej",
-        content: content
+    //     type: "orddiktat",
+    //     audio: "hejhej",
+    //     content: content
 
-    };
-    teacherClass.findOneAndUpdate({
-            initials: initials
-        }, {
-            $push: {
-                tests: [
-                    {
-                        date: new Date().toISOString,
-                        totalModules: teacherModules.length - 1,
-                        modules: [module]
-                    }
-                 ]
-            }
-        }, {
-            upsert: true
-        },
-        function (err, user) {
-            if (err) res.send(err);
-            else {
-                res.redirect(teacherModules[0]);
-                teacherModules.shift();
-                console.log('next module should be ' + teacherModules[0]);
+    // };
+    // teacherClass.findOneAndUpdate({
+    //         initials: initials
+    //     }, {
+    //         $push: {
+    //             tests: [
+    //                 {
+    //                     date: new Date().toISOString,
+    //                     totalModules: teacherModules.length - 1,
+    //                     modules: [module]
+    //                 }
+    //              ]
+    //         }
+    //     }, {
+    //         upsert: true
+    //     },
+    //     function (err, user) {
+    //         if (err) res.send(err);
+    //         else {
+    //             res.redirect(teacherModules[0]);
+    //             teacherModules.shift();
+    //             console.log('next module should be ' + teacherModules[0]);
 
-            }
-        }
-    );
+    //         }
+    //     }
+    // );
 
 
     // Set our internal DB variable
@@ -260,7 +297,8 @@ router.get('/nonsense_teacher', function (req, res) {
 
 
 router.post('/nonsense_addinfo', function (req, res) {
-
+    var mongo = require('./../public/js/MongoHandler'); 
+    mongo.readFromDB('downloaded_audio.mp3', 'uploaded_audio.mp3'); 
     //    // TODO MONGOOSE 3
     //    var db = req.db;
     //

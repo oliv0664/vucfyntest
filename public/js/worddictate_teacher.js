@@ -13,6 +13,9 @@
 
             event.preventDefault(); //this will prevent the default submit
 
+            console.log("##### ", audioFiles); 
+            $('#intro').val(JSON.stringify(audioFiles[0]));
+
             var content = [];
             for (var i = 0; i < lineCount; i++) {
                 var line1 = $('#line1' + i).val();
@@ -23,8 +26,8 @@
                 var object = {
                     "line1": line1,
                     "answer": answer,
-                    "line2": line2,
-                    "file": file
+                    "line2": line2
+                    // "file": audioFiles[lineCount].name
                 }
 
                 content.push(object);
@@ -100,7 +103,7 @@
             type: 'file',
             class: 'h2size',
             id: 'file' + lineCount,
-            //name: 'file' + lineCount, //[file]
+            name: 'file' + lineCount, //[file]
             accept: 'audio/*',
             onchange: 'readURL(this)'
         });
@@ -108,7 +111,7 @@
 
         // tilføj en lydkontroller til den givne lydfil
         $audioControl = $('<audio controls></audio>')
-            .append('</source>')
+            // .append('</source>')
             .attr('id', 'soundSrc' + lineCount);
 
 
@@ -166,12 +169,11 @@
     }
 
 
-
-
+    var audioFiles = []; 
 
     // indlæser en fil, som input af brugeren
     function readURL(input) {
-
+        console.log("file input " + input); 
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
@@ -179,11 +181,22 @@
 
             reader.onload = function (e) {
                 $('#soundSrc' + fileSrc)
-                    .attr('src', e.target.result)
+                .attr('src', e.target.result)
             };
+            
+            console.log("input.files ", input.files[0]); 
 
             reader.readAsDataURL(input.files[0]);
+
+            var audioFile = {
+                id: fileSrc,
+                name: input.files[0].name,
+                file: input.files[0]
+            }; 
+
+            audioFiles.push(audioFile); 
         }
+        console.log("audiofile ", audioFile); 
     }
 
 
