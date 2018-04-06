@@ -10,11 +10,11 @@ var moduleSchema = new Schema({
 
 	type: String,
 	audio: String,
-	content: { type: Array, "default": [] } 
+	content: { type: Array, default: [] } 
 
 }); 
 
-
+var moduleClass = mongoose.model('modules', moduleSchema); 
 
 
 
@@ -25,7 +25,11 @@ var teacherSchema = new Schema({
 	tests: [{
 		date: Date,
 		totalModules: Number,
-		modules: [moduleSchema]
+		modules: [{
+			type: String,
+			audio: String, 
+			content: { type: [moduleSchema], default: [] }
+		}]
 	}]
     
 }); 

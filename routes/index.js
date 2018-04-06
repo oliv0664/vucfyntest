@@ -5,12 +5,13 @@ var path = require('path');
 var formidable = require('formidable');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
+var empty = require('empty-folder');
 
 
 var mailSender = require('./../public/js/email_handler');
 var teacherClass = require('./../public/models/teacherSchema.js');
 var studentClass = require('./../public/models/studentSchema.js');
-var mongoHandler = require('./../public/js/mongoHandler.js'); 
+var mongo = require('./../public/js/mongoHandler.js'); 
 
 var teacherID;
 var studentID;
@@ -134,19 +135,19 @@ router.post('/index_addinfo', function (req, res) {
     console.log(teacherModules);
     console.log(studentModules);
 
-    var teacherTest = new teacherClass({
-        initials: initials,
-        totalTests: 1,
-        tests: []
-    });
+    // var teacherTest = new teacherClass({
+    //     initials: initials,
+    //     totalTests: 1,
+    //     tests: []
+    // });
 
     teacherClass.findOneAndUpdate({
             initials: initials
         }, {
             $set: {
                 initials: initials,
-                "totalTests": 1,
-                "tests": []
+                totalTests: 1,
+                tests: []
             }
         }, {
             upsert: true
@@ -173,81 +174,124 @@ router.get('/worddictate_teacher', function (req, res) {
 });
 
 
+
 router.post('/worddictate_addinfo', function (req, res) {
     // TODO MONGOOSE 2
     // var lines = req.body.lines;
     //var files = req.body.files;
     // var file = req.body.file;
+    // var content = req.body.line0;
+    // console.log("content: ", content);  
     
-    
+    writeFiles(req); 
+
     //this code uploads all files from view to readFrom folder
     //then it uploads all files to MongoDB
     //mangler en bedre navngivning af filer i DB, så de kan findes igen 
-    var files = []; 
-    var form = new formidable.IncomingForm(); 
-    form.parse(req);
-    form.on('fileBegin', function(name, file) {
-        file.path = 'public/readFrom/' + file.name; 
-    }); 
+    function writeFiles(req) {
+        var files = []; 
+        var form = new formidable.IncomingForm(); 
+        form.parse(req);
+        form.on('fileBegin', function(name, file) {
+            file.path = 'public/readFrom/' + file.name; 
+        }); 
+        
+        form.on('file', function(name, file) {
+            files.push([file]);    
+        });
+        
+        form.on('end', function() {
+            var file_data = []; 
+            
+            //this is where the fun begins 
+            //for every item in files, run this function, and save the output in a promises array
+            var promises = files.map(function(item) {
     
-    form.on('file', function(name, file) {
-        files.push([file]); 
-        console.log('Uploaded ' + file.name);     
-    });
+                var fileUpload = item[0].name; 
 
-    form.on('end', function() {
-        console.log("FILES ", files);
+                var mongo = require('../public/js/MongoHandler');
 
-        for(var i=0; i<files.length; i++) {
-            var fileUpload = files[i][0].name; 
-            console.log("FILEUPLOAD " + fileUpload);
-            var mongo = require('../public/js/MongoHandler');
-            //this function also removes the files from the readFrom folder
-            mongo.writeToDB(fileUpload, fileUpload);  
-        }
+                //when MongoHandler is done with upload to MongoDB return result
+                return mongo.writeToDB(fileUpload, fileUpload)
+                    .then(function(result) {
+                        file_data.push(result);
+                    }, function(err) { console.log(err); });  
+            }); 
+    
+            //once all the promises are done
+            Promise.all(promises).then(function() {
+                //when files are uploaded, they are removed from 'readFrom' folder
+                empty('./public/readfrom', false, function(err, removed, failed) {
+                    if(err) { console.error(err); }
+                }); 
 
-       
-    });
+                console.log("UPLOADED FILES ",  file_data); 
+
+                //this is the content from the teacher test
+                //this should be saved in mongoDB 'teachers' collection 
+                
+                var content = [1, 2, 3]; 
+
+                var mod = {
+                    type: "orddiktat",
+                    audio: JSON.stringify(file_data[0]),
+                    content: content
+                };
+                
+                console.log("MODULE: ", mod); 
+
+                //dette skal skrives om så det virker
+                //brug evt. denne kode
+
+                // Person.findOne({ 'name.last': 'Ghost' }, 'name occupation', function (err, person) {
+                //     if (err) return handleError(err);
+                //     // Prints "Space Ghost is a talk show host".
+                //     console.log('%s %s is a %s.', person.name.first, person.name.last,
+                //       person.occupation);
+                //   });
+
+
+
+                
+                // teacherClass.findOneAndUpdate({
+                //     initials: initials
+                // }, {
+                //     $push: {
+                //         tests: [
+                //             {
+                //                 date: new Date().toISOString,
+                //                 totalModules: teacherModules.length - 1,
+                //                 $push: {
+                //                     modules: [mod]
+                //                 }
+                //             }
+                //         ]
+                //     }
+                // }, {
+                //     upsert: true
+                // },
+                // function (err, user) {
+                //     if (err) {
+                //         console.log("¤¤¤"); 
+                //         res.send(err);
+                //     } else {
+                //         console.log("####"); 
+                //         res.redirect(teacherModules[0]);
+                //         teacherModules.shift();
+                //         console.log('next module should be ' + teacherModules[0]);
+                        
+                //     }
+                // }
+            // );
+            }); 
+        }); 
+    }
+
+
+
      
-    
 
-    //this is the content from the teacher test
-    //this should be saved in mongoDB 'teachers' collection 
-    var content = req.body.content;
 
-    res.redirect('worddictate_teacher'); 
-    // var module = {
-
-    //     type: "orddiktat",
-    //     audio: "hejhej",
-    //     content: content
-
-    // };
-    // teacherClass.findOneAndUpdate({
-    //         initials: initials
-    //     }, {
-    //         $push: {
-    //             tests: [
-    //                 {
-    //                     date: new Date().toISOString,
-    //                     totalModules: teacherModules.length - 1,
-    //                     modules: [module]
-    //                 }
-    //              ]
-    //         }
-    //     }, {
-    //         upsert: true
-    //     },
-    //     function (err, user) {
-    //         if (err) res.send(err);
-    //         else {
-    //             res.redirect(teacherModules[0]);
-    //             teacherModules.shift();
-    //             console.log('next module should be ' + teacherModules[0]);
-
-    //         }
-    //     }
-    // );
 
 
     // Set our internal DB variable

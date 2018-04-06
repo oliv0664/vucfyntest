@@ -9,34 +9,33 @@
             addLine();
         });
 
-        $('#form').bind('submit', function (event) {
+        // $('#form').bind('submit', function (event) {
 
-            event.preventDefault(); //this will prevent the default submit
+        //     event.preventDefault(); //this will prevent the default submit
 
-            console.log("##### ", audioFiles); 
-            $('#intro').val(JSON.stringify(audioFiles[0]));
+        //     console.log("##### ", audioFiles); 
+        //     $('#intro').val(JSON.stringify(audioFiles[0]));
 
-            var content = [];
-            for (var i = 0; i < lineCount; i++) {
-                var line1 = $('#line1' + i).val();
-                var answer = $('#answer' + i).val();
-                var line2 = $('#line2' + i).val();
-                var file = $('#file' + i).val();
+        //     var content = [];
+        //     for (var i = 0; i < lineCount; i++) {
+        //         var line1 = $('#line1' + i).val();
+        //         var answer = $('#answer' + i).val();
+        //         var line2 = $('#line2' + i).val();
+        //         var file = $('#file' + i).val();
 
-                var object = {
-                    "line1": line1,
-                    "answer": answer,
-                    "line2": line2
-                    // "file": audioFiles[lineCount].name
-                }
+        //         var object = {
+        //             "line1": line1,
+        //             "answer": answer,
+        //             "line2": line2
+        //         }
 
-                content.push(object);
-            }
+        //         content.push(object);
+        //     }
 
-            $('#content').val(JSON.stringify(content));
+        //     $('#content').val(JSON.stringify(content));
 
-            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
-        });
+        //     $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
+        // });
     });
 
 
@@ -71,7 +70,7 @@
             class: 'h2size',
             id: 'line1' + lineCount,
             type: 'text',
-            //name: 'line' + lineCount, //[lineText1]
+            name: 'line' + lineCount, //[lineText1]
             placeholder: 'Indtast tekst her',
             size: size
         });
@@ -81,7 +80,7 @@
             class: 'h2size',
             id: 'answer' + lineCount,
             type: 'text',
-            //name: 'line' + lineCount, //[lineTextAnswer]
+            name: 'line' + lineCount, //[lineTextAnswer]
             placeholder: 'Indsæt det korrekte ord',
             size: (size - 6)
         });
@@ -92,7 +91,7 @@
             class: 'h2size',
             id: 'line2' + lineCount,
             type: 'text',
-            //name: 'line' + lineCount, //[lineText2]
+            name: 'line' + lineCount, //[lineText2]
             placeholder: 'Indtast tekst her',
             size: size
         });

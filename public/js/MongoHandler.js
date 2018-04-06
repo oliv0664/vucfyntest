@@ -3,8 +3,7 @@ var mongoose = require('mongoose');
 var mongoDB = 'mongodb://localhost/vucfyntest';
 var Grid = require('gridfs-stream');
 var fs = require('fs');
-
-var empty = require('empty-folder'); 
+ 
 
 var options = {
     useMongoClient: true
@@ -20,29 +19,32 @@ Grid.mongo = mongoose.mongo;
 // module.exports = { db: db, grid: Grid}
 
 module.exports = {
-    writeToDB: function(nameInFolder, nameInDB) {
-        console.log("$$$$$$"); 
-        db.once('open', function () {
-            console.log('- Connection Open -');
-            var gfs = Grid(db.db);
-    
-            var filePath = path.join(__dirname, '../readFrom/' + nameInFolder);
-    
-            var writestream = gfs.createWriteStream({
-                filename: nameInDB
-            });
-    
-            fs.createReadStream(filePath).pipe(writestream);
-    
-            writestream.on('close', function (file) {
-                console.log(file.filename + ' Written to DB');
 
-                //when files are uploaded, they are removed from 'readFrom' folder
-                empty('./public/readfrom', false, function(err, removed, failed) {
-                    if(err) { console.error(err); }
-            
-                    console.log("REMOVED " + removed); 
-                    console.log("FAILED " + failed); 
+    writeToDB: function(nameInFolder, nameInDB) {
+
+        return new Promise(function(resolve, reject) {
+
+            db.once('open', function () {
+                console.log('- Connection Open -');
+                var gfs = Grid(db.db);
+                
+                var filePath = path.join(__dirname, '../readFrom/' + nameInFolder);
+                
+                var writestream = gfs.createWriteStream({
+                    filename: nameInDB
+                });
+                
+                fs.createReadStream(filePath).pipe(writestream);
+                
+                var file_data; 
+                writestream.on('close', function (file) {
+                    console.log(file.filename + ' Written to DB');
+                    file_data = {
+                        file_name: file.filename,
+                        file_id: file._id
+                    }; 
+
+                    resolve(file_data); 
                 });
             });
         });
@@ -64,10 +66,6 @@ module.exports = {
                 console.log('File has been written fully!');
             });
         });
-    },
-
-    test: function() {
-        console.log("TEST FUNCTION FROM APP"); 
     }
 }
 //saves file to db, from folder called "readFrom"
