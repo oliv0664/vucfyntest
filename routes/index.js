@@ -118,12 +118,12 @@ router.post('/index_addinfo', function (req, res) {
     delete data.initials;
     // each selected .test_options represents a selected module 
 
-    for (module in data) {
-        if (module == "startpage") {
-            studentModules.push(module);
+    for (modules in data) {
+        if (modules == "startpage") {
+            studentModules.push(modules);
         } else {
-            console.log(module);
-            temp = module.split(' ');
+            console.log(modules);
+            temp = modules.split(' ');
             console.log(temp + " " + temp[0] + " " + temp[1]);
             teacherModules.push(temp[0]);
             studentModules.push(temp[1]);
@@ -141,13 +141,19 @@ router.post('/index_addinfo', function (req, res) {
     //     tests: []
     // });
 
+
+    //skal skrives om, så den tjekker efter initialer, 
+    //hvis de findes pushes der test og totalTests++
     teacherClass.findOneAndUpdate({
             initials: initials
         }, {
             $set: {
                 initials: initials,
                 totalTests: 1,
-                tests: []
+                tests: [{
+                    date: new Date().toISOString,
+                    totalModules: studentModules.length
+                }]
             }
         }, {
             upsert: true
@@ -182,6 +188,7 @@ router.post('/worddictate_addinfo', function (req, res) {
     // var file = req.body.file;
     // var content = req.body.line0;
     // console.log("content: ", content);  
+    console.log("POST DATA: " + req.body.intro); 
     
     writeFiles(req); 
 
@@ -190,10 +197,17 @@ router.post('/worddictate_addinfo', function (req, res) {
     //mangler en bedre navngivning af filer i DB, så de kan findes igen 
     function writeFiles(req) {
         var files = []; 
+        var inputfields; 
         var form = new formidable.IncomingForm(); 
-        form.parse(req);
+        form.parse(req, function(err, fields, files) {
+            inputfields = fields; 
+        });
+
         form.on('fileBegin', function(name, file) {
-            file.path = 'public/readFrom/' + file.name; 
+            //check if there is audio file
+            if(file.name != '') {
+                file.path = 'public/readFrom/' + file.name; 
+            }
         }); 
         
         form.on('file', function(name, file) {
@@ -212,10 +226,13 @@ router.post('/worddictate_addinfo', function (req, res) {
                 var mongo = require('../public/js/MongoHandler');
 
                 //when MongoHandler is done with upload to MongoDB return result
-                return mongo.writeToDB(fileUpload, fileUpload)
+                //check if there is audiofile
+                if(fileUpload != '') {
+                    return mongo.writeToDB(fileUpload, fileUpload)
                     .then(function(result) {
                         file_data.push(result);
                     }, function(err) { console.log(err); });  
+                }
             }); 
     
             //once all the promises are done
@@ -225,64 +242,36 @@ router.post('/worddictate_addinfo', function (req, res) {
                     if(err) { console.error(err); }
                 }); 
 
-                console.log("UPLOADED FILES ",  file_data); 
+                console.log("INPUT FIELDS ",  inputfields); 
 
                 //this is the content from the teacher test
                 //this should be saved in mongoDB 'teachers' collection 
-                
-                var content = [1, 2, 3]; 
 
                 var mod = {
                     type: "orddiktat",
                     audio: JSON.stringify(file_data[0]),
-                    content: content
+                    content: inputfields
                 };
                 
                 console.log("MODULE: ", mod); 
 
-                //dette skal skrives om så det virker
-                //brug evt. denne kode
+                teacherClass.findOneAndUpdate({
+                    initials: initials
+                }, {
+                    $push: {
+                        modules: mod
+                    }
+                }, {
+                    upsert: true
+                }, function(err, user) {
+                    if(err) { res.send(err) }
+                    else {
+                        res.redirect(teacherModules[0]);
+                        teacherModules.shift(); 
+                        console.log('next module should be ' + teacherModules[0]);
+                    }
+                });
 
-                // Person.findOne({ 'name.last': 'Ghost' }, 'name occupation', function (err, person) {
-                //     if (err) return handleError(err);
-                //     // Prints "Space Ghost is a talk show host".
-                //     console.log('%s %s is a %s.', person.name.first, person.name.last,
-                //       person.occupation);
-                //   });
-
-
-
-                
-                // teacherClass.findOneAndUpdate({
-                //     initials: initials
-                // }, {
-                //     $push: {
-                //         tests: [
-                //             {
-                //                 date: new Date().toISOString,
-                //                 totalModules: teacherModules.length - 1,
-                //                 $push: {
-                //                     modules: [mod]
-                //                 }
-                //             }
-                //         ]
-                //     }
-                // }, {
-                //     upsert: true
-                // },
-                // function (err, user) {
-                //     if (err) {
-                //         console.log("¤¤¤"); 
-                //         res.send(err);
-                //     } else {
-                //         console.log("####"); 
-                //         res.redirect(teacherModules[0]);
-                //         teacherModules.shift();
-                //         console.log('next module should be ' + teacherModules[0]);
-                        
-                //     }
-                // }
-            // );
             }); 
         }); 
     }

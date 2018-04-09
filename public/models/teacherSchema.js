@@ -10,7 +10,7 @@ var moduleSchema = new Schema({
 
 	type: String,
 	audio: String,
-	content: { type: Array, default: [] } 
+	content: { type: Schema.Types.Mixed, default: {} } 
 
 }); 
 
@@ -23,13 +23,9 @@ var teacherSchema = new Schema({
 	initials: String, 
 	totalTests: Number,
 	tests: [{
-		date: Date,
+		date: String,
 		totalModules: Number,
-		modules: [{
-			type: String,
-			audio: String, 
-			content: { type: [moduleSchema], default: [] }
-		}]
+		modules: { type: [moduleSchema], default: [] }
 	}]
     
 }); 
@@ -39,4 +35,4 @@ var teacherSchema = new Schema({
 var teacherClass = mongoose.model('teachers', teacherSchema);
 // var moduleClass = mongoose.model('teachers', moduleSchema); 
 
-module.exports = teacherClass;
+module.exports = teacherClass, moduleClass;
