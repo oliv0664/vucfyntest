@@ -153,33 +153,63 @@ router.post('/index_addinfo', function (req, res) {
     //     tests: []
     // });
 
-
+    console.log("INIT: " + initials); 
     //skal skrives om, så den tjekker efter initialer, 
     //hvis de findes pushes der test og totalTests++
+    
+    
+    // DETTE VIRKER IKKE 
+    // DEN SIGER TEACHER = NULL
     teacherClass.findOneAndUpdate({
-            initials: initials
-        }, {
-            $set: {
-                initials: initials,
-                totalTests: 1,
-                tests: [{
-                    date: new Date(),
-                    totalModules: studentModules.length
-                }]
-            }
-        }, {
-            upsert: true
-        },
-        function (err, user) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.redirect(teacherModules[0])
-                teacherModules.shift();
-                console.log('next module should be ' + teacherModules[0]);
-            }
+        initials: initials
+    }, 'initials', function(err, teacher) {
+        if(err) { res.send(err); }
+        else {
+            console.log("SUCCESS! " + teacher); 
+            teacher.initials = initials;
+            teacher.totalTests++; 
+            teacher.tests.push({
+                date: new Date(),
+                totalModules: studentModules.length,
+                modules: []
+            }); 
+            
+            teacher.save(function(err) {
+                if(err) console.log(err); 
+            });
+
+            res.redirect(teacherModules[0])
+            teacherModules.shift();
+            console.log('next module should be ' + teacherModules[0]);
         }
-    );
+    }); 
+
+
+    // teacherClass.findOneAndUpdate({
+    //         initials: initials
+    //     }, {
+    //         $set: {
+    //             initials: initials,
+    //             totalTests: 1,
+    //             tests: [{
+    //                 date: new Date(),
+    //                 totalModules: studentModules.length,
+    //                 modules: []
+    //             }]
+    //         }
+    //     }, {
+    //         upsert: true
+    //     },
+    //     function (err, user) {
+    //         if (err) {
+    //             res.send(err);
+    //         } else {
+    //             res.redirect(teacherModules[0])
+    //             teacherModules.shift();
+    //             console.log('next module should be ' + teacherModules[0]);
+    //         }
+    //     }
+    // );
 });
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET WORDDICTATE */
@@ -262,6 +292,9 @@ router.post('/worddictate_addinfo', function (req, res) {
 
                 //this is the content from the teacher test
                 //this should be saved in mongoDB 'teachers' collection 
+                for(var i=0; i<file_data.length; i++) {
+                    inputfields["file_"+i] = file_data[i]; 
+                }
 
                 var mod = {
                     moduleType: "orddiktat",
@@ -269,27 +302,53 @@ router.post('/worddictate_addinfo', function (req, res) {
                     content: inputfields
                 };
 
-
                 console.log("MODULE: ", mod);
+
 
                 teacherClass.findOneAndUpdate({
                     initials: initials
-                }, {
-                    $push: {
-                        // todo
+                }, 'tests', function(err, teacher) {
+                    if(err) { res.send(err); }
+                    else {
+                        teacher.tests[0].modules.push(mod);  
                         
-                    }
-                }, {
-                    upsert: true
-                }, function (err, user) {
-                    if (err) {
-                        res.send(err)
-                    } else {
+                        teacher.save(function(err) {
+                            if(err) console.log(err); 
+                        }); 
+
                         res.redirect(teacherModules[0]);
-                        teacherModules.shift();
-                        console.log('next module should be ' + teacherModules[0]);
+                        teacherModules.shift(); 
                     }
-                });
+                }); 
+
+                // Person.findOne({ 'name.last': 'Ghost' }, 'name occupation', function (err, person) {
+                //     if (err) return handleError(err);
+                //     // Prints "Space Ghost is a talk show host".
+                //     console.log('%s %s is a %s.', person.name.first, person.name.last,
+                //       person.occupation);
+                //   });
+
+
+
+
+                // teacherClass.findOneAndUpdate({
+                //     initials: initials
+                // }, {
+                //     $push: {
+                //         // todo
+                        
+                //     }
+                // }, {
+                //     upsert: true
+                // }, function (err, user) {
+                //     if (err) {
+                //         res.send(err)
+                //     } else {
+                //         res.redirect(teacherModules[0]);
+                //         teacherModules.shift();
+                //         console.log('next module should be ' + teacherModules[0]);
+                //     }
+                // });
 
             });
         });
@@ -675,23 +734,39 @@ router.get('/worddictate_participant', function (req, res) {
     console.log(teacherID);
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    teacherClass.find().where({
-        _id: teacherID
-        //        initials: 'TEST2' //5a3fc35311aedd22b0e3de9d
-    }).exec(function (err, docs) {
-        //        console.log('test data from db: ' + docs.tests[0].content[0].line1);
-        if (err) {
-            res.send(err)
-        } else {
+    
+    teacherClass.findOne({'_index': teacherID},
+    'tests', function(err, teacher) {
+        if(err) { console.log(err); }
+        else {
+            console.log("DOCS[0] " + JSON.stringify(teacher.tests[0]._id));
 
-            console.log(docs[0].tests[0].answer);
-            res.render('worddictate_participant', {
-                "data": docs[0].tests[0],
-                title: 'worddictate_participant'
-            });
+            for(var i=0; i<teacher.tests.length; i++) {
+                if(JSON.stringify(teacher.tests[i]._id) == JSON.stringify(teacherID)) {
+                    console.log("YAY"); 
+                    res.render('worddictate_participant', {
+                        "data": teacher.tests[0].modules[0],
+                        title: 'worddictate_participant'
+                    });
+                }
+            }
+
         }
-        //        g_moduleCount++;
-    });
+    })
+
+    
+    // teacherClass.find().where({
+    //     tests: teacherID
+    //     //        initials: 'TEST2' //5a3fc35311aedd22b0e3de9d
+    // }).exec(function (err, docs) {
+    //     //        console.log('test data from db: ' + docs.tests[0].content[0].line1);
+    //     if (err) {
+    //         res.send(err)
+    //     } else {
+
+    //     }
+    //     //        g_moduleCount++;
+    // });
 });
 
 
@@ -939,15 +1014,28 @@ router.get('/finalpage', function (req, res) {
 
 router.get('/getAllData', function (req, res) {
     console.log('initials test: ' + initials);
-    var db = req.db;
-    var collection = db.get('teachers');
-    collection.findOne({
-        "initials": initials
-    }, function (e, docs) {
+    
+    teacherClass.find({
+        initials: initials
+    }, function(err, docs) {
+        if(err) { console.log(err); }
+        else {
+            console.log(docs);
 
-        console.log('Who am I? ', docs._id);
-        res.send(JSON.stringify(docs._id));
-    });
+            res.send(JSON.stringify(docs[0].tests[0]._id)); 
+        }
+    }); 
+    
+    
+    // var db = req.db;
+    // var collection = db.get('teachers');
+    // collection.findOne({
+    //     "initials": initials
+    // }, function (e, docs) {
+
+    //     console.log('Who am I? ', docs._id);
+    //     res.send(JSON.stringify(docs._id));
+    // });
 });
 
 router.post('/send_mail', function (req, res) {

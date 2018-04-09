@@ -144,19 +144,25 @@ checkIdInUrl = function (req, res, next) {
         collection.find({}).then((docs) => {
             var match = false;
 
-            for (i = 0; i < docs.length; i++) {
+            for (i = 0; i<docs.length; i++) {
 
-                idTeacher = docs[i]._id;
+                for(j=0; j<docs[i].tests.length; j++){
 
-                if (idUrl == idTeacher) {
-                    app.set('idTeacher',idTeacher);
-                    match = true;
-                    console.log('there is a match, now redirecting to the correct page');
-                    res.render('welcome', {
-                        title: 'main page'
-                    });
-                    //                   next();
+                    // is technically != the teachers id anymore!.
+                    console.log("ID " +docs[i].tests[j]._id);
+                    idTeacher = docs[i].tests[j]._id;
+                    
+                    if (idUrl == idTeacher) {
+                        app.set('idTeacher',idTeacher);
+                        match = true;
+                        console.log('there is a match, now redirecting to the correct page');
+                        res.render('welcome', {
+                            title: 'main page'
+                        });
+                        //                   next();
+                    }
                 }
+
             }
             if (!match) {
                 console.log('there is no match, redirect to error');

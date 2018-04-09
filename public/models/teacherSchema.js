@@ -24,9 +24,15 @@ var teacherSchema = new Schema({
     initials: String,
     totalTests: Number,
     tests: [{
+        _index: {
+            type: Schema.Types.ObjectId,
+            index: true,
+            required: true, 
+            auto: true
+        },
         date: Date,
         totalModules: Number,
-        modules: [moduleSchema]
+        modules: { type: Array, default: [] }
 	}]
 });
 
