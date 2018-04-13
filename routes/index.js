@@ -10,7 +10,7 @@ var empty = require('empty-folder');
 
 var mailSender = require('./../public/js/email_handler');
 var teacherClass = require('./../public/models/teacherSchema.js');
-var teacher = new teacherClass(); 
+var teacher = new teacherClass();
 var studentClass = require('./../public/models/studentSchema.js');
 var mongo = require('./../public/js/mongoHandler.js');
 var mongoose = require('mongoose');
@@ -69,13 +69,14 @@ function getId() {
     return id;
 }
 
-var testIndex; 
+var testIndex;
+
 function getTestIndex() {
-    return testIndex; 
+    return testIndex;
 }
 
 function setTestIndex(index) {
-    testIndex = index; 
+    testIndex = index;
 }
 
 
@@ -95,8 +96,9 @@ router.post('/welcome_addinfo', function (req, res) {
     teacherClass.find().where({
         _id: teacherID
     }).exec(function (err, docs) {
-            if (err) { res.send(err); } 
-            else {
+            if (err) {
+                res.send(err);
+            } else {
                 // find relevnt teacher data to student 
                 var tdata = docs;
                 console.log(tdata);
@@ -130,7 +132,7 @@ router.post('/index_addinfo', function (req, res) {
     studentModules = [];
     // Get our form values. These rely on the "name" attributes
     var data = req.body;
-    console.log("DATA: ", data); 
+    console.log("DATA: ", data);
     // get the teachers initials and remove them from the data{}
     initials = data.initials;
     delete data.initials;
@@ -154,44 +156,48 @@ router.post('/index_addinfo', function (req, res) {
     console.log(studentModules);
 
     //find et teacher dokument med initialerne 
-    teacherClass.findOne({initials: initials}, function(err, teacher) {
-        if(err) { console.log(err); }
-        else {
-            
+    teacherClass.findOne({
+        initials: initials
+    }, function (err, teacher) {
+        if (err) {
+            console.log(err);
+        } else {
+
             //hvis der ikke eksisterer en teacher med de initialer
-            if(!teacher) {
-                console.log("NEW TEACHER"); 
+            if (!teacher) {
+                console.log("NEW TEACHER");
                 //opret en ny
                 teacher = new teacherClass({
                     initials: initials,
                     totalTests: 1,
                     tests: []
-                }); 
+                });
                 //ellers tilføj til eksisterende
             } else {
-            console.log("ADD TO EXISTING TEACHER"); 
-            teacher.totalTests++;  
-        }
-        
+                console.log("ADD TO EXISTING TEACHER");
+                teacher.totalTests++;
+            }
+
             //push en ny test i tests arrayet
             teacher.tests.push({
                 date: new Date(),
                 totalModules: teacherModules.length,
                 modules: []
             });
-            
+
             //gem til db og redirect view 
-            teacher.save(function(err, test) {
-                if(err) { console.log(err); }
-                else {    
-                    setTestIndex(test.tests[test.tests.length-1].id)
-                    console.log("SAVED: " + test.tests[test.tests.length-1].id); 
-                    res.redirect(teacherModules[0]); 
-                    teacherModules.shift(); 
-                } 
+            teacher.save(function (err, test) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    setTestIndex(test.tests[test.tests.length - 1].id)
+                    console.log("SAVED: " + test.tests[test.tests.length - 1].id);
+                    res.redirect(teacherModules[0]);
+                    teacherModules.shift();
+                }
             });
-        }   
-    }); 
+        }
+    });
 
 });
 
@@ -219,11 +225,37 @@ router.post('/worddictate_addinfo', function (req, res) {
         var files = [];
         var inputfields;
         var form = new formidable.IncomingForm();
-        
+
+
+        // contentObj goes into inputcontent
+
         form.parse(req, function (err, fields, files) {
-            console.log("FIELDS ##### ", fields); 
+
+            // 
+            var tempInputContent = Object.keys(fields).filter(input => input.length < 12);
+            var tempInputContentAnswers = Object.keys(fields).filter(input => input.length > 12);
             
-            inputfields = fields;
+            var inputContent = [];
+            var inputContentAnswers = [];
+            
+            for (i = 0; i < tempInputContentAnswers.length; i++) {
+                
+                inputContent.push({
+                    index: "question " + i,
+                    line1: fields[tempInputContent[i]],
+                    line2: fields[tempInputContent[i + 1]]
+                });
+                
+                inputContentAnswers.push({
+                    index: "answer " + i,
+                    answer: fields[tempInputContentAnswers[i]]
+                });
+            }
+            console.log("content " , inputContent);
+            console.log("contentAA " , inputContentAnswers);
+
+            inputfields = inputContent;
+            // remember answers are separated 
         });
 
         form.on('fileBegin', function (name, file) {
@@ -243,7 +275,7 @@ router.post('/worddictate_addinfo', function (req, res) {
             console.log("3");
             var file_data = [];
 
-            
+
 
             //this is where the fun begins 
             //for every item in files, run this function, and save the output in a promises array
@@ -280,8 +312,8 @@ router.post('/worddictate_addinfo', function (req, res) {
 
                 //this is the content from the teacher test
                 //this should be saved in mongoDB 'teachers' collection 
-                for(var i=1; i<file_data.length; i++) {
-                    inputfields["file_"+i-1] = file_data[i]; 
+                for (var i = 1; i < file_data.length; i++) {
+                    inputfields["file_" + i - 1] = file_data[i];
                 }
 
                 var mod = {
@@ -296,19 +328,20 @@ router.post('/worddictate_addinfo', function (req, res) {
 
                 teacherClass.findOneAndUpdate({
                     initials: initials
-                }, 'tests', function(err, teacher) {
-                    if(err) { res.send(err); }
-                    else { 
-                        console.log("TEACHER: " + teacher); 
-                        teacher.tests[teacher.tests.length-1].modules.push(mod);  
-                        
-                        teacher.save(function(err) {
-                            if(err) console.log(err); 
+                }, 'tests', function (err, teacher) {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                        console.log("TEACHER: " + teacher);
+                        teacher.tests[teacher.tests.length - 1].modules.push(mod);
+
+                        teacher.save(function (err) {
+                            if (err) console.log(err);
                             res.redirect(teacherModules[0]);
-                            teacherModules.shift(); 
-                        }); 
+                            teacherModules.shift();
+                        });
                     }
-                }); 
+                });
 
 
             });
@@ -656,31 +689,34 @@ router.get('/worddictate_participant', function (req, res) {
     // teacherID = JSON.stringify(teacherID); 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    
-    teacherClass.find({"tests._id": teacherID}, function(err, teacher) {
-        if(err) { console.log(err); }
-        else {
 
-            var id_serv = JSON.stringify(teacherID); 
-            
-            for(var i=0; i<teacher[0].tests.length; i++) {
-                var id_db = JSON.stringify(teacher[0].tests[i]._id); 
-                
-                if(id_db == id_serv) {
-                    console.log("SUCCESS!!"); 
-                    console.log(teacher[0].tests[3].modules[0]); 
+    teacherClass.find({
+        "tests._id": teacherID
+    }, function (err, teacher) {
+        if (err) {
+            console.log(err);
+        } else {
+
+            var id_serv = JSON.stringify(teacherID);
+
+            for (var i = 0; i < teacher[0].tests.length; i++) {
+                var id_db = JSON.stringify(teacher[0].tests[i]._id);
+
+                if (id_db == id_serv) {
+                    console.log("SUCCESS!!");
+                    console.log(teacher[0].tests[3].modules[0]);
                     res.render('worddictate_participant', {
-                         "data": teacher[0].tests[i].modules[0].content,
+                        "data": teacher[0].tests[i].modules[0].content,
                         title: 'worddictate_participant'
                     });
                 } else {
-                    console.log("NO MATCH"); 
+                    console.log("NO MATCH");
                 }
             }
 
 
         }
-    }); 
+    });
 });
 
 
@@ -928,19 +964,20 @@ router.get('/finalpage', function (req, res) {
 
 router.get('/getAllData', function (req, res) {
     console.log('initials test: ' + initials);
-    
+
     teacherClass.find({
         initials: initials
-    }, function(err, docs) {
-        if(err) { console.log(err); }
-        else {
+    }, function (err, docs) {
+        if (err) {
+            console.log(err);
+        } else {
             console.log(docs);
 
-            res.send(JSON.stringify(docs[0].tests[docs[0].tests.length-1]._id)); 
+            res.send(JSON.stringify(docs[0].tests[docs[0].tests.length - 1]._id));
         }
-    }); 
-    
-    
+    });
+
+
     // var db = req.db;
     // var collection = db.get('teachers');
     // collection.findOne({
