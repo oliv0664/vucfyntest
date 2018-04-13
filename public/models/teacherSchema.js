@@ -9,11 +9,8 @@ var Schema = mongoose.Schema;
 var moduleSchema = new Schema({
     moduleType: String,
     audio: String,
-    content: {
-        type: Schema.Types.Mixed,
-        default: {}
-
-    }
+    content: { type: Array, default: [] },
+    contentAnswers: { type: Array, default: [] }
 });
 //
 //var moduleClass = mongoose.model('modules', moduleSchema); 
@@ -24,12 +21,6 @@ var teacherSchema = new Schema({
     initials: String,
     totalTests: Number,
     tests: [{
-        _index: {
-            type: Schema.Types.ObjectId,
-            index: true,
-            required: true, 
-            auto: true
-        },
         date: Date,
         totalModules: Number,
         modules: { type: Array, default: [] }

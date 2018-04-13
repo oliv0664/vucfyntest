@@ -21,10 +21,10 @@ Grid.mongo = mongoose.mongo;
 module.exports = {
 
     writeToDB: function(nameInFolder, nameInDB) {
-
+        console.log("WRITE TO DB 1"); 
         return new Promise(function(resolve, reject) {
-
-            db.once('open', function () {
+            console.log("WRITE TO DB 2"); 
+            // db.once('open', function () {
                 console.log('- Connection Open -');
                 var gfs = Grid(db.db);
                 
@@ -46,7 +46,9 @@ module.exports = {
 
                     resolve(file_data); 
                 });
-            });
+            // });
+
+            // reject(new Error('db conn fail')); 
         });
     },
 

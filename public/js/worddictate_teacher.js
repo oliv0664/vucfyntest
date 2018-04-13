@@ -69,7 +69,7 @@
             class: 'h2size',
             id: 'line1' + lineCount,
             type: 'text',
-            name: 'line1' + lineCount, //[lineText1]
+            name: 'line', //[lineText1]
             placeholder: 'Indtast tekst her',
             size: size
         });
@@ -79,7 +79,7 @@
             class: 'h2size',
             id: 'answer' + lineCount,
             type: 'text',
-            name: 'lineanswer' + lineCount, //[lineTextAnswer]
+            name: 'line', //[lineTextAnswer]
             placeholder: 'Indsæt det korrekte ord',
             size: (size - 6)
         });
@@ -90,7 +90,7 @@
             class: 'h2size',
             id: 'line2' + lineCount,
             type: 'text',
-            name: 'line2' + lineCount, //[lineText2]
+            name: 'line', //[lineText2]
             placeholder: 'Indtast tekst her',
             size: size
         });

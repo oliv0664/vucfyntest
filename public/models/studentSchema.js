@@ -5,8 +5,7 @@ var Schema = mongoose.Schema;
 var studentSchema = new Schema({
     
 	studentID: String, 
-    teacherID: String,
-	totalTests: Number
+    teacherID: String
 	   
 }); 
 

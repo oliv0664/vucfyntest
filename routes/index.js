@@ -10,8 +10,10 @@ var empty = require('empty-folder');
 
 var mailSender = require('./../public/js/email_handler');
 var teacherClass = require('./../public/models/teacherSchema.js');
+var teacher = new teacherClass(); 
 var studentClass = require('./../public/models/studentSchema.js');
 var mongo = require('./../public/js/mongoHandler.js');
+var mongoose = require('mongoose');
 
 var teacherID;
 var studentID;
@@ -58,18 +60,23 @@ router.get('/error', function (req, res, next) {
 //});
 function setupStudentModules() {
     // hardcoded for now
-    studentModules = ['startpage', 'worddictate_participant', 'nonsense_participant', 'clozetest_participant',
-        'interpret_participant', 'letter_participant', 'final_page'];
+    studentModules = ['worddictate_participant', 'final_page'];
 }
 
 function getId() {
-
     var id = '5a785e4b3867e72b94b2baba';
     console.log('getID is running');
     return id;
-
 }
 
+var testIndex; 
+function getTestIndex() {
+    return testIndex; 
+}
+
+function setTestIndex(index) {
+    testIndex = index; 
+}
 
 
 router.post('/welcome_addinfo', function (req, res) {
@@ -81,17 +88,15 @@ router.post('/welcome_addinfo', function (req, res) {
     console.log(teacherID);
     var student = {
         studentID: studentID,
-        teacherID: teacherID,
-        totalTests: 1
+        teacherID: teacherID
     };
 
     //var collection = db.get('students');
     teacherClass.find().where({
         _id: teacherID
     }).exec(function (err, docs) {
-            if (err) {
-                res.send(err);
-            } else {
+            if (err) { res.send(err); } 
+            else {
                 // find relevnt teacher data to student 
                 var tdata = docs;
                 console.log(tdata);
@@ -125,6 +130,7 @@ router.post('/index_addinfo', function (req, res) {
     studentModules = [];
     // Get our form values. These rely on the "name" attributes
     var data = req.body;
+    console.log("DATA: ", data); 
     // get the teachers initials and remove them from the data{}
     initials = data.initials;
     delete data.initials;
@@ -147,69 +153,46 @@ router.post('/index_addinfo', function (req, res) {
     console.log(teacherModules);
     console.log(studentModules);
 
-    // var teacherTest = new teacherClass({
-    //     initials: initials,
-    //     totalTests: 1,
-    //     tests: []
-    // });
-
-    console.log("INIT: " + initials); 
-    //skal skrives om, så den tjekker efter initialer, 
-    //hvis de findes pushes der test og totalTests++
-    
-    
-    // DETTE VIRKER IKKE 
-    // DEN SIGER TEACHER = NULL
-    teacherClass.findOneAndUpdate({
-        initials: initials
-    }, 'initials', function(err, teacher) {
-        if(err) { res.send(err); }
+    //find et teacher dokument med initialerne 
+    teacherClass.findOne({initials: initials}, function(err, teacher) {
+        if(err) { console.log(err); }
         else {
-            console.log("SUCCESS! " + teacher); 
-            teacher.initials = initials;
-            teacher.totalTests++; 
+            
+            //hvis der ikke eksisterer en teacher med de initialer
+            if(!teacher) {
+                console.log("NEW TEACHER"); 
+                //opret en ny
+                teacher = new teacherClass({
+                    initials: initials,
+                    totalTests: 1,
+                    tests: []
+                }); 
+                //ellers tilføj til eksisterende
+            } else {
+            console.log("ADD TO EXISTING TEACHER"); 
+            teacher.totalTests++;  
+        }
+        
+            //push en ny test i tests arrayet
             teacher.tests.push({
                 date: new Date(),
-                totalModules: studentModules.length,
+                totalModules: teacherModules.length,
                 modules: []
-            }); 
-            
-            teacher.save(function(err) {
-                if(err) console.log(err); 
             });
-
-            res.redirect(teacherModules[0])
-            teacherModules.shift();
-            console.log('next module should be ' + teacherModules[0]);
-        }
+            
+            //gem til db og redirect view 
+            teacher.save(function(err, test) {
+                if(err) { console.log(err); }
+                else {    
+                    setTestIndex(test.tests[test.tests.length-1].id)
+                    console.log("SAVED: " + test.tests[test.tests.length-1].id); 
+                    res.redirect(teacherModules[0]); 
+                    teacherModules.shift(); 
+                } 
+            });
+        }   
     }); 
 
-
-    // teacherClass.findOneAndUpdate({
-    //         initials: initials
-    //     }, {
-    //         $set: {
-    //             initials: initials,
-    //             totalTests: 1,
-    //             tests: [{
-    //                 date: new Date(),
-    //                 totalModules: studentModules.length,
-    //                 modules: []
-    //             }]
-    //         }
-    //     }, {
-    //         upsert: true
-    //     },
-    //     function (err, user) {
-    //         if (err) {
-    //             res.send(err);
-    //         } else {
-    //             res.redirect(teacherModules[0])
-    //             teacherModules.shift();
-    //             console.log('next module should be ' + teacherModules[0]);
-    //         }
-    //     }
-    // );
 });
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET WORDDICTATE */
@@ -224,14 +207,9 @@ router.get('/worddictate_teacher', function (req, res) {
 
 
 router.post('/worddictate_addinfo', function (req, res) {
-    // TODO MONGOOSE 2
-    // var lines = req.body.lines;
-    //var files = req.body.files;
-    // var file = req.body.file;
-    // var content = req.body.line0;
-    // console.log("content: ", content);  
-    console.log("POST DATA: " + req.body.intro);
 
+    // var testarrayjaja = req.body;
+    // console.log("REQ: " , testarrayjaja); 
     writeFiles(req);
 
     //this code uploads all files from view to readFrom folder
@@ -241,11 +219,15 @@ router.post('/worddictate_addinfo', function (req, res) {
         var files = [];
         var inputfields;
         var form = new formidable.IncomingForm();
+        
         form.parse(req, function (err, fields, files) {
+            console.log("FIELDS ##### ", fields); 
+            
             inputfields = fields;
         });
 
         form.on('fileBegin', function (name, file) {
+            console.log("1");
             //check if there is audio file
             if (file.name != '') {
                 file.path = 'public/readFrom/' + file.name;
@@ -253,15 +235,20 @@ router.post('/worddictate_addinfo', function (req, res) {
         });
 
         form.on('file', function (name, file) {
+            console.log("2");
             files.push([file]);
         });
 
         form.on('end', function () {
+            console.log("3");
             var file_data = [];
+
+            
 
             //this is where the fun begins 
             //for every item in files, run this function, and save the output in a promises array
             var promises = files.map(function (item) {
+                console.log("4");
 
                 var fileUpload = item[0].name;
 
@@ -281,6 +268,7 @@ router.post('/worddictate_addinfo', function (req, res) {
 
             //once all the promises are done
             Promise.all(promises).then(function () {
+                console.log("5");
                 //when files are uploaded, they are removed from 'readFrom' folder
                 empty('./public/readfrom', false, function (err, removed, failed) {
                     if (err) {
@@ -292,14 +280,15 @@ router.post('/worddictate_addinfo', function (req, res) {
 
                 //this is the content from the teacher test
                 //this should be saved in mongoDB 'teachers' collection 
-                for(var i=0; i<file_data.length; i++) {
-                    inputfields["file_"+i] = file_data[i]; 
+                for(var i=1; i<file_data.length; i++) {
+                    inputfields["file_"+i-1] = file_data[i]; 
                 }
 
                 var mod = {
                     moduleType: "orddiktat",
-                    audio: JSON.stringify(file_data[0]),
-                    content: inputfields
+                    audio: file_data[0],
+                    content: inputfields,
+                    contentAnswer: "hej"
                 };
 
                 console.log("MODULE: ", mod);
@@ -309,91 +298,23 @@ router.post('/worddictate_addinfo', function (req, res) {
                     initials: initials
                 }, 'tests', function(err, teacher) {
                     if(err) { res.send(err); }
-                    else {
-                        teacher.tests[0].modules.push(mod);  
+                    else { 
+                        console.log("TEACHER: " + teacher); 
+                        teacher.tests[teacher.tests.length-1].modules.push(mod);  
                         
                         teacher.save(function(err) {
                             if(err) console.log(err); 
+                            res.redirect(teacherModules[0]);
+                            teacherModules.shift(); 
                         }); 
-
-                        res.redirect(teacherModules[0]);
-                        teacherModules.shift(); 
                     }
                 }); 
 
-                // Person.findOne({ 'name.last': 'Ghost' }, 'name occupation', function (err, person) {
-                //     if (err) return handleError(err);
-                //     // Prints "Space Ghost is a talk show host".
-                //     console.log('%s %s is a %s.', person.name.first, person.name.last,
-                //       person.occupation);
-                //   });
-
-
-
-
-                // teacherClass.findOneAndUpdate({
-                //     initials: initials
-                // }, {
-                //     $push: {
-                //         // todo
-                        
-                //     }
-                // }, {
-                //     upsert: true
-                // }, function (err, user) {
-                //     if (err) {
-                //         res.send(err)
-                //     } else {
-                //         res.redirect(teacherModules[0]);
-                //         teacherModules.shift();
-                //         console.log('next module should be ' + teacherModules[0]);
-                //     }
-                // });
 
             });
         });
     }
 
-
-
-
-
-
-
-
-    // Set our internal DB variable
-    //    var db = req.db;
-    //    // Get our form values. These rely on the "name" attributes 
-    //  
-    //
-    //    // Set our collection
-    //    var collection = db.get('teachers');
-    //    // Submit to the DB
-    //    collection.update({
-    //        "initials": initials
-    //    }, {
-    //        "$push": {
-    //            "tests": {
-    //                "type": "orddiktat",
-    //                "file": file,
-    //                "content": JSON.parse(content)
-    //            }
-    //        }
-    //
-    //    }, function (err, doc) {
-    //        if (err) {
-    //            // If it failed, return error
-    //            res.send("There was a problem adding the information to the database.");
-    //        } else {
-    //            // And forward to success page
-    // TODO MONGOOSE 2
-    //            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS IMPLEMENTED
-    //        }
-    //        
-    // //    });
-    //             res.redirect(teacherModules[0]);
-    //             teacherModules.shift();
-    //             console.log('next module should be ' + teacherModules[0]);
 });
 
 
@@ -731,42 +652,35 @@ router.get('/worddictate_participant', function (req, res) {
     //    var db = req.db;
     //    var collection = db.get('teachers');
     //    console.log("studentModules[0]: " + studentModules[0]);
-    console.log(teacherID);
+    console.log("TEACHER ID: " + typeof JSON.stringify(teacherID));
+    // teacherID = JSON.stringify(teacherID); 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     
-    teacherClass.findOne({'_index': teacherID},
-    'tests', function(err, teacher) {
+    teacherClass.find({"tests._id": teacherID}, function(err, teacher) {
         if(err) { console.log(err); }
         else {
-            console.log("DOCS[0] " + JSON.stringify(teacher.tests[0]._id));
 
-            for(var i=0; i<teacher.tests.length; i++) {
-                if(JSON.stringify(teacher.tests[i]._id) == JSON.stringify(teacherID)) {
-                    console.log("YAY"); 
+            var id_serv = JSON.stringify(teacherID); 
+            
+            for(var i=0; i<teacher[0].tests.length; i++) {
+                var id_db = JSON.stringify(teacher[0].tests[i]._id); 
+                
+                if(id_db == id_serv) {
+                    console.log("SUCCESS!!"); 
+                    console.log(teacher[0].tests[3].modules[0]); 
                     res.render('worddictate_participant', {
-                        "data": teacher.tests[0].modules[0],
+                         "data": teacher[0].tests[i].modules[0].content,
                         title: 'worddictate_participant'
                     });
+                } else {
+                    console.log("NO MATCH"); 
                 }
             }
 
+
         }
-    })
-
-    
-    // teacherClass.find().where({
-    //     tests: teacherID
-    //     //        initials: 'TEST2' //5a3fc35311aedd22b0e3de9d
-    // }).exec(function (err, docs) {
-    //     //        console.log('test data from db: ' + docs.tests[0].content[0].line1);
-    //     if (err) {
-    //         res.send(err)
-    //     } else {
-
-    //     }
-    //     //        g_moduleCount++;
-    // });
+    }); 
 });
 
 
@@ -1022,7 +936,7 @@ router.get('/getAllData', function (req, res) {
         else {
             console.log(docs);
 
-            res.send(JSON.stringify(docs[0].tests[0]._id)); 
+            res.send(JSON.stringify(docs[0].tests[docs[0].tests.length-1]._id)); 
         }
     }); 
     
