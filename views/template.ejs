@@ -18,6 +18,7 @@
     <header>
         <% include header %> 
     </header>
+
     <description>
         <h1 class="title" id="h1_1">Title</h1>
 <!--        audio should be included in the audio source-->
@@ -27,9 +28,11 @@
         <%= description %> 
         </h2>
     </description>
-    <div> 
-    <% include orddiktat_kursist %>
-    </div>
+
+    <main> 
+        <% var content = data; %> 
+        <% include orddiktat_kursist %>
+    </main>
 
 
 </body>

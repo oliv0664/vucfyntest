@@ -24,54 +24,59 @@ module.exports = {
         console.log("WRITE TO DB 1"); 
         return new Promise(function(resolve, reject) {
             console.log("WRITE TO DB 2"); 
-            // db.once('open', function () {
-                console.log('- Connection Open -');
-                var gfs = Grid(db.db);
-                
-                var filePath = path.join(__dirname, '../readFrom/' + nameInFolder);
-                
-                var writestream = gfs.createWriteStream({
-                    filename: nameInDB
-                });
-                
-                fs.createReadStream(filePath).pipe(writestream);
-                
-                var file_data; 
-                writestream.on('close', function (file) {
-                    console.log(file.filename + ' Written to DB');
-                    file_data = {
-                        file_name: file.filename,
-                        file_id: file._id
-                    }; 
+        // db.once('open', function () {
+            console.log('- Connection Open -');
+            var gfs = Grid(db.db);
+            
+            var filePath = path.join(__dirname, '../readFrom/' + nameInFolder);
+            
+            var writestream = gfs.createWriteStream({
+                filename: nameInDB
+            });
+            
+            fs.createReadStream(filePath).pipe(writestream);
+            
+            var file_data; 
+            writestream.on('close', function (file) {
+                console.log(file.filename + ' Written to DB');
+                file_data = {
+                    file_name: file.filename,
+                    file_id: file._id
+                }; 
 
-                    resolve(file_data); 
-                });
-            // });
+                resolve(file_data); 
+            });
+        // });
 
-            // reject(new Error('db conn fail')); 
+        // reject(new Error('db conn fail')); 
         });
     },
 
     readFromDB: function(nameInFolder, IdInDb) {
-        return new Promise(function(resolve, rejection){
+        console.log("### READ FROM DB"); 
+        return new Promise(function(resolve, reject){
             
-        var destination = '../writeTo/' + nameInFolder;
-//        db.once('open', function () {
+            var destination = '../writeTo/' + nameInFolder;
+            // resolve(destination);
+    //        db.once('open', function () {
             console.log('- Connection Open -');
             var gfs = Grid(db.db);
-    
+
             var fs_write_stream = fs.createWriteStream(path.join(__dirname, destination));
-    
+
             var readstream = gfs.createReadStream({
                 _id: IdInDb
             });
-    
+
             readstream.pipe(fs_write_stream);
+
             fs_write_stream.on('close', function () {
                 console.log('File has been written fully!');
-                resolve(destination);
+                // var test = "HELLO WORLD"; 
+                resolve(destination); 
+                // return destination; 
             });
-//        });
+    //        });
         });
     }
 }
