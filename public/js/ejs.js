@@ -1,1 +1,0 @@
-var ejs = require('ejs'); 

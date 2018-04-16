@@ -700,9 +700,11 @@ router.get('/worddictate_participant', function (req, res) {
                 if (id_db == id_serv) {
                     console.log("SUCCESS!!");
                     console.log(teacher[0].tests[i].modules[0]);
-                    res.render('worddictate_participant', {
-                        "data": teacher[0].tests[i].modules[0].content,
-                        title: 'worddictate_participant'
+                    res.render('template', {
+                        data: teacher[0].tests[i].modules[0].content,
+                        title: teacher[0].tests[i].modules[0].moduleType,
+                        audio: teacher[0].tests[i].modules[0].audio,
+                        description: "this text field is a WIP"
                     });
                 } else {
                     console.log("NO MATCH");
@@ -1050,12 +1052,12 @@ router.post('/upload', function (req, res) {
 });
 
 
-
-router.get('/template', function (req, res) {
-    res.render('template', {
-        title: 'Template'
-    });
-});
+//
+//router.get('/template', function (req, res) {
+//    res.render('template', {
+//        title: 'Template'
+//    });
+//});
 
 
 

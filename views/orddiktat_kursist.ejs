@@ -1,52 +1,34 @@
-<html>
-
-<head>
-
-    <meta charset="utf-8">
-    <title>Orddiktat</title>
-
-    <script src="/jquery/jquery-3.2.1.min.js"></script>
-    <!-- <script src="/js/worddictate_participant.js"></script> -->
-    <script src="/js/audioControl.js"></script>
-    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
 
 
-</head>
 
-<body>
-
-    <header>
-        <% include header %> 
-    </header>
+   
+<!--
 
     <div id="section">
         <h1 class="title" id="h1_1">Orddiktat</h1>
     </div>
-
-    <div><%= data[0].line1 %></div>
-
+-->
 
     <form id="form" method="post" action="/worddictate_addanswer">
 
-        <div id="subsection">
+<!--        <div id="subsection">-->
+<!--
             <h3>Du skal nu skrive en lille tekst som en diktat.<br>
                 Teksten bliver læst højt i mindre tekststykker, som læses to gange efter hinanden.<br>
                 Alle tegn i teksten dikteres.<br>
                 Diktaten tager ca. 10 minutter.
             </h3>
+-->
              <button class="h2size" type="button" id="start">Start</button> 
-        </div>
+<!--        </div>-->
     
-            <div id="subsubsection"></div>
+<!--            <div id="subsubsection"></div>-->
     
+<!--
             <div id="bottom">
                 <input type="hidden" id="answers" name="answers">
             </div>
+-->
+</form>
+
     
-        </form>
-   
-
-</body>
-
-
-</html>
