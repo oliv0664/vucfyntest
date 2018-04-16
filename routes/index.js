@@ -703,7 +703,7 @@ router.get('/worddictate_participant', function (req, res) {
                     var fileName  = "tt";
                     return mongo.readFromDB('testFile.mp3', teacher[0].tests[i].modules[0].audio.file_id) 
                         .then(function (result) {
-                            fileName = result;
+                            fileName = result.slice(2);
                             console.log("hejhej " + result);
                             console.log("Hej Hello " + fileName ); 
                             
