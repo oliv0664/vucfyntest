@@ -8,6 +8,7 @@
     <script src="/js/start_handler.js"></script>
     <script src="/js/time_handler.js"></script>
     <script src="/js/initialize.js"></script>
+    <script src="/public/js/ejs.js"></script>
 
     <!-- script der behandler den specifikke test -->
     <script id="test_handler"></script>
@@ -18,7 +19,7 @@
 
 </head>
 
-<body onload="initializeTest((<%=JSON.stringify(testlist)%>));">
+<body>
 
     <!--    standard header for alle sider-->
     <div id="header">
@@ -35,18 +36,21 @@
     </div>
 
     <!-- her starter 'form' som gemmer data -->
-    <form id="form" method="post" action="/letter_addanswer">
+    <form id="form" method="post" action="/userInput">
 
         <!-- alt det dynamiske indhold indsættes her -->
         <div id="body_section">
             <button class="h2size" type="button" id="start">STARTKNAP</button>
+            <div><=%- content %></div>
         </div>
 
         <!-- en ekstra section hvis det behøves til en test -->
         <div id="subsection"></div>
 
         <!-- her indsættes 'Gem'/'Næste'/'Videre' knapper -->
-        <div id="bottom"></div>
+        <div id="bottom">
+            <input type="submit">
+        </div>
 
     </form>
 

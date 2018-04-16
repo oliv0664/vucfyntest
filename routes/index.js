@@ -223,7 +223,8 @@ router.post('/worddictate_addinfo', function (req, res) {
     //mangler en bedre navngivning af filer i DB, så de kan findes igen 
     function writeFiles(req) {
         var files = [];
-        var inputfields;
+        var inputContent = [];
+        var inputContentAnswers = []; 
         var form = new formidable.IncomingForm();
 
 
@@ -234,9 +235,6 @@ router.post('/worddictate_addinfo', function (req, res) {
             // 
             var tempInputContent = Object.keys(fields).filter(input => input.length < 12);
             var tempInputContentAnswers = Object.keys(fields).filter(input => input.length > 12);
-            
-            var inputContent = [];
-            var inputContentAnswers = [];
             
             for (i = 0; i < tempInputContentAnswers.length; i++) {
                 
@@ -254,7 +252,7 @@ router.post('/worddictate_addinfo', function (req, res) {
             console.log("content " , inputContent);
             console.log("contentAA " , inputContentAnswers);
 
-            inputfields = inputContent;
+            // inputfields = inputContent;
             // remember answers are separated 
         });
 
@@ -308,19 +306,18 @@ router.post('/worddictate_addinfo', function (req, res) {
                     }
                 });
 
-                console.log("INPUT FIELDS ", inputfields);
 
                 //this is the content from the teacher test
                 //this should be saved in mongoDB 'teachers' collection 
                 for (var i = 1; i < file_data.length; i++) {
-                    inputfields["file_" + i - 1] = file_data[i];
+                    inputContent[i-1].file = file_data[i]; 
                 }
 
                 var mod = {
                     moduleType: "orddiktat",
                     audio: file_data[0],
-                    content: inputfields,
-                    contentAnswer: "hej"
+                    content: inputContent,
+                    contentAnswer: inputContentAnswers
                 };
 
                 console.log("MODULE: ", mod);
@@ -682,9 +679,7 @@ var g_moduleCount = 0;
 
 //henter 'worddictate_participant' og finder data i databasen, svarende til de indtastede initialer
 router.get('/worddictate_participant', function (req, res) {
-    //    var db = req.db;
-    //    var collection = db.get('teachers');
-    //    console.log("studentModules[0]: " + studentModules[0]);
+
     console.log("TEACHER ID: " + typeof JSON.stringify(teacherID));
     // teacherID = JSON.stringify(teacherID); 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
@@ -704,7 +699,7 @@ router.get('/worddictate_participant', function (req, res) {
 
                 if (id_db == id_serv) {
                     console.log("SUCCESS!!");
-                    console.log(teacher[0].tests[3].modules[0]);
+                    console.log(teacher[0].tests[i].modules[0]);
                     res.render('worddictate_participant', {
                         "data": teacher[0].tests[i].modules[0].content,
                         title: 'worddictate_participant'
@@ -1055,6 +1050,12 @@ router.post('/upload', function (req, res) {
 });
 
 
+
+router.get('/template', function (req, res) {
+    res.render('template', {
+        title: 'Template'
+    });
+});
 
 
 

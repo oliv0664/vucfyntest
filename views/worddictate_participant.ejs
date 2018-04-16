@@ -6,14 +6,14 @@
     <title>Orddiktat</title>
 
     <script src="/jquery/jquery-3.2.1.min.js"></script>
-    <script src="/js/worddictate_participant.js"></script>
+    <!-- <script src="/js/worddictate_participant.js"></script> -->
     <script src="/js/audioControl.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
 
 
 </head>
 
-<body onload="initializeTest((<%=JSON.stringify(data)%>));">
+<body>
 
         <div id="header">
                 <img class="header" id="head_1" src="images/VUC_logo.png" height="100">
@@ -28,6 +28,8 @@
     <div id="section">
         <h1 class="title" id="h1_1">Orddiktat</h1>
     </div>
+
+    <div><%= data[0].line1 %></div>
 
 
     <form id="form" method="post" action="/worddictate_addanswer">
