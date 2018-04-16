@@ -72,8 +72,8 @@ module.exports = {
 
             fs_write_stream.on('close', function () {
                 console.log('File has been written fully!');
-                var test = "HELLO WORLD"; 
-                resolve(test); 
+                // var test = "HELLO WORLD"; 
+                resolve(destination); 
                 // return destination; 
             });
     //        });
