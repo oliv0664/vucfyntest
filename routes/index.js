@@ -224,7 +224,7 @@ router.post('/worddictate_addinfo', function (req, res) {
     function writeFiles(req) {
         var files = [];
         var inputContent = [];
-        var inputContentAnswers = []; 
+        var inputContentAnswers = [];
         var form = new formidable.IncomingForm();
 
 
@@ -235,22 +235,22 @@ router.post('/worddictate_addinfo', function (req, res) {
             // 
             var tempInputContent = Object.keys(fields).filter(input => input.length < 12);
             var tempInputContentAnswers = Object.keys(fields).filter(input => input.length > 12);
-            
+
             for (i = 0; i < tempInputContentAnswers.length; i++) {
-                
+
                 inputContent.push({
                     index: "question " + i,
                     line1: fields[tempInputContent[i]],
                     line2: fields[tempInputContent[i + 1]]
                 });
-                
+
                 inputContentAnswers.push({
                     index: "answer " + i,
                     answer: fields[tempInputContentAnswers[i]]
                 });
             }
-            console.log("content " , inputContent);
-            console.log("contentAA " , inputContentAnswers);
+            console.log("content ", inputContent);
+            console.log("contentAA ", inputContentAnswers);
 
             // inputfields = inputContent;
             // remember answers are separated 
@@ -310,7 +310,7 @@ router.post('/worddictate_addinfo', function (req, res) {
                 //this is the content from the teacher test
                 //this should be saved in mongoDB 'teachers' collection 
                 for (var i = 1; i < file_data.length; i++) {
-                    inputContent[i-1].file = file_data[i]; 
+                    inputContent[i - 1].file = file_data[i];
                 }
 
                 var mod = {
@@ -697,13 +697,24 @@ router.get('/worddictate_participant', function (req, res) {
             for (var i = 0; i < teacher[0].tests.length; i++) {
                 var id_db = JSON.stringify(teacher[0].tests[i]._id);
 
+
+
                 if (id_db == id_serv) {
+                var fileName;
+                return mongo.readFromDB('testFile.mp3', teacher[0].tests[i].modules[0].audio.file_id).then(function (result) {
+                    fileName = result;
+                    console.log("hejhej " + result);
+                }, function (err) {
+                    console.log(err);
+                });
+
+                console.log("FIFIFIFIFIF: ", fileName);
                     console.log("SUCCESS!!");
                     console.log(teacher[0].tests[i].modules[0]);
                     res.render('template', {
                         data: teacher[0].tests[i].modules[0].content,
                         title: teacher[0].tests[i].modules[0].moduleType,
-                        audio: teacher[0].tests[i].modules[0].audio,
+                        audio: fileName,
                         description: "this text field is a WIP"
                     });
                 } else {
