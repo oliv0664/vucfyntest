@@ -700,23 +700,24 @@ router.get('/worddictate_participant', function (req, res) {
 
 
                 if (id_db == id_serv) {
-                var fileName;
-                return mongo.readFromDB('testFile.mp3', teacher[0].tests[i].modules[0].audio.file_id).then(function (result) {
-                    fileName = result;
-                    console.log("hejhej " + result);
-                }, function (err) {
-                    console.log(err);
-                });
-
-                console.log("FIFIFIFIFIF: ", fileName);
-                    console.log("SUCCESS!!");
-                    console.log(teacher[0].tests[i].modules[0]);
-                    res.render('template', {
-                        data: teacher[0].tests[i].modules[0].content,
-                        title: teacher[0].tests[i].modules[0].moduleType,
-                        audio: fileName,
-                        description: "this text field is a WIP"
-                    });
+                    var fileName  = "tt";
+                    return mongo.readFromDB('testFile.mp3', teacher[0].tests[i].modules[0].audio.file_id) 
+                        .then(function (result) {
+                            fileName = result;
+                            console.log("hejhej " + result);
+                            console.log("Hej Hello " + fileName ); 
+                            
+                            
+                            console.log("FIFIFIFIFIF: ", fileName);
+                            console.log("SUCCESS!!");
+                            console.log(teacher[0].tests[i].modules[0]);
+                            res.render('template', {
+                                data: teacher[0].tests[i].modules[0].content,
+                                title: teacher[0].tests[i].modules[0].moduleType,
+                                audio: fileName,
+                                description: "this text field is a WIP"
+                            });
+                        }); 
                 } else {
                     console.log("NO MATCH");
                 }
