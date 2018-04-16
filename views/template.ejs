@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="utf-8">
-    <title>VUC FYN + <% title %></title>
+    <title>VUC FYN + <%= title %></title>
 
     <script src="/jquery/jquery-3.2.1.min.js"></script>
     <!-- <script src="/js/worddictate_participant.js"></script> -->
@@ -21,7 +21,7 @@
 
     <description>
         
-        <h1 class="title" id="h1_1">Title</h1>
+        <h1 class="title" id="h1_1"><%= title %></h1>
 <!--        audio should be included in the audio source-->
         <audio src="<%= audio %>" controls></audio>
         <h2>
@@ -31,7 +31,7 @@
 
     <main> 
         <% var content = data; %> 
-        <% include orddiktat_kursist %>
+        <% include orddiktat %>
     </main>
 
 
