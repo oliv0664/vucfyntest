@@ -52,21 +52,26 @@ module.exports = {
         });
     },
 
-    readFromDB: function(nameInFolder, nameInDB) {
-        db.once('open', function () {
+    readFromDB: function(nameInFolder, IdInDb) {
+        return new Promise(function(resolve, rejection){
+            
+        var destination = '../writeTo/' + nameInFolder;
+//        db.once('open', function () {
             console.log('- Connection Open -');
             var gfs = Grid(db.db);
     
-            var fs_write_stream = fs.createWriteStream(path.join(__dirname, '../writeTo/' + nameInFolder));
+            var fs_write_stream = fs.createWriteStream(path.join(__dirname, destination));
     
             var readstream = gfs.createReadStream({
-                filename: nameInDB
+                _id: IdInDb
             });
     
             readstream.pipe(fs_write_stream);
             fs_write_stream.on('close', function () {
                 console.log('File has been written fully!');
+                resolve(destination);
             });
+//        });
         });
     }
 }
