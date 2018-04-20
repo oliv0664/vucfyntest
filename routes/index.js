@@ -210,144 +210,72 @@ router.get('/worddictate_teacher', function (req, res) {
     });
 });
 
-
-
 router.post('/worddictate_addinfo', function (req, res) {
-
-    // var testarrayjaja = req.body;
-    // console.log("REQ: " , testarrayjaja); 
-    writeFiles(req);
 
     //this code uploads all files from view to readFrom folder
     //then it uploads all files to MongoDB
     //mangler en bedre navngivning af filer i DB, så de kan findes igen 
-    function writeFiles(req) {
-        var files = [];
-        var inputContent = [];
-        var inputContentAnswers = [];
-        var form = new formidable.IncomingForm();
 
+    // arrays that should hold data fields from the client form
+    var inputContent = [];
+    var inputContentAnswers = [];
 
-        // contentObj goes into inputcontent
+    // 
+    var form = new formidable.IncomingForm();
 
-        form.parse(req, function (err, fields, files) {
+    // parse the request and handle fields data
 
-            // 
-            var tempInputContent = Object.keys(fields).filter(input => input.length < 12);
-            var tempInputContentAnswers = Object.keys(fields).filter(input => input.length > 12);
+    form.parse(req, function (err, fields, files) {
 
-            for (i = 0; i < tempInputContentAnswers.length; i++) {
+        console.log("asdasdasdasdasdasd", fields);
+        // organize data fields into temporary arrays for reference 
+        var tempInputContent = Object.keys(fields).filter(input => input.length < 12);
+        var tempInputContentAnswers = Object.keys(fields).filter(input => input.length > 12);
 
-                inputContent.push({
-                    index: "question " + i,
-                    line1: fields[tempInputContent[i]],
-                    line2: fields[tempInputContent[i + 1]]
-                });
+        for (i = 0; i < tempInputContentAnswers.length; i++) {
 
-                inputContentAnswers.push({
-                    index: "answer " + i,
-                    answer: fields[tempInputContentAnswers[i]]
-                });
-            }
-            console.log("content ", inputContent);
-            console.log("contentAA ", inputContentAnswers);
-
-            // inputfields = inputContent;
+            // here we use reference to get the exact property from the object 
             // remember answers are separated 
-        });
+            inputContent.push({
+                index: "question " + i,
+                line1: fields[tempInputContent[i]],
+                line2: fields[tempInputContent[i + 1]]
+            });
 
-        form.on('fileBegin', function (name, file) {
-            console.log("1");
-            //check if there is audio file
-            if (file.name != '') {
-                file.path = 'public/readFrom/' + file.name;
+            inputContentAnswers.push({
+                index: "answer " + i,
+                answer: fields[tempInputContentAnswers[i]]
+            });
+        }
+
+    });
+
+    // handle all the files together with fields data
+    // the output  - mod - is an object containing module data
+    formHandler(form, inputContent, inputContentAnswers, function (mod) {
+
+        // find the correct teachers test 
+
+        teacherClass.findOneAndUpdate({
+            initials: initials
+        }, 'tests', function (err, teacher) {
+            if (err) {
+                res.send(err);
+            } else {
+                console.log("TEACHER: " + teacher);
+                teacher.tests[teacher.tests.length - 1].modules.push(mod);
+
+                teacher.save(function (err) {
+                    if (err) console.log(err);
+                    res.redirect(teacherModules[0]);
+                    teacherModules.shift();
+                });
             }
         });
+    });
 
-        form.on('file', function (name, file) {
-            console.log("2");
-            files.push([file]);
-        });
-
-        form.on('end', function () {
-            console.log("3");
-            var file_data = [];
-
-
-
-            //this is where the fun begins 
-            //for every item in files, run this function, and save the output in a promises array
-            var promises = files.map(function (item) {
-                console.log("4");
-
-                var fileUpload = item[0].name;
-
-                var mongo = require('../public/js/MongoHandler');
-
-                //when MongoHandler is done with upload to MongoDB return result
-                //check if there is audiofile
-                if (fileUpload != '') {
-                    return mongo.writeToDB(fileUpload, fileUpload)
-                        .then(function (result) {
-                            file_data.push(result);
-                        }, function (err) {
-                            console.log(err);
-                        });
-                }
-            });
-
-            //once all the promises are done
-            Promise.all(promises).then(function () {
-                console.log("5");
-                //when files are uploaded, they are removed from 'readFrom' folder
-                empty('./public/readfrom', false, function (err, removed, failed) {
-                    if (err) {
-                        console.error(err);
-                    }
-                });
-
-
-                //this is the content from the teacher test
-                //this should be saved in mongoDB 'teachers' collection 
-                for (var i = 1; i < file_data.length; i++) {
-                    inputContent[i - 1].file = file_data[i];
-                }
-
-                var mod = {
-                    moduleType: "orddiktat",
-                    audio: file_data[0],
-                    content: inputContent,
-                    contentAnswer: inputContentAnswers
-                };
-
-                console.log("MODULE: ", mod);
-
-
-                teacherClass.findOneAndUpdate({
-                    initials: initials
-                }, 'tests', function (err, teacher) {
-                    if (err) {
-                        res.send(err);
-                    } else {
-                        console.log("TEACHER: " + teacher);
-                        teacher.tests[teacher.tests.length - 1].modules.push(mod);
-
-                        teacher.save(function (err) {
-                            if (err) console.log(err);
-                            res.redirect(teacherModules[0]);
-                            teacherModules.shift();
-                        });
-                    }
-                });
-
-
-            });
-        });
-    }
 
 });
-
-
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET NONSENSE*/
 
@@ -359,32 +287,65 @@ router.get('/nonsense_teacher', function (req, res) {
 
 
 router.post('/nonsense_addinfo', function (req, res) {
-    var mongo = require('./../public/js/MongoHandler');
-    mongo.readFromDB('downloaded_audio.mp3', 'uploaded_audio.mp3');
-    //    // TODO MONGOOSE 3
-    //    var db = req.db;
-    //
-    //    var file = req.body.file;
-    //    var content = req.body.content;
-    //
-    //    var collection = db.get('teachers');
-    //    collection.update({
-    //        "initials": initials
-    //    }, {
-    //        "$push": {
-    //            "tests": {
-    //                "type": "vrøvleord",
-    //                "file": file,
-    //                "content": JSON.parse(content)
-    //            }
-    //        }
-    //    }, function (err, doc) {
-    //        if (err) {
-    //            res.send("There was a problem adding the information to the database.");
-    //        } else {
-    ////            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS
-    //        }
-    //    });
+    var inputContent = [];
+    var inputContentAnswers = [];
+    
+    var form = new formidable.IncomingForm();
+
+    // parse the request and handle fields data
+    form.parse(req, function (err, fields, files) {
+
+        console.log("FIELDS: ", fields);
+//        for(i = 0; i < fields.content.length; i++){
+//            
+//        console.log("//////////////FIELDS: ", fields.content[i].answer);
+//        }
+//        // organize data fields into temporary arrays for reference 
+//        var tempInputContent = Object.keys(fields).filter(input => input.length < 12);
+//        var tempInputContentAnswers = Object.keys(fields).filter(input => input.length > 12);
+//
+//        for (i = 0; i < tempInputContentAnswers.length; i++) {
+//
+//            // here we use reference to get the exact property from the object 
+//            // remember answers are separated 
+//            inputContent.push({
+//                index: "question " + i,
+//                line1: fields[tempInputContent[i]],
+//                line2: fields[tempInputContent[i + 1]]
+//            });
+//
+//            inputContentAnswers.push({
+//                index: "answer " + i,
+//                answer: fields[tempInputContentAnswers[i]]
+//            });
+//        }
+
+    });
+
+    // handle all the files together with fields data
+    // the output  - mod - is an object containing module data
+//    formHandler(form, inputContent, inputContentAnswers, function (mod) {
+//
+//        // find the correct teachers test 
+//
+//        teacherClass.findOneAndUpdate({
+//            initials: initials
+//        }, 'tests', function (err, teacher) {
+//            if (err) {
+//                res.send(err);
+//            } else {
+//                console.log("TEACHER: " + teacher);
+//                teacher.tests[teacher.tests.length - 1].modules.push(mod);
+//
+//                teacher.save(function (err) {
+//                    if (err) console.log(err);
+//                    res.redirect(teacherModules[0]);
+//                    teacherModules.shift();
+//                });
+//            }
+//        });
+//    });
+
     res.redirect(teacherModules[0]);
     teacherModules.shift();
     console.log('next module should be ' + teacherModules[0]);
@@ -682,7 +643,7 @@ router.get('/worddictate_participant', function (req, res) {
 
     console.log("TEACHER ID: " + typeof JSON.stringify(teacherID));
     // teacherID = JSON.stringify(teacherID); 
-   
+
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
 
     teacherClass.find({
@@ -752,12 +713,12 @@ router.post('/worddictate_addanswer', function (req, res) {
 
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
 router.get('/nonsense_participant', function (req, res) {
-   
-    
+
+
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-   teacherClass.find({
+    teacherClass.find({
         "tests._id": teacherID
     }, function (err, teacher) {
         if (err) {
@@ -790,9 +751,9 @@ router.get('/nonsense_participant', function (req, res) {
 
         }
     });
-//            "data": docs.tests[1],
-//            title: 'nonsense_participant'
-//        g_moduleCount++;
+    //            "data": docs.tests[1],
+    //            title: 'nonsense_participant'
+    //        g_moduleCount++;
 });
 
 
@@ -1087,7 +1048,82 @@ router.post('/upload', function (req, res) {
 //    });
 //});
 
+function formHandler(incForm, inputCont, inputContAns, callback) {
 
+    var files = [];
+
+
+    incForm.on('fileBegin', function (name, file) {
+        console.log("1");
+        //check if there is audio file
+        if (file.name != '') {
+            file.path = 'public/readFrom/' + file.name;
+        }
+    });
+
+    incForm.on('file', function (name, file) {
+        console.log("2");
+        files.push([file]);
+    });
+
+    incForm.on('end', function () {
+        console.log("3");
+        var file_data = [];
+
+        //this is where the fun begins 
+        //for every item in files, run this function, and save the output in a promises array
+        var promises = files.map(function (item) {
+            console.log("4");
+
+            var fileUpload = item[0].name;
+
+            var mongo = require('../public/js/MongoHandler');
+
+            //when MongoHandler is done with upload to MongoDB return result
+            //check if there is audiofile
+            if (fileUpload != '') {
+                return mongo.writeToDB(fileUpload, fileUpload)
+                    .then(function (result) {
+                        file_data.push(result);
+                    }, function (err) {
+                        console.log(err);
+                    });
+            }
+        });
+
+        //once all the promises are done
+        Promise.all(promises).then(function () {
+            console.log("5");
+            //when files are uploaded, they are removed from 'readFrom' folder
+            empty('./public/readfrom', false, function (err, removed, failed) {
+                if (err) {
+                    console.error(err);
+                }
+            });
+
+
+            //this is the content from the teacher test
+            //this should be saved in mongoDB 'teachers' collection 
+            for (var i = 1; i < file_data.length; i++) {
+                inputCont[i - 1].file = file_data[i];
+            }
+
+            var mod = {
+                moduleType: "orddiktat",
+                audio: file_data[0],
+                content: inputCont,
+                contentAnswer: inputContAns
+            };
+
+            console.log("MODULE: ", mod);
+
+
+
+            return callback(mod);
+
+        });
+    });
+};
 
 
 

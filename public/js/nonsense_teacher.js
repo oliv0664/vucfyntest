@@ -7,27 +7,27 @@
             addLine();
         });
 
-        $('#form').bind('submit', function (event) {
-
-            event.preventDefault(); //this will prevent the default submit
-
-            var content = [];
-            for (var i = 0; i < lineCount; i++) {
-                var answer = $('#answer' + i).val();
-                var file = $('#file' + i).val();
-
-                var object = {
-                    "answer": answer,
-                    "file": file
-                }
-
-                content.push(object);
-            }
-
-            $('#content').val(JSON.stringify(content));
-
-            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
-        });
+//        $('#form').bind('submit', function (event) {
+//
+//            event.preventDefault(); //this will prevent the default submit
+//
+//            var content = [];
+//            for (var i = 0; i < lineCount; i++) {
+//                var answer = $('#answer' + i).val();
+//                var file = $('#file' + i).val();
+//
+//                var object = {
+//                    "answer": answer,
+//                    "file": file
+//                }
+//
+//                content.push(object);
+//            }
+//
+//            $('#content').val(JSON.stringify(content));
+//
+//            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
+//        });
     });
 
 
