@@ -682,7 +682,7 @@ router.get('/worddictate_participant', function (req, res) {
 
     console.log("TEACHER ID: " + typeof JSON.stringify(teacherID));
     // teacherID = JSON.stringify(teacherID); 
-    //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
+   
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
 
     teacherClass.find({
@@ -697,27 +697,18 @@ router.get('/worddictate_participant', function (req, res) {
             for (var i = 0; i < teacher[0].tests.length; i++) {
                 var id_db = JSON.stringify(teacher[0].tests[i]._id);
 
-
-
                 if (id_db == id_serv) {
-                    var fileName  = "tt";
-                    return mongo.readFromDB('testFile.mp3', teacher[0].tests[i].modules[0].audio.file_id) 
+                    var fileName = "tt";
+                    return mongo.readFromDB('testFile.mp3', teacher[0].tests[i].modules[0].audio.file_id)
                         .then(function (result) {
                             fileName = result.slice(2);
-                            console.log("hejhej " + result);
-                            console.log("Hej Hello " + fileName ); 
-                            
-                            
-                            console.log("FIFIFIFIFIF: ", fileName);
-                            console.log("SUCCESS!!");
-                            console.log(teacher[0].tests[i].modules[0]);
                             res.render('template', {
                                 data: teacher[0].tests[i].modules[0].content,
-                                title: teacher[0].tests[i].modules[0].moduleType,
+                                'title': teacher[0].tests[i].modules[0].moduleType,
                                 audio: fileName,
                                 description: "this text field is a WIP"
                             });
-                        }); 
+                        });
                 } else {
                     console.log("NO MATCH");
                 }
@@ -761,26 +752,51 @@ router.post('/worddictate_addanswer', function (req, res) {
 
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
 router.get('/nonsense_participant', function (req, res) {
-    var db = req.db;
-    var collection = db.get('teachers');
+   
+    
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    collection.findOne({
-        _id: teacherID
-    }, function (e, docs) {
-        //console.log(docs.tests[g_moduleCount]);
-        res.render('nonsense_participant', {
-            "data": docs.tests[1],
-            title: 'nonsense_participant'
-        });
-        g_moduleCount++;
+   teacherClass.find({
+        "tests._id": teacherID
+    }, function (err, teacher) {
+        if (err) {
+            console.log(err);
+        } else {
+
+            var id_serv = JSON.stringify(teacherID);
+
+            for (var i = 0; i < teacher[0].tests.length; i++) {
+                var id_db = JSON.stringify(teacher[0].tests[i]._id);
+
+                if (id_db == id_serv) {
+                    // den korrekte test under samme intial 
+                    var fileName = "tt";
+                    return mongo.readFromDB('testFile.mp3', teacher[0].tests[i].modules[0].audio.file_id)
+                        .then(function (result) {
+                            fileName = result.slice(2);
+                            res.render('template', {
+                                data: teacher[0].tests[i].modules[0].content,
+                                'title': teacher[0].tests[i].modules[0].moduleType,
+                                audio: fileName,
+                                description: "this text field is a WIP"
+                            });
+                        });
+                } else {
+                    console.log("NO MATCH");
+                }
+            }
+
+
+        }
     });
+//            "data": docs.tests[1],
+//            title: 'nonsense_participant'
+//        g_moduleCount++;
 });
 
 
 router.post('/nonsense_addanswer', function (req, res) {
-    var db = req.db;
 
     var answers = req.body.answers;
 
