@@ -657,17 +657,28 @@ router.get('/worddictate_participant', function (req, res) {
 
             for (var i = 0; i < teacher[0].tests.length; i++) {
                 var id_db = JSON.stringify(teacher[0].tests[i]._id);
-
+                
                 if (id_db == id_serv) {
                     var fileName = "tt";
-                    return mongo.readFromDB('testFile.mp3', teacher[0].tests[i].modules[0].audio.file_id)
-                        .then(function (result) {
-                            fileName = result.slice(2);
+                    var audio_files = []; 
+                    var promises = [];
+                    var content = teacher[0].tests[i].modules[0].content; //0 = orddiktat
+                    var moduleType = teacher[0].tests[i].modules[0].moduleType; 
+
+                    promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[0].audio.file_id)); 
+                    for (var j=0; j<teacher[0].tests[i].modules[0].content.length; j++) {
+                        promises.push(mongo.readFromDB('file'+j+'.mp3', teacher[0].tests[i].modules[0].content[j].file.file_id)); 
+                    }    
+                    Promise.all(promises).then(function (result) {
+                            for(var k=0; k<result.length; k++) {
+                                result[k] = result[k].slice(2); 
+                            }
                             res.render('template', {
-                                data: teacher[0].tests[i].modules[0].content,
-                                'title': teacher[0].tests[i].modules[0].moduleType,
-                                audio: fileName,
-                                description: "this text field is a WIP"
+                                content: content,
+                                'title': moduleType,
+                                descriptionAudio: result.shift(),
+                                description: "Dette er en beskrivelse af testen",
+                                audioFiles: result
                             });
                         });
                 } else {
