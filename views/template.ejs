@@ -10,7 +10,6 @@
     <script src="/js/audioControl.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
 
-
 </head>
 
 <body>
@@ -23,15 +22,14 @@
         
         <h1 class="title" id="h1_1"><%= title %></h1>
 <!--        audio should be included in the audio source-->
-        <audio src="<%= audio %>" controls></audio>
+        <audio src="<%= descriptionAudio %>" controls></audio>
         <h2>
         <%= description %> 
         </h2>
     </description>
 
     <main> 
-        <% var content = data; %> 
-        <%- include(title + '_kursist') %>
+        <%- include(title + '_kursist', content) %>
     </main>
 
 
