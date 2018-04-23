@@ -5,8 +5,13 @@ var Schema = mongoose.Schema;
 var studentSchema = new Schema({
     
 	studentID: String, 
-    teacherID: String
-	   
+    teacherID: String,
+    studentInfo: { type: Object, default: {}},
+    modules: [{
+        moduleType: String,
+        answers: { type: Array, default: [] }
+    }]
+   
 }); 
 
 
