@@ -52,6 +52,7 @@
             class: 'h2size',
             type: 'text',
             id: 'answer' + lineCount,
+            name: 'answer' + lineCount,
             placeholder: 'Indsæt det korrekte ord her',
             size: '25'
         });
@@ -61,7 +62,7 @@
             class: 'h2size',
             type: 'file',
             id: 'file' + lineCount,
-            //name: 'files[]', //[file]
+            name: 'file' + lineCount,
             accept: 'audio/*',
             onchange: 'readURL(this)'
         });
