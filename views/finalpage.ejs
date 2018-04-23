@@ -1,56 +1,28 @@
-<!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Slutside</title>
-    <script src="/jquery/jquery-3.2.1.min.js"> </script>
-    <script src="/js/sendMail.js"></script>
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> -->
+    <script src="/jquery/jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+    <script src="/js/sendMail.js"></script>
 </head>
 
 <body>
-    <div id="header">
-        <img class="header" id="head_1" src="images/VUC_logo.png" height="100">
-        <h3 class="header" id="head_2">FVU Screening</h3>
-        <h3 class="header" id="head_3">HF & VUC FYN</h3>
-    </div>
+    <header>
+        <% include header %>
+    </header>
         
-    <form id="form" action="/send_mail" method="post">
-        <div class="section">
-            <div class="fullwidth">
-                <h2 class="title" id="h1_1">Du er nu færdig med din FVU Screening</h2>
-            
-                <div class="fullwidth">
-        
-                    <h3 class="h3size">Skriv mailadresse på din lærer her:</h3>
-                    <input id="mailReciever" type="text" name="mail" placeholder="Email">
-                    <input class="h3size" type="submit">    
-                </div>
-            </div>
-        </div>
-</form>
-<!--    Dette er udgandstpunktet til fileuploader-->
-<!--
-    <p>Filuploaderen virker ikke endnu</p>
-    <p> kig i chrome dev tools console efter upload</p>
-    <div class="container">
-        <div class="progress">
-            <div class="progress-bar" role="progressbar"></div>
-            <input id="upload-input" type="file" name="uploads[]">
-        </div>
-    </div>
--->
-
-
-
-    <!-- <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script> -->
-    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
-    <!-- <script src="/js/upload.js"></script> -->
+    <description>
+        <h2 class="title" id="h1_1">Du er nu færdig med din FVU Screening</h2>
+    </description>
+    
+    <main>
+        <form id="form" action="/send_mail" method="post">
+            <h3 class="h3size">Skriv mailadresse på din lærer her:</h3>
+            <input id="mailReciever" type="text" name="mail" placeholder="Email">
+            <input class="h3size" type="submit">  
+        </form>
+    </main>
 </body>
 
 </html>
