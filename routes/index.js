@@ -87,7 +87,7 @@ function setTestIndex(index) {
 router.post('/welcome_addinfo', function (req, res) {
 
     //var db = req.db;
-
+    console.log('before anything: ', studentModules);
     studentID = req.body.id;
     teacherID = req.app.get('idTeacher');
     console.log(studentID + " YNLPYPHTASCSACASC");
@@ -741,7 +741,7 @@ router.post('/worddictate_addanswer', function (req, res) {
         }
         var mod = {
             moduleType: 'Orddiktat',
-            answers: inputAnswers     
+            answers: inputAnswers
         }
 
         studentClass.findOneAndUpdate({
@@ -791,7 +791,7 @@ router.post('/worddictate_addanswer', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET NONSENSE */
 
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
-router.get('/vrøvleord_kursist', function (req, res) {
+router.get('/vroevleord_kursist', function (req, res) {
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
@@ -1045,91 +1045,72 @@ router.get('/getAllData', function (req, res) {
 
 router.post('/send_mail', function (req, res) {
 
-   
-    // req.body.data;  
+    var testID;
 
-    var testID; 
-    
     studentClass.findOne({
         'studentID': studentID
     }, function (err, student) {
         if (err) {
             console.log(err);
         } else {
-            //code to get correct answers
-            console.log("FINAL STUDENT ", student);
-        }
-    });
 
 
+            // var mail = req.body.mail;
+            // console.log(mail);
 
-    teacherClass.findOne({
-        'tests._id': testID
-    }, function (err, teacher) {
-        if (err) {
-            console.log(err);
-        } else {
-            //code to get correct answers
-            console.log("FINAL TEACHER ", teacher);
-        }
-    });
+            // var msg = mailSender.htmlBuilder(testResult);
+            // mailSender.sendMail(mail, msg);
 
-    // var mail = req.body.mail;
-    // console.log(mail);
-
-    // var msg = mailSender.htmlBuilder(testResult);
-    // mailSender.sendMail(mail, msg);
-
-    // res.redirect("finalpage");
-});
+            // res.redirect("finalpage");
             //code to get correct answers 
-            testID = student.teacherID; 
-            
+            testID = student.teacherID;
+
             // for(var i=0; i<student.modules.length; i++) {
-                //     student_answers.push({
-                    //         moduleType: student.modules[i].moduleType,
-                    //         answers: student.modules[i].answers 
-                    //     });  
-                    // } 
-                    
-                    
-                    teacherClass.findOne({
-                        'tests._id': testID
-                    }, function (err, teacher) {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            //code to get correct answers
-                            console.log("FINAL TEACHER ", teacher);
-                            
-                            var id_serv = JSON.stringify(testID); 
-                            
-                            for(var i=0; i<teacher.tests.length; i++) {
-                                var id_db = JSON.stringify(teacher.tests[i]._id); 
-                                
-                                if(id_serv == id_db) {
-                                    var final_score = evaluateScore(i, student, teacher); 
-                                    var mail = req.body.mail; 
-                                    var msg = mailSender.htmlBuilder(final_score);
-                                    mailSender.sendMail(mail, msg); 
-                                }
-                            }
+            //     student_answers.push({
+            //         moduleType: student.modules[i].moduleType,
+            //         answers: student.modules[i].answers 
+            //     });  
+            // } 
+
+
+            teacherClass.findOne({
+                'tests._id': testID
+            }, function (err, teacher) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    //code to get correct answers
+                    console.log("FINAL TEACHER ", teacher);
+
+                    var id_serv = JSON.stringify(testID);
+
+                    for (var i = 0; i < teacher.tests.length; i++) {
+                        var id_db = JSON.stringify(teacher.tests[i]._id);
+
+                        if (id_serv == id_db) {
+                            var final_score = evaluateScore(i, student, teacher);
+                            var mail = req.body.mail;
+                            var msg = mailSender.htmlBuilder(final_score);
+                            mailSender.sendMail(mail, msg);
                         }
-                    }); 
+                    }
                 }
             });
-        });
-        
+        }
+    });
+});
+
+
 function evaluateScore(testIndex, student, teacher) {
-    var final_score = []; 
-    for(var j=0; j<student.modules.length; j++) {
-        for(var k=0; k<student.modules[j].answers.length; k++) {
+    var final_score = [];
+    for (var j = 0; j < student.modules.length; j++) {
+        for (var k = 0; k < student.modules[j].answers.length; k++) {
             var point = 0;
-            var student_answer = student.modules[j].answers[k]; 
+            var student_answer = student.modules[j].answers[k];
             var correct_answer = teacher.tests[testIndex].modules[j].contentAnswer[k].answer;
-            if(student_answer == correct_answer) {
-                point = 1; 
-            } 
+            if (student_answer == correct_answer) {
+                point = 1;
+            }
             final_score.push({
                 student_answer: student_answer,
                 correct_answer: correct_answer,
@@ -1137,7 +1118,7 @@ function evaluateScore(testIndex, student, teacher) {
             });
         }
     }
-    return final_score; 
+    return final_score;
 }
 
 
