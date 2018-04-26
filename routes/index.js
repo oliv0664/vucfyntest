@@ -20,6 +20,7 @@ var studentID;
 var initials;
 var teacherModules = [];
 var studentModules = [];
+var kursistModules = [];
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -58,13 +59,14 @@ router.get('/error', function (req, res, next) {
 //        });
 //    });
 //});
-function setupStudentModules(modules) {
-    for(var i=0; i<modules.length; i++) {
-        console.log("MODULETYPE " + modules[i].moduleType); 
-        studentModules.push(modules[i].moduleType + '_kursist'); 
+function setupStudentModules(modulesArray) {
+    var tempArray = [];
+    for (var i = 0; i < modulesArray.length; i++) {
+        console.log("MODULETYPE " + modulesArray[i].moduleType);
+        tempArray.push(modulesArray[i].moduleType + '_kursist');
     }
-    studentModules.push('finalpage'); 
-    return studentModules; 
+    tempArray.push('finalpage');
+    return tempArray;
 }
 
 function getId() {
@@ -87,7 +89,7 @@ function setTestIndex(index) {
 router.post('/welcome_addinfo', function (req, res) {
 
     //var db = req.db;
-
+    console.log('before anything: ', studentModules);
     studentID = req.body.id;
     teacherID = req.app.get('idTeacher');
     console.log(studentID + " YNLPYPHTASCSACASC");
@@ -100,7 +102,7 @@ router.post('/welcome_addinfo', function (req, res) {
             res.send(err);
         } else {
             // find relevnt teacher data to student 
-            console.log(teacher[0].tests[0].modules[0].moduleType); 
+            console.log(teacher[0].tests[0].modules[0].moduleType);
             // make student object with data
             var id_serv = JSON.stringify(teacherID);
 
@@ -109,7 +111,7 @@ router.post('/welcome_addinfo', function (req, res) {
                 var id_db = JSON.stringify(teacher[0].tests[i]._id);
                 if (id_db == id_serv) {
 
-                    var studentModules = setupStudentModules(teacher[0].tests[i].modules);
+                    kursistModules = setupStudentModules(teacher[0].tests[i].modules);
 
                     studentClass.findOneAndUpdate({
                         studentID: studentID
@@ -118,27 +120,30 @@ router.post('/welcome_addinfo', function (req, res) {
                             res.send(err);
                         } else {
 
-                            if(!student) {
+                            if (!student) {
                                 student = new studentClass({
-                                    studentID: studentID, 
-                                    teacherID: teacherID, 
-                                    studentinfo: {}, 
-                                    modules: [] 
-                                }); 
+                                    studentID: studentID,
+                                    teacherID: teacherID,
+                                    studentinfo: {},
+                                    modules: []
+                                });
                                 console.log("STUDENT: " + student);
-                                
+
                                 student.save(function (err) {
-                                    if (err) console.log(err);
-                                    res.redirect(studentModules[0]);
-                                    studentModules.shift();
+                                    if (err) {
+                                        console.log(err);
+                                    }
+
+                                    res.redirect(kursistModules[0]);
+                                    kursistModules.shift();
                                 });
                             } else {
-                                res.send(alert('ID ER TAGET!')); 
+                                res.send(alert('ID ER TAGET!'));
                             }
                         }
                     });
 
-                }   
+                }
 
             }
 
@@ -156,7 +161,6 @@ router.post('/index_addinfo', function (req, res) {
     studentModules = [];
     // Get our form values. These rely on the "name" attributes
     var data = req.body;
-    console.log("DATA: ", data);
     // get the teachers initials and remove them from the data{}
     initials = data.initials;
     delete data.initials;
@@ -256,9 +260,9 @@ router.post('/worddictate_addinfo', function (req, res) {
         var tempInputContent = Object.keys(fields).filter(input => input.length < 12);
         var tempInputContentAnswers = Object.keys(fields).filter(input => input.length > 12);
 
-        var j=0; 
-        for (i=0; i<tempInputContentAnswers.length * 2; i=i+2) {
-            console.log("I " + i); 
+        var j = 0;
+        for (i = 0; i < tempInputContentAnswers.length * 2; i = i + 2) {
+            console.log("I " + i);
             // here we use reference to get the exact property from the object 
             // remember answers are separated 
             inputContent.push({
@@ -315,66 +319,56 @@ router.get('/nonsense_teacher', function (req, res) {
 router.post('/nonsense_addinfo', function (req, res) {
     var inputContent = [];
     var inputContentAnswers = [];
-    
+
     var form = new formidable.IncomingForm();
 
     // parse the request and handle fields data
     form.parse(req, function (err, fields, files) {
 
         console.log("FIELDS: ", fields);
-//        for(i = 0; i < fields.content.length; i++){
-//            
-//        console.log("//////////////FIELDS: ", fields.content[i].answer);
-//        }
-//        // organize data fields into temporary arrays for reference 
-//        var tempInputContent = Object.keys(fields).filter(input => input.length < 12);
-//        var tempInputContentAnswers = Object.keys(fields).filter(input => input.length > 12);
-//
-//        for (i = 0; i < tempInputContentAnswers.length; i++) {
-//
-//            // here we use reference to get the exact property from the object 
-//            // remember answers are separated 
-//            inputContent.push({
-//                index: "question " + i,
-//                line1: fields[tempInputContent[i]],
-//                line2: fields[tempInputContent[i + 1]]
-//            });
-//
-//            inputContentAnswers.push({
-//                index: "answer " + i,
-//                answer: fields[tempInputContentAnswers[i]]
-//            });
-//        }
+
+        // organize data fields into temporary arrays for reference 
+        var tempInputContentAnswers = Object.keys(fields);
+        var j = 0;
+        for (i = 0; i < tempInputContentAnswers.length * 2; i = i + 2) {
+            console.log("I " + i);
+            // here we use reference to get the exact property from the object 
+            // remember answers are separated 
+            inputContent.push({
+                index: "question " + j
+            });
+
+            inputContentAnswers.push({
+                index: "answer " + j,
+                answer: fields[tempInputContentAnswers[j]]
+            });
+            j++;
+        }
 
     });
 
     // handle all the files together with fields data
     // the output  - mod - is an object containing module data
-//    formHandler(form, inputContent, inputContentAnswers, function (mod) {
-//
-//        // find the correct teachers test 
-//
-//        teacherClass.findOneAndUpdate({
-//            initials: initials
-//        }, 'tests', function (err, teacher) {
-//            if (err) {
-//                res.send(err);
-//            } else {
-//                console.log("TEACHER: " + teacher);
-//                teacher.tests[teacher.tests.length - 1].modules.push(mod);
-//
-//                teacher.save(function (err) {
-//                    if (err) console.log(err);
-//                    res.redirect(teacherModules[0]);
-//                    teacherModules.shift();
-//                });
-//            }
-//        });
-//    });
+    formHandler(form, inputContent, inputContentAnswers, function (mod) {
 
-    res.redirect(teacherModules[0]);
-    teacherModules.shift();
-    console.log('next module should be ' + teacherModules[0]);
+        // find the correct teachers test 
+        teacherClass.findOneAndUpdate({
+            initials: initials
+        }, 'tests', function (err, teacher) {
+            if (err) {
+                res.send(err);
+            } else {
+                console.log("TEACHER: " + teacher);
+                teacher.tests[teacher.tests.length - 1].modules.push(mod);
+
+                teacher.save(function (err) {
+                    if (err) console.log(err);
+                    res.redirect(teacherModules[0]);
+                    teacherModules.shift();
+                });
+            }
+        });
+    });
 });
 
 
@@ -530,9 +524,9 @@ router.get('/nextpage', function (req, res) {
 
 
 router.post('/nextpage', function (req, res) {
-    res.redirect(studentModules[0]);
-    studentModules.shift();
-    console.log('next module should be ' + studentModules[0]);
+    res.redirect(kursistModules[0]);
+    kursisModules.shift();
+    console.log('next module should be ' + kursisModules[0]);
 });
 
 
@@ -650,9 +644,9 @@ router.post('/startpage_addinfo', function (req, res) {
     //
     //        } else {
 
-    console.log("######## student modules: " + studentModules[0]);
-    res.redirect(studentModules[0]);
-    studentModules.shift();
+    console.log("######## student modules: " + kursisModules[0]);
+    res.redirect(kursisModules[0]);
+    kursisModules.shift();
 
     //        }
 });
@@ -683,24 +677,24 @@ router.get('/orddiktat_kursist', function (req, res) {
 
             for (var i = 0; i < teacher[0].tests.length; i++) {
                 var id_db = JSON.stringify(teacher[0].tests[i]._id);
-                
+
                 if (id_db == id_serv) {
                     var fileName = "tt";
-                    var audio_files = []; 
+                    var audio_files = [];
                     var promises = [];
                     var content = teacher[0].tests[i].modules[0].content; //0 = orddiktat
-                    var moduleType = teacher[0].tests[i].modules[0].moduleType; 
+                    var moduleType = teacher[0].tests[i].modules[0].moduleType;
 
-                    promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[0].audio.file_id)); 
-                    for (var j=0; j<teacher[0].tests[i].modules[0].content.length; j++) {
-                        promises.push(mongo.readFromDB('file'+j+'.mp3', teacher[0].tests[i].modules[0].content[j].file.file_id)); 
-                    }    
+                    promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[0].audio.file_id));
+                    for (var j = 0; j < teacher[0].tests[i].modules[0].content.length; j++) {
+                        promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[0].content[j].file.file_id));
+                    }
                     Promise.all(promises).then(function (result) {
-                        
-                        for(var k=0; k<result.length; k++) {
-                            result[k] = result[k].slice(2); 
+
+                        for (var k = 0; k < result.length; k++) {
+                            result[k] = result[k].slice(2);
                         }
-                        
+
                         res.render('template', {
                             content: content,
                             'title': moduleType,
@@ -714,8 +708,8 @@ router.get('/orddiktat_kursist', function (req, res) {
                     console.log("NO MATCH");
                 }
             }
-            
-            
+
+
         }
     });
 });
@@ -725,10 +719,12 @@ router.post('/worddictate_addanswer', function (req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
     empty('./public/writeTo', false, function (err, removed, failed) {
-        if (err) { console.error(err); }
+        if (err) {
+            console.error(err);
+        }
     });
 
-   console.log('test'); 
+    console.log('test');
     // arrays that should hold data fields from the client form
     var inputAnswers = [];
     // var inputContentAnswers = [];
@@ -740,14 +736,14 @@ router.post('/worddictate_addanswer', function (req, res) {
 
     form.parse(req, function (err, fields, files) {
 
-        inputAnswers = []; 
+        inputAnswers = [];
         var temp = Object.keys(fields);
         for (i = 0; i < temp.length; i++) {
             inputAnswers.push(fields[temp[i]]);
         }
         var mod = {
             moduleType: 'Orddiktat',
-            answers: inputAnswers     
+            answers: inputAnswers
         }
 
         studentClass.findOneAndUpdate({
@@ -761,36 +757,13 @@ router.post('/worddictate_addanswer', function (req, res) {
 
                 student.save(function (err) {
                     if (err) console.log(err);
-                    res.redirect(studentModules[0]);
-                    studentModules.shift();
+                    res.redirect(kursisModules[0]);
+                    kursisModules.shift();
                 });
             }
         });
     });
-    
-    // var db = req.db;
-    // console.log(' ************* ' + studentID);
-    // var answers = req.body.answers;
 
-    // // her jeg er kommet til 
-
-    // collection.update({
-    //     "studentID": studentID
-    // }, {
-    //     "$push": {
-    //         "tests": {
-    //             "type": "orddiktat",
-    //             "answers": JSON.parse(answers)
-    //         }
-    //     }
-    // }, function (err, doc) {
-    //     if (err) {
-    //         res.send("There was a problem adding the information to the database.");
-    //     } else {
-    //         res.redirect(studentModules[0]);
-    //         studentModules.shift();
-    //     }
-    // });
 });
 
 
@@ -798,9 +771,7 @@ router.post('/worddictate_addanswer', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET NONSENSE */
 
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
-router.get('/nonsense_participant', function (req, res) {
-
-
+router.get('/vroevleord_kursist', function (req, res) {
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
@@ -817,18 +788,31 @@ router.get('/nonsense_participant', function (req, res) {
                 var id_db = JSON.stringify(teacher[0].tests[i]._id);
 
                 if (id_db == id_serv) {
-                    // den korrekte test under samme intial 
                     var fileName = "tt";
-                    return mongo.readFromDB('testFile.mp3', teacher[0].tests[i].modules[0].audio.file_id)
-                        .then(function (result) {
-                            fileName = result.slice(2);
-                            res.render('template', {
-                                data: teacher[0].tests[i].modules[0].content,
-                                'title': teacher[0].tests[i].modules[0].moduleType,
-                                audio: fileName,
-                                description: "this text field is a WIP"
-                            });
+                    var audio_files = [];
+                    var promises = [];
+                    var content = teacher[0].tests[i].modules[0].content; //0 = orddiktat
+                    var moduleType = teacher[0].tests[i].modules[0].moduleType;
+
+                    promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[0].audio.file_id));
+                    for (var j = 0; j < teacher[0].tests[i].modules[0].content.length; j++) {
+                        promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[0].content[j].file.file_id));
+                    }
+                    Promise.all(promises).then(function (result) {
+
+                        for (var k = 0; k < result.length; k++) {
+                            result[k] = result[k].slice(2);
+                        }
+
+                        res.render('template', {
+                            content: content,
+                            'title': moduleType,
+                            descriptionAudio: result.shift(),
+                            description: "Dette er en beskrivelse af testen",
+                            audioFiles: result
                         });
+
+                    });
                 } else {
                     console.log("NO MATCH");
                 }
@@ -845,27 +829,53 @@ router.get('/nonsense_participant', function (req, res) {
 
 router.post('/nonsense_addanswer', function (req, res) {
 
-    var answers = req.body.answers;
-
-    var collection = db.get('students');
-
-    collection.update({
-        "studentID": studentID
-    }, {
-        "$push": {
-            "tests": {
-                "type": "vrøvleord",
-                "answers": JSON.parse(answers)
-            }
-        }
-    }, function (err, doc) {
+    //det første der sker, er at 'writeTo' mappen tømmes 
+    empty('./public/writeTo', false, function (err, removed, failed) {
         if (err) {
-            res.send("There was a problem adding the information to the database.");
-        } else {
-            res.redirect(studentModules[0]);
-            studentModules.shift();
+            console.error(err);
         }
     });
+
+    console.log('test');
+    // arrays that should hold data fields from the client form
+    var inputAnswers = [];
+    // var inputContentAnswers = [];
+
+    // 
+    var form = new formidable.IncomingForm();
+
+    // parse the request and handle fields data
+
+    form.parse(req, function (err, fields, files) {
+
+        inputAnswers = [];
+        var temp = Object.keys(fields);
+        for (i = 0; i < temp.length; i++) {
+            inputAnswers.push(fields[temp[i]]);
+        }
+        var mod = {
+            moduleType: 'Vroelveord',
+            answers: inputAnswers
+        }
+
+        studentClass.findOneAndUpdate({
+            studentID: studentID
+        }, 'modules', function (err, student) {
+            if (err) {
+                res.send(err);
+            } else {
+                console.log("STUDENT: " + student);
+                student.modules.push(mod);
+
+                student.save(function (err) {
+                    if (err) console.log(err);
+                    res.redirect(kursisModules[0]);
+                    kursisModules.shift();
+                });
+            }
+        });
+    });
+
 });
 
 
@@ -912,8 +922,8 @@ router.post('/clozetest_addanswer', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect(studentModules[0]);
-            studentModules.shift();
+            res.redirect(kursisModules[0]);
+            kursisModules.shift();
         }
     });
 });
@@ -962,8 +972,8 @@ router.post('/interpret_addanswer', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect(studentModules[0]);
-            studentModules.shift();
+            res.redirect(kursisModules[0]);
+            kursisModules.shift();
         }
     });
 });
@@ -1013,7 +1023,7 @@ router.post('/letter_addanswer', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect(studentModules[0]);
+            res.redirect(kursisModules[0]);
         }
     });
 });
@@ -1053,65 +1063,73 @@ router.get('/getAllData', function (req, res) {
 });
 
 router.post('/send_mail', function (req, res) {
-   
-    // req.body.data;  
 
-    var testID; 
-    
+    var testID;
+
     studentClass.findOne({
         'studentID': studentID
     }, function (err, student) {
         if (err) {
             console.log(err);
         } else {
+
+
+            // var mail = req.body.mail;
+            // console.log(mail);
+
+            // var msg = mailSender.htmlBuilder(testResult);
+            // mailSender.sendMail(mail, msg);
+
+            // res.redirect("finalpage");
             //code to get correct answers 
-            testID = student.teacherID; 
-            
+            testID = student.teacherID;
+
             // for(var i=0; i<student.modules.length; i++) {
-                //     student_answers.push({
-                    //         moduleType: student.modules[i].moduleType,
-                    //         answers: student.modules[i].answers 
-                    //     });  
-                    // } 
-                    
-                    
-                    teacherClass.findOne({
-                        'tests._id': testID
-                    }, function (err, teacher) {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            //code to get correct answers
-                            console.log("FINAL TEACHER ", teacher);
-                            
-                            var id_serv = JSON.stringify(testID); 
-                            
-                            for(var i=0; i<teacher.tests.length; i++) {
-                                var id_db = JSON.stringify(teacher.tests[i]._id); 
-                                
-                                if(id_serv == id_db) {
-                                    var final_score = evaluateScore(i, student, teacher); 
-                                    var mail = req.body.mail; 
-                                    var msg = mailSender.htmlBuilder(final_score);
-                                    mailSender.sendMail(mail, msg); 
-                                }
-                            }
+            //     student_answers.push({
+            //         moduleType: student.modules[i].moduleType,
+            //         answers: student.modules[i].answers 
+            //     });  
+            // } 
+
+
+            teacherClass.findOne({
+                'tests._id': testID
+            }, function (err, teacher) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    //code to get correct answers
+                    console.log("FINAL TEACHER ", teacher);
+
+                    var id_serv = JSON.stringify(testID);
+
+                    for (var i = 0; i < teacher.tests.length; i++) {
+                        var id_db = JSON.stringify(teacher.tests[i]._id);
+
+                        if (id_serv == id_db) {
+                            var final_score = evaluateScore(i, student, teacher);
+                            var mail = req.body.mail;
+                            var msg = mailSender.htmlBuilder(final_score);
+                            mailSender.sendMail(mail, msg);
                         }
-                    }); 
+                    }
                 }
             });
-        });
-        
+        }
+    });
+});
+
+
 function evaluateScore(testIndex, student, teacher) {
-    var final_score = []; 
-    for(var j=0; j<student.modules.length; j++) {
-        for(var k=0; k<student.modules[j].answers.length; k++) {
+    var final_score = [];
+    for (var j = 0; j < student.modules.length; j++) {
+        for (var k = 0; k < student.modules[j].answers.length; k++) {
             var point = 0;
-            var student_answer = student.modules[j].answers[k]; 
+            var student_answer = student.modules[j].answers[k];
             var correct_answer = teacher.tests[testIndex].modules[j].contentAnswer[k].answer;
-            if(student_answer == correct_answer) {
-                point = 1; 
-            } 
+            if (student_answer == correct_answer) {
+                point = 1;
+            }
             final_score.push({
                 student_answer: student_answer,
                 correct_answer: correct_answer,
@@ -1119,7 +1137,7 @@ function evaluateScore(testIndex, student, teacher) {
             });
         }
     }
-    return final_score; 
+    return final_score;
 }
 
 
@@ -1201,34 +1219,34 @@ function formHandler(incForm, inputCont, inputContAns, callback) {
     incForm.on('file', function (name, file) {
         files.push([file]);
     });
-    
+
     incForm.on('end', function () {
         console.log("3");
-        console.log('FILES FILES FIES ', files[1][0].name); 
+        console.log('FILES FILES FIES ', files[1][0].name);
         //this is where the fun begins 
-   
-        var promises = []; 
-        for(var i=0; i<files.length; i++) {
+
+        var promises = [];
+        for (var i = 0; i < files.length; i++) {
             promises.push(
-                new Promise(function(resolve, reject) {
+                new Promise(function (resolve, reject) {
                     // files.map(function (item) {
-                        
-                        var fileUpload = files[i][0].name;
-                        console.log("4 " + fileUpload);
-                        var mongo = require('../public/js/MongoHandler');
-                        //when MongoHandler is done with upload to MongoDB return result
-                        //check if there is audiofile
-                        if (fileUpload != '') {
-                            return mongo.writeToDB(fileUpload, fileUpload)
-                                .then(function (result) {
-                                    console.log("FILEUPLOAD " + i + " FINISHED ", result); 
-                                    // file_data[i] = result;
-                                    resolve(result);
-                                }, function (err) {
-                                    console.log(err);
-                                });
-                        }
-                    })
+
+                    var fileUpload = files[i][0].name;
+                    console.log("4 " + fileUpload);
+                    var mongo = require('../public/js/MongoHandler');
+                    //when MongoHandler is done with upload to MongoDB return result
+                    //check if there is audiofile
+                    if (fileUpload != '') {
+                        return mongo.writeToDB(fileUpload, fileUpload)
+                            .then(function (result) {
+                                console.log("FILEUPLOAD " + i + " FINISHED ", result);
+                                // file_data[i] = result;
+                                resolve(result);
+                            }, function (err) {
+                                console.log(err);
+                            });
+                    }
+                })
             );
         }
 
@@ -1245,10 +1263,21 @@ function formHandler(incForm, inputCont, inputContAns, callback) {
             //this is the content from the teacher test
             //this should be saved in mongoDB 'teachers' collection 
             for (var i = 1; i < file_data.length; i++) {
-                console.log("FILES FILES FILES ", inputCont[i-1]); 
+                console.log("FILES FILES FILES ", inputCont[i - 1]);
                 inputCont[i - 1].file = file_data[i];
             }
 
+            
+            var testStringUrl;
+            function poop(){
+                // this is a tiny bit hardcoded
+                var possibleQueries = ['orddiktat','vroevleord', 'clozetest'];
+                var url = window.location.href;
+                console.log(url);
+                return url;
+            }
+            testStringUrl = poop();
+            
             var mod = {
                 moduleType: "orddiktat",
                 audio: file_data[0],
