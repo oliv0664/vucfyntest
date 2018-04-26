@@ -38,6 +38,7 @@ module.exports = {
             
             var file_data; 
             writestream.on('close', function (file) {
+                console.log("#####"); 
                 console.log(file.filename + ' Written to DB');
                 file_data = {
                     file_name: file.filename,
