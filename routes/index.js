@@ -1272,14 +1272,14 @@ function formHandler(incForm, inputCont, inputContAns, callback) {
             function poop(){
                 // this is a tiny bit hardcoded
                 var possibleQueries = ['orddiktat','vroevleord', 'clozetest'];
-                var url = req.url;
+                var url = window.location.href;
                 console.log(url);
                 return url;
             }
             testStringUrl = poop();
             
             var mod = {
-                moduleType: testStringUrl,
+                moduleType: "orddiktat",
                 audio: file_data[0],
                 content: inputCont,
                 contentAnswer: inputContAns
