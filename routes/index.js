@@ -326,8 +326,8 @@ router.post('/orddiktat', function (req, res) {
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET NONSENSE*/
 
-router.get('/nonsense_teacher', function (req, res) {
-    res.render('nonsense_teacher', {
+router.get('/vroevleord_laerer', function (req, res) {
+    res.render('vroevleord_laerer', {
         title: 'Vrøvleord'
     });
 });
@@ -366,7 +366,7 @@ router.post('/nonsense_addinfo', function (req, res) {
 
     // handle all the files together with fields data
     // the output  - mod - is an object containing module data
-    formHandler(form, inputContent, inputContentAnswers, function (mod) {
+    formHandler(req.url, form, inputContent, inputContentAnswers, function (mod) {
 
         // find the correct teachers test 
         teacherClass.findOneAndUpdate({
@@ -1269,7 +1269,6 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
                             });
                     } else {
                         console.log("EMPTY FGILEEEE"); 
-                        resolve({file_name: 'no file', file_id: null}); 
                     }
                 })
             );
