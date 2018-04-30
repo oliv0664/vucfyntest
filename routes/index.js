@@ -332,8 +332,8 @@ router.get('/vroevleord_laerer', function (req, res) {
     });
 });
 
+router.post(encodeURI('/vrøvleord'), function (req, res) {
 
-router.post('/vroevleord', function (req, res) {
     var inputContent = [];
     var inputContentAnswers = [];
 
@@ -1292,9 +1292,8 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
                 inputCont[i - 1].file = file_data[i];
             }
 
-            
             var mod = {
-                moduleType: url.slice(1),
+                moduleType: decodeURI(url).slice(1),
                 audio: file_data[0],
                 content: inputCont,
                 contentAnswer: inputContAns

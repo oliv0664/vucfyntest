@@ -20,6 +20,7 @@
         "monk": "^6.0.5",
         "morgan": "^1.9.0",
         "nodemailer": "^4.4.2",
-        "serve-favicon": "~2.4.2"
+        "serve-favicon": "~2.4.2",
+        "utf8": "^3.0.0"
     }
 }
