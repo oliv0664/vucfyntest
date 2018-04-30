@@ -333,7 +333,7 @@ router.get('/vroevleord_laerer', function (req, res) {
 });
 
 
-router.post('/nonsense_addinfo', function (req, res) {
+router.post('/vroevleord', function (req, res) {
     var inputContent = [];
     var inputContentAnswers = [];
 
@@ -394,13 +394,13 @@ router.post('/nonsense_addinfo', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET CLOZETEST*/
 
 router.get('/clozetest_laerer', function (req, res) {
-    res.render('clozetest_teacher', {
+    res.render('clozetest_laerer', {
         title: 'Clozetest'
     });
 });
 
 
-router.post('/clozetest_addinfo', function (req, res) {
+router.post('/clozetest', function (req, res) {
 
     //    // TODO MONGOOSE 4
     //    // Set our internal DB variable
@@ -442,13 +442,13 @@ router.post('/clozetest_addinfo', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET INTERPRET*/
 
 router.get('/tekstforstaaelse_laerer', function (req, res) {
-    res.render('interpret_teacher', {
+    res.render('tekstforstaaelse_laerer', {
         title: 'Tekstforståelse'
     });
 });
 
 
-router.post('/interpret_addinfo', function (req, res) {
+router.post('/tekstforstaaelse', function (req, res) {
     // TODO MONGOOSE 5
     //    // Set our internal DB variable
     //    var db = req.db;
@@ -490,13 +490,13 @@ router.post('/interpret_addinfo', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET LETTER*/
 
 router.get('/brev_laerer', function (req, res) {
-    res.render('letter_teacher', {
+    res.render('brev_laerer', {
         title: 'Brev'
     });
 });
 
 
-router.post('/letter_addinfo', function (req, res) {
+router.post('/brev', function (req, res) {
 
     //    // TODO MONGOOSE 6
     //    var db = req.db;
@@ -732,7 +732,7 @@ router.get('/orddiktat_kursist', function (req, res) {
 });
 
 
-router.post('/worddictate_addanswer', function (req, res) {
+router.post('/orddiktat_answer', function (req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
     empty('./public/writeTo', false, function (err, removed, failed) {
@@ -844,7 +844,7 @@ router.get('/vroevleord_kursist', function (req, res) {
 });
 
 
-router.post('/nonsense_addanswer', function (req, res) {
+router.post('/vroevletest_answer', function (req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
     empty('./public/writeTo', false, function (err, removed, failed) {
@@ -900,7 +900,7 @@ router.post('/nonsense_addanswer', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET CLOZETEST */
 
 //henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
-router.get('/clozetest_participant', function (req, res) {
+router.get('/clozetest_kursist', function (req, res) {
     var db = req.db;
     var collection = db.get('teachers');
 
@@ -910,16 +910,16 @@ router.get('/clozetest_participant', function (req, res) {
         _id: teacherID
     }, function (e, docs) {
         //console.log(docs.tests[g_moduleCount]);
-        res.render('clozetest_participant', {
+        res.render('clozetest_kursist', {
             "data": docs.tests[2],
-            title: 'clozetest_participant'
+            title: 'clozetest'
         });
         g_moduleCount++;
     });
 });
 
 
-router.post('/clozetest_addanswer', function (req, res) {
+router.post('/clozetest_answer', function (req, res) {
     var db = req.db;
 
     var answers = req.body.answers;
@@ -950,7 +950,7 @@ router.post('/clozetest_addanswer', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET INTERPRET */
 
 //henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
-router.get('/interpret_participant', function (req, res) {
+router.get('/tekstforstaaelse_kursist', function (req, res) {
     var db = req.db;
     var collection = db.get('teachers');
 
@@ -960,16 +960,16 @@ router.get('/interpret_participant', function (req, res) {
         _id: teacherID
     }, function (e, docs) {
         //console.log(docs.tests[g_moduleCount]);
-        res.render('interpret_participant', {
+        res.render('tekstforstaaelse_kursist', {
             "data": docs.tests[3],
-            title: 'interpret_participant'
+            title: 'tekstforstaaelse'
         });
         g_moduleCount++;
     });
 });
 
 
-router.post('/interpret_addanswer', function (req, res) {
+router.post('/tekstforstaaelse_answer', function (req, res) {
     var db = req.db;
 
     var answers = req.body.answers;
@@ -1000,7 +1000,7 @@ router.post('/interpret_addanswer', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET LETTER */
 
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
-router.get('/letter_participant', function (req, res) {
+router.get('/brev_kursist', function (req, res) {
     var db = req.db;
     var collection = db.get('teachers');
 
@@ -1011,15 +1011,15 @@ router.get('/letter_participant', function (req, res) {
         //        initials: 'TEST2'
 
     }, function (e, docs) {
-        res.render('letter_participant', {
+        res.render('brev_kursist', {
             "data": docs.tests[4],
-            title: 'letter_participant'
+            title: 'brev'
         });
         g_moduleCount++;
     });
 });
 
-router.post('/letter_addanswer', function (req, res) {
+router.post('/brev_answer', function (req, res) {
     var db = req.db;
 
     var answers = req.body.answers;
