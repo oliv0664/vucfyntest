@@ -13,55 +13,55 @@
             addQuestion();
         });
 
-        $('#form').bind('submit', function (event) {
-
-            event.preventDefault(); //this will prevent the default submit
-
-            var texts = [];
-            for (var i = 0; i < textCount; i++) {
-                var text = $('#text' + i).val();
-                var file = $('#file' + i).val();
-
-                var object = {
-                    "text": text,
-                    "file": file
-                }
-
-                texts.push(object);
-            }
-
-
-            var questions = [];
-
-            for (var i = 0; i < questionCount; i++) {
-                var question = $('#question' + i).val();
-
-                var answers = [];
-
-                for (var j = 0; j < ids[i]; j++) {
-                    var answer = $('#answer' + i + j).val();
-                    answers.push(answer);
-                }
-                // rightAnswer can also have white spaces infront and at the end thus it should be trimmed with trim();
-                var rightAnswer = $("input[name=correct" + i + "]:checked").next().val().trim();
-                console.log(rightAnswer);
-                var object = {
-                    "question": question,
-                    "answers": answers,
-                    "rightAnswer": rightAnswer
-                }
-                questions.push(object);
-            }
-
-            var content = {
-                "texts": texts,
-                "questions": questions
-            }
-
-            $('#content').val(JSON.stringify(content));
-            console.log(content);
-            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
-        });
+//        $('#form').bind('submit', function (event) {
+//
+//            event.preventDefault(); //this will prevent the default submit
+//
+//            var texts = [];
+//            for (var i = 0; i < textCount; i++) {
+//                var text = $('#text' + i).val();
+//                var file = $('#file' + i).val();
+//
+//                var object = {
+//                    "text": text,
+//                    "file": file
+//                }
+//
+//                texts.push(object);
+//            }
+//
+//
+//            var questions = [];
+//
+//            for (var i = 0; i < questionCount; i++) {
+//                var question = $('#question' + i).val();
+//
+//                var answers = [];
+//
+//                for (var j = 0; j < ids[i]; j++) {
+//                    var answer = $('#answer' + i + j).val();
+//                    answers.push(answer);
+//                }
+//                // rightAnswer can also have white spaces infront and at the end thus it should be trimmed with trim();
+//                var rightAnswer = $("input[name=correct" + i + "]:checked").next().val().trim();
+//                console.log(rightAnswer);
+//                var object = {
+//                    "question": question,
+//                    "answers": answers,
+//                    "rightAnswer": rightAnswer
+//                }
+//                questions.push(object);
+//            }
+//
+//            var content = {
+//                "texts": texts,
+//                "questions": questions
+//            }
+//
+//            $('#content').val(JSON.stringify(content));
+//            console.log(content);
+//            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
+//        });
 
     });
 
@@ -93,7 +93,7 @@
             class: 'h2size',
             id: 'text' + textCount,
             form: 'form',
-            //name: 'texts[' + textCount + ']',
+            name: 'texts' + textCount,
             placeholder: 'Indtast tekst her',
             size: size,
             required: true
@@ -105,7 +105,7 @@
             type: 'file',
             class: 'h2size',
             id: 'file' + textCount,
-            //name: 'files[]', //[file]
+            name: 'file' + textCount,
             accept: 'audio/*',
             onchange: 'readURL(this)',
             required: true
@@ -251,7 +251,7 @@
             type: 'text',
             class: 'h2size',
             id: 'answer' + id + ids[id],
-            //name: 'labels[' + id + ']',
+            name: 'q ' + id + ' option ' + ids[id] ,
             placeholder: 'Indtast svarmulighed'
         });
 

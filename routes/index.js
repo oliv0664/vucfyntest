@@ -449,39 +449,60 @@ router.get('/tekstforstaaelse_laerer', function (req, res) {
 
 
 router.post('/tekstforstaaelse', function (req, res) {
-    // TODO MONGOOSE 5
-    //    // Set our internal DB variable
-    //    var db = req.db;
-    //    // Get our form values. These rely on the "name" attributes 
-    //    var file = req.body.file;
-    //    var content = req.body.content;
-    //    console.log(content);
-    //    // Set our collection
-    //    var collection = db.get('teachers');
-    //
-    //    // Submit to the DB
-    //    collection.update({
-    //        "initials": initials
-    //    }, {
-    //        "$push": {
-    //            "tests": {
-    //                "type": "tekstforståelse",
-    //                "file": file,
-    //                "content": JSON.parse(content)
-    //            }
-    //        }
-    //    }, function (err, doc) {
-    //        if (err) {
-    //            // If it failed, return error
-    //            res.send("There was a problem adding the information to the database.");
-    //        } else {
-    //            // And forward to success page
-    ////            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS
-    //        }
-    //    });
-    res.redirect(teacherModules[0]);
-    teacherModules.shift();
-    console.log('next module should be ' + teacherModules[0]);
+   var inputContent = [];
+    var inputContentAnswers = [];
+
+    var form = new formidable.IncomingForm();
+
+    // parse the request and handle fields data
+    form.parse(req, function (err, fields, files) {
+
+        
+        console.log("FIELDS content: ", fields);
+
+        // organize data fields into temporary arrays for reference 
+//        var tempInputContentAnswers = Object.keys(fields);
+//        var j = 0;
+//        for (i = 0; i < tempInputContentAnswers.length * 2; i = i + 2) {
+//            console.log("I " + i);
+//            // here we use reference to get the exact property from the object 
+//            // remember answers are separated 
+//            inputContent.push({
+//                index: "question " + j
+//            });
+//
+//            inputContentAnswers.push({
+//                index: "answer " + j,
+//                answer: fields[tempInputContentAnswers[j]]
+//            });
+//            j++;
+//        }
+
+    });
+
+//    // handle all the files together with fields data
+//    // the output  - mod - is an object containing module data
+//    formHandler(req.url, form, inputContent, inputContentAnswers, function (mod) {
+//
+//        // find the correct teachers test 
+//        teacherClass.findOneAndUpdate({
+//            initials: initials
+//        }, 'tests', function (err, teacher) {
+//            if (err) {
+//                res.send(err);
+//            } else {
+//                console.log("TEACHER: " + teacher);
+//                teacher.tests[teacher.tests.length - 1].modules.push(mod);
+//
+//                teacher.save(function (err) {
+//                    if (err) console.log(err);
+//                    res.redirect(teacherModules[0]);
+//                    teacherModules.shift();
+//                });
+//            }
+//        });
+//    });
+    res.redirect("/tekstforstaaelse_laerer");
 });
 
 
