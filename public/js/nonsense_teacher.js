@@ -54,7 +54,8 @@
             id: 'answer' + lineCount,
             name: 'answer' + lineCount,
             placeholder: 'Indsæt det korrekte ord her',
-            size: '25'
+            size: '25',
+            required: true
         });
 
         // tilføj en lydfil
@@ -64,7 +65,8 @@
             id: 'file' + lineCount,
             name: 'file' + lineCount,
             accept: 'audio/*',
-            onchange: 'readURL(this)'
+            onchange: 'readURL(this)',
+            required: true
         });
 
 
