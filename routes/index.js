@@ -346,20 +346,19 @@ router.post(encodeURI('/vrøvleord'), function (req, res) {
 
         // organize data fields into temporary arrays for reference 
         var tempInputContentAnswers = Object.keys(fields);
-        var j = 0;
-        for (i = 0; i < tempInputContentAnswers.length * 2; i = i + 2) {
+
+        for (i = 0; i < tempInputContentAnswers.length; i++) {
             console.log("I " + i);
             // here we use reference to get the exact property from the object 
             // remember answers are separated 
             inputContent.push({
-                index: "question " + j
+                index: "question " + i
             });
 
             inputContentAnswers.push({
-                index: "answer " + j,
-                answer: fields[tempInputContentAnswers[j]]
+                index: "answer " + i,
+                answer: fields[tempInputContentAnswers[i]]
             });
-            j++;
         }
 
     });
@@ -413,21 +412,22 @@ router.post(encodeURI('/clozetest'), function (req, res) {
         console.log("FIELDS: ", fields);
 
         // organize data fields into temporary arrays for reference 
-        var tempInputContentAnswers = Object.keys(fields);
-        var j = 0;
-        for (i = 0; i < tempInputContentAnswers.length * 2; i = i + 2) {
+        var tempInputContent = Object.keys(fields); 
+        var j=0; 
+        for (i = 0; i < tempInputContent.length * 2; i=i+2) {
             console.log("I " + i);
             // here we use reference to get the exact property from the object 
             // remember answers are separated 
             inputContent.push({
-                index: "question " + j
+                index: "question " + j,
+                lineText: fields[tempInputContent[i]],
+                lineText2: fields[tempInputContent[i+1]]
             });
 
             inputContentAnswers.push({
-                index: "answer " + j,
-                answer: fields[tempInputContentAnswers[j]]
+                index: "answer " + j
             });
-            j++;
+            j++; 
         }
 
     });
@@ -736,7 +736,7 @@ router.get(encodeURI('/orddiktat_kursist'), function (req, res) {
             for (var i = 0; i < teacher[0].tests.length; i++) {
                 var id_db = JSON.stringify(teacher[0].tests[i]._id);
 
-                if (id_db == id_serv) 
+                if (id_db == id_serv) {
                     var audio_files = [];
                     var promises = [];
                     var content = teacher[0].tests[i].modules[0].content; //0 = orddiktat

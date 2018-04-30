@@ -9,29 +9,7 @@
             addLine();
         });
 
-        $('#form').bind('submit', function (event) {
-
-            event.preventDefault(); //this will prevent the default submit
-
-            var content = [];
-            for (var i = 0; i < lineCount; i++) {
-                var line1 = $('#line1' + i).val();
-                var line2 = $('#line2' + i).val();
-                var file = $('#file' + i).val();
-
-                var object = {
-                    "line1": line1,
-                    "line2": line2,
-                    "file": file
-                }
-
-                content.push(object);
-            }
-
-            $('#content').val(JSON.stringify(content));
-
-            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
-        });
+       
 
     });
 
@@ -83,7 +61,7 @@
             class: 'h2size',
             id: 'line2' + lineCount,
             type: 'text',
-            //name: 'lines[' + lineCount + '][]', //[lineText2]
+            name: 'lineText2_' + lineCount, //[lineText2]
             placeholder: 'Indtast tekst her',
             size: size,
             required: true
