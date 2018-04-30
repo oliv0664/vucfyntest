@@ -244,13 +244,13 @@ router.post('/index_addinfo', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET WORDDICTATE */
 
 //henter hjemmesiden 'worddictate_teacher' 
-router.get('/orddiktat_laerer', function (req, res) {
-    res.render('orddiktat_laerer', {
+router.get(encodeURI('/orddiktat_lærer'), function (req, res) {
+    res.render('orddiktat_lærer', {
         title: 'Orddiktat'
     });
 });
 
-router.post('/orddiktat', function (req, res) {
+router.post(encodeURI('/orddiktat'), function (req, res) {
 
     //this code uploads all files from view to readFrom folder
     //then it uploads all files to MongoDB
@@ -326,8 +326,8 @@ router.post('/orddiktat', function (req, res) {
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET NONSENSE*/
 
-router.get('/vroevleord_laerer', function (req, res) {
-    res.render('vroevleord_laerer', {
+router.get(encodeURI('/vrøvleord_lærer'), function (req, res) {
+    res.render('vrøvleord_lærer', {
         title: 'Vrøvleord'
     });
 });
@@ -393,14 +393,14 @@ router.post(encodeURI('/vrøvleord'), function (req, res) {
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET CLOZETEST*/
 
-router.get('/clozetest_laerer', function (req, res) {
-    res.render('clozetest_laerer', {
+router.get(encodeURI('/clozetest_lærer'), function (req, res) {
+    res.render('clozetest_lærer', {
         title: 'Clozetest'
     });
 });
 
 
-router.post('/clozetest', function (req, res) {
+router.post(encodeURI('/clozetest'), function (req, res) {
 
     //    // TODO MONGOOSE 4
     //    // Set our internal DB variable
@@ -441,14 +441,14 @@ router.post('/clozetest', function (req, res) {
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET INTERPRET*/
 
-router.get('/tekstforstaaelse_laerer', function (req, res) {
-    res.render('tekstforstaaelse_laerer', {
+router.get(encodeURI('/tekstforståelse_lærer'), function (req, res) {
+    res.render('tekstforstaaelse_lærer', {
         title: 'Tekstforståelse'
     });
 });
 
 
-router.post('/tekstforstaaelse', function (req, res) {
+router.post(encodeURI('/tekstforståelse'), function (req, res) {
     // TODO MONGOOSE 5
     //    // Set our internal DB variable
     //    var db = req.db;
@@ -489,14 +489,14 @@ router.post('/tekstforstaaelse', function (req, res) {
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET LETTER*/
 
-router.get('/brev_laerer', function (req, res) {
-    res.render('brev_laerer', {
+router.get(encodeURI('/brev_lærer'), function (req, res) {
+    res.render('brev_lærer', {
         title: 'Brev'
     });
 });
 
 
-router.post('/brev', function (req, res) {
+router.post(encodeURI('/brev'), function (req, res) {
 
     //    // TODO MONGOOSE 6
     //    var db = req.db;
@@ -560,13 +560,13 @@ router.post('/nextpage', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET STARTPAGE */
 
 //henter hjemmesiden 'startpage' 
-router.get('/startpage', function (req, res) {
+router.get(encodeURI('/startpage'), function (req, res) {
     res.render('startpage', {
         title: 'Startside'
     });
 });
 
-router.post('/startpage_addinfo', function (req, res) {
+router.post(encodeURI('/startpage_addinfo'), function (req, res) {
 
     // var db = req.db;
     //    console.log(req.body);
@@ -676,7 +676,7 @@ var g_moduleCount = 0;
 /* ALLE FUNKTIONER DER ER TILKNYTTET WORDDICTATE */
 
 //henter 'worddictate_participant' og finder data i databasen, svarende til de indtastede initialer
-router.get('/orddiktat_kursist', function (req, res) {
+router.get(encodeURI('/orddiktat_kursist'), function (req, res) {
 
     console.log("TEACHER ID: " + typeof JSON.stringify(teacherID));
     // teacherID = JSON.stringify(teacherID); 
@@ -732,7 +732,7 @@ router.get('/orddiktat_kursist', function (req, res) {
 });
 
 
-router.post('/orddiktat_answer', function (req, res) {
+router.post(encodeURI('/orddiktat_answer'), function (req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
     empty('./public/writeTo', false, function (err, removed, failed) {
@@ -788,7 +788,7 @@ router.post('/orddiktat_answer', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET NONSENSE */
 
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
-router.get('/vrøvleord_kursist', function (req, res) {
+router.get(encodeURI('/vrøvleord_kursist'), function (req, res) {
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
@@ -845,7 +845,7 @@ router.get('/vrøvleord_kursist', function (req, res) {
 
 
 
-router.post('/vroevleord_answer', function (req, res) {
+router.post(encodeURI('/vrøvleord_answer'), function (req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
     empty('./public/writeTo', false, function (err, removed, failed) {
