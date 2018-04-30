@@ -459,49 +459,50 @@ router.post(encodeURI('/tekstforståelse'), function (req, res) {
 
         
         console.log("FIELDS content: ", fields);
+// organize data fields into temporary arrays for reference 
 
-        // organize data fields into temporary arrays for reference 
-//        var tempInputContentAnswers = Object.keys(fields);
-//        var j = 0;
-//        for (i = 0; i < tempInputContentAnswers.length * 2; i = i + 2) {
-//            console.log("I " + i);
-//            // here we use reference to get the exact property from the object 
-//            // remember answers are separated 
-//            inputContent.push({
-//                index: "question " + j
-//            });
-//
-//            inputContentAnswers.push({
-//                index: "answer " + j,
-//                answer: fields[tempInputContentAnswers[j]]
-//            });
-//            j++;
-//        }
+        var tempInputContentAnswers = Object.keys(fields);
+        var j = 0;
+        for (i = 0; i < tempInputContentAnswers.length * 2; i = i + 2) {
+            console.log("I " + i);
+            // here we use reference to get the exact property from the object 
+            // remember answers are separated 
+            inputContent.push({
+                index: "question " + j
+            });
+
+            inputContentAnswers.push({
+                index: "answer " + j,
+                answer: fields[tempInputContentAnswers[j]]
+            });
+            j++;
+        }
 
     });
 
-//    // handle all the files together with fields data
-//    // the output  - mod - is an object containing module data
-//    formHandler(req.url, form, inputContent, inputContentAnswers, function (mod) {
-//
-//        // find the correct teachers test 
-//        teacherClass.findOneAndUpdate({
-//            initials: initials
-//        }, 'tests', function (err, teacher) {
-//            if (err) {
-//                res.send(err);
-//            } else {
-//                console.log("TEACHER: " + teacher);
-//                teacher.tests[teacher.tests.length - 1].modules.push(mod);
-//
-//                teacher.save(function (err) {
-//                    if (err) console.log(err);
-//                    res.redirect(teacherModules[0]);
-//                    teacherModules.shift();
-//                });
-//            }
-//        });
-//    });
+    // handle all the files together with fields data
+    // the output  - mod - is an object containing module data
+    formHandler(req.url, form, inputContent, inputContentAnswers, function (mod) {
+
+        // find the correct teachers test 
+        teacherClass.findOneAndUpdate({
+            initials: initials
+        }, 'tests', function (err, teacher) {
+            if (err) {
+                res.send(err);
+            } else {
+                console.log("TEACHER: " + teacher);
+                teacher.tests[teacher.tests.length - 1].modules.push(mod);
+
+                teacher.save(function (err) {
+                    if (err) console.log(err);
+                    res.redirect(teacherModules[0]);
+                    teacherModules.shift();
+                });
+            }
+        });
+    });
+// heeeey heeey 
     res.redirect("/tekstforstaaelse_laerer");
 
 });
