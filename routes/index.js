@@ -127,7 +127,7 @@ router.post('/welcome_addinfo', function (req, res) {
                                     studentinfo: {},
                                     modules: []
                                 });
-                                console.log("STUDENT: " + student);
+                                console.log("STUDENT: ", kursistModules);
 
                                 student.save(function (err) {
                                     if (err) {
@@ -332,8 +332,8 @@ router.get('/vroevleord_laerer', function (req, res) {
     });
 });
 
+router.post(encodeURI('/vrøvleord'), function (req, res) {
 
-router.post('/vroevleord', function (req, res) {
     var inputContent = [];
     var inputContentAnswers = [];
 
@@ -542,8 +542,8 @@ router.get('/nextpage', function (req, res) {
 
 router.post('/nextpage', function (req, res) {
     res.redirect(kursistModules[0]);
-    kursisModules.shift();
-    console.log('next module should be ' + kursisModules[0]);
+    kursistModules.shift();
+    console.log('next module should be ' + kursistModules[0]);
 });
 
 
@@ -661,9 +661,9 @@ router.post('/startpage_addinfo', function (req, res) {
     //
     //        } else {
 
-    console.log("######## student modules: " + kursisModules[0]);
-    res.redirect(kursisModules[0]);
-    kursisModules.shift();
+    console.log("######## student modules: " + kursistModules[0]);
+    res.redirect(kursistModules[0]);
+    kursistModules.shift();
 
     //        }
 });
@@ -844,7 +844,8 @@ router.get('/vroevleord_kursist', function (req, res) {
 });
 
 
-router.post('/vroevletest_answer', function (req, res) {
+
+router.post('/vroevleord_answer', function (req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
     empty('./public/writeTo', false, function (err, removed, failed) {
@@ -858,7 +859,6 @@ router.post('/vroevletest_answer', function (req, res) {
     var inputAnswers = [];
     // var inputContentAnswers = [];
 
-    // 
     var form = new formidable.IncomingForm();
 
     // parse the request and handle fields data
@@ -886,8 +886,8 @@ router.post('/vroevletest_answer', function (req, res) {
 
                 student.save(function (err) {
                     if (err) console.log(err);
-                    res.redirect(kursisModules[0]);
-                    kursisModules.shift();
+                    res.redirect(kursistModules[0]);
+                    kursistModules.shift();
                 });
             }
         });
@@ -939,8 +939,8 @@ router.post('/clozetest_answer', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect(kursisModules[0]);
-            kursisModules.shift();
+            res.redirect(kursistModules[0]);
+            kursistModules.shift();
         }
     });
 });
@@ -989,8 +989,8 @@ router.post('/tekstforstaaelse_answer', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect(kursisModules[0]);
-            kursisModules.shift();
+            res.redirect(kursistModules[0]);
+            kursistModules.shift();
         }
     });
 });
@@ -1040,7 +1040,7 @@ router.post('/brev_answer', function (req, res) {
         if (err) {
             res.send("There was a problem adding the information to the database.");
         } else {
-            res.redirect(kursisModules[0]);
+            res.redirect(kursistModules[0]);
         }
     });
 });
@@ -1293,9 +1293,8 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
                 inputCont[i - 1].file = file_data[i];
             }
 
-            
             var mod = {
-                moduleType: url.slice(1),
+                moduleType: decodeURI(url).slice(1),
                 audio: file_data[0],
                 content: inputCont,
                 contentAnswer: inputContAns
