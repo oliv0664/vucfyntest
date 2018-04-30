@@ -788,7 +788,7 @@ router.post('/worddictate_addanswer', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET NONSENSE */
 
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
-router.get('/vroevleord_kursist', function (req, res) {
+router.get('/vrøvleord_kursist', function (req, res) {
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
