@@ -18,7 +18,7 @@ module.exports = {
             from: 'vucfyn.test@outlook.dk', //vucfyn.diktat.test@gmail.com
             to: mailTo, 
             subject: 'screeningtest resultater',
-            //text: JSON.stringify(message)
+            // text: JSON.stringify(message)
             html: message
             
         };
@@ -40,7 +40,7 @@ module.exports = {
         var html; 
 
         for(var i=0; i<results.length; i++) {
-            html += '<p>Spørgsmål ' + i + '</p>'; 
+            html += '<p>Spørgsmål ' + i+1 + '</p>'; 
             html += '<p>kursist svar: ' + results[i].student_answer + '</p>'; 
             html += '<p>korrekt svar: ' + results[i].correct_answer + '</p>';
             html += '<p>points' + results[i].point + '</p>';
@@ -48,52 +48,6 @@ module.exports = {
         }
 
         return html; 
-        // var html = 
-        //     `<h1>Testresultater</h1>
-        //     <p>Lærer ID: ` + results.teacherID + `</p>
-        //     <table border="1" width="100%">
-        //     <tr>`; 
-    
-        // for(var i=1; i<Object.keys(results).length-1; i++) {
-        //     html += `<td style="width: 600px">`+Object.keys(results)[i]+`</td>`
-        // }
-    
-        // for(var i=0; i<results.tests.length; i++) {
-        //     html += `<td style="width: 600px">`+Object.keys(results.tests[i])[0]+`</td>`
-        //     for(var j=0; j<results.tests[i].answers.length; j++) {
-        //         html += `<td style="width: 600px">svar `+j+`</td>`;
-        //         html += `<td>point</td>`; 
-        //     }   
-        // }
-        // html += `<td>tid</td>`;
-    
-        // html += 
-        //     `</tr>`;
-        //     `<tr>`
-    
-        // var arr = []; 
-        // for(var key in results) { arr.push(key) }
-    
-        // for(var i=1; i<Object.keys(results).length-1; i++) {
-        //     html += `<td style="width: 600px">`+results[arr[i]]+`</td>`;
-        // }
-    
-        // for(var i=0; i<results.tests.length; i++) {
-        //     html += `<td style="width: 600px">`+results.tests[i].type+`</td>`
-        //     for(var j=0; j<results.tests[i].answers.length; j++) {
-        //         html += `<td style="width: 600px">`+results.tests[i].answers[j].answer+`</td>
-        //         <td>` + results.tests[i].answers[j].point + `</td>`
-        //     }   
-        // }
-    
-        // var time = timeConverter(results.tests[1].answers[0].time); 
-
-        // html +=
-        //     `<td style="width: 600px">`+ time +`</td>
-        //     </tr>
-        //     </table>`;
-    
-        // return html; 
     
     }
 }
