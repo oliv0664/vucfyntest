@@ -63,7 +63,7 @@
             class: 'h2size',
             id: 'line1' + lineCount,
             type: 'text',
-            //name: 'lines[' + lineCount + '][]', //[lineText1]
+            name: 'lineText_' + lineCount, //[lineText1]
             placeholder: 'Indtast tekst her',
             size: size,
             required: true
