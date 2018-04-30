@@ -95,7 +95,8 @@
             form: 'form',
             //name: 'texts[' + textCount + ']',
             placeholder: 'Indtast tekst her',
-            size: size
+            size: size,
+            required: true
         }).css("height", "100px");
 
 
@@ -106,7 +107,8 @@
             id: 'file' + textCount,
             //name: 'files[]', //[file]
             accept: 'audio/*',
-            onchange: 'readURL(this)'
+            onchange: 'readURL(this)',
+            required: true
         });
 
 
@@ -160,7 +162,8 @@
         $newQuestionDiv = $('<div/>')
             .attr({
                 id: 'questDiv' + questionCount,
-                class: 'fullwidth'
+                class: 'fullwidth',
+                required: true
             })
             .text((questionCount + 1) + '. ');
 
@@ -239,7 +242,8 @@
             class: 'h2size',
             id: 'correct' + ids[id],
             type: 'radio',
-            name: 'correct' + id
+            name: 'correct' + id,
+            required: true
         }).val(ids[id]);
 
 

@@ -65,14 +65,16 @@
             type: 'text',
             //name: 'lines[' + lineCount + '][]', //[lineText1]
             placeholder: 'Indtast tekst her',
-            size: size
+            size: size,
+            required: true
         });
 
 
         $newField = $('<label/>').attr({
             class: 'h2size',
             id: 'lineField' + lineCount,
-            size: (size - 6)
+            size: (size - 6),
+            required: true
         }).text("Kursist input");
 
 
@@ -83,7 +85,8 @@
             type: 'text',
             //name: 'lines[' + lineCount + '][]', //[lineText2]
             placeholder: 'Indtast tekst her',
-            size: size
+            size: size,
+            required: true
         });
 
 
@@ -94,7 +97,8 @@
             id: 'file' + lineCount,
             //name: 'files[]', //[file]
             accept: 'audio/*',
-            onchange: 'readURL(this)'
+            onchange: 'readURL(this)',
+            required: true
         });
 
 

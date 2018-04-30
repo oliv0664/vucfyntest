@@ -71,7 +71,8 @@
             type: 'text',
             name: 'lineText_' + lineCount,
             placeholder: 'Indtast tekst her',
-            size: size
+            size: size,
+            required: true
         });
 
 
@@ -81,7 +82,8 @@
             type: 'text',
             name: 'lineTextAnswer_' + lineCount, 
             placeholder: 'Indsæt det korrekte ord',
-            size: (size - 6)
+            size: (size - 6),
+            required: true
         });
 
 
@@ -92,7 +94,8 @@
             type: 'text',
             name: 'lineText2_' + lineCount,
             placeholder: 'Indtast tekst her',
-            size: size
+            size: size,
+            required: true
         });
 
 
@@ -103,7 +106,8 @@
             id: 'file' + lineCount,
             name: 'file' + lineCount, //[file]
             accept: 'audio/*',
-            onchange: 'readURL(this)'
+            onchange: 'readURL(this)',
+            required: true
         });
 
         // tilføj en lydkontroller til den givne lydfil

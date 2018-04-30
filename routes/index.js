@@ -393,7 +393,7 @@ router.post('/vroevleord', function (req, res) {
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET CLOZETEST*/
 
-router.get('/clozetest_teacher', function (req, res) {
+router.get('/clozetest_laerer', function (req, res) {
     res.render('clozetest_teacher', {
         title: 'Clozetest'
     });
@@ -441,7 +441,7 @@ router.post('/clozetest_addinfo', function (req, res) {
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET INTERPRET*/
 
-router.get('/interpret_teacher', function (req, res) {
+router.get('/tekstforstaaelse_laerer', function (req, res) {
     res.render('interpret_teacher', {
         title: 'Tekstforståelse'
     });
@@ -489,7 +489,7 @@ router.post('/interpret_addinfo', function (req, res) {
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET LETTER*/
 
-router.get('/letter_teacher', function (req, res) {
+router.get('/brev_laerer', function (req, res) {
     res.render('letter_teacher', {
         title: 'Brev'
     });
