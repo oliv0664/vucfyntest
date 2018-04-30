@@ -695,8 +695,7 @@ router.get(encodeURI('/orddiktat_kursist'), function (req, res) {
             for (var i = 0; i < teacher[0].tests.length; i++) {
                 var id_db = JSON.stringify(teacher[0].tests[i]._id);
 
-                if (id_db == id_serv) {
-                    var fileName = "tt";
+                if (id_db == id_serv) 
                     var audio_files = [];
                     var promises = [];
                     var content = teacher[0].tests[i].modules[0].content; //0 = orddiktat
@@ -805,7 +804,6 @@ router.get(encodeURI('/vrøvleord_kursist'), function (req, res) {
                 var id_db = JSON.stringify(teacher[0].tests[i]._id);
 
                 if (id_db == id_serv) {
-                    var fileName = "tt";
                     var audio_files = [];
                     var promises = [];
                     var content = teacher[0].tests[i].modules[0].content; //0 = orddiktat
@@ -838,9 +836,6 @@ router.get(encodeURI('/vrøvleord_kursist'), function (req, res) {
 
         }
     });
-    //            "data": docs.tests[1],
-    //            title: 'nonsense_participant'
-    //        g_moduleCount++;
 });
 
 
@@ -871,7 +866,7 @@ router.post(encodeURI('/vrøvleord_answer'), function (req, res) {
             inputAnswers.push(fields[temp[i]]);
         }
         var mod = {
-            moduleType: 'Vroelveord',
+            moduleType: 'Vrølveord',
             answers: inputAnswers
         }
 
@@ -901,47 +896,103 @@ router.post(encodeURI('/vrøvleord_answer'), function (req, res) {
 
 //henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
 router.get('/clozetest_kursist', function (req, res) {
-    var db = req.db;
-    var collection = db.get('teachers');
-
+    
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    collection.findOne({
-        _id: teacherID
-    }, function (e, docs) {
-        //console.log(docs.tests[g_moduleCount]);
-        res.render('clozetest_kursist', {
-            "data": docs.tests[2],
-            title: 'clozetest'
-        });
-        g_moduleCount++;
+    teacherClass.find({
+        "tests._id": teacherID
+    }, function (err, teacher) {
+        if (err) {
+            console.log(err);
+        } else {
+
+            var id_serv = JSON.stringify(teacherID);
+
+            for (var i = 0; i < teacher[0].tests.length; i++) {
+                var id_db = JSON.stringify(teacher[0].tests[i]._id);
+
+                if (id_db == id_serv) {
+                    var audio_files = [];
+                    var promises = [];
+                    var content = teacher[0].tests[i].modules[0].content; //0 = orddiktat
+                    var moduleType = teacher[0].tests[i].modules[0].moduleType;
+
+                    promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[0].audio.file_id));
+                    for (var j = 0; j < teacher[0].tests[i].modules[0].content.length; j++) {
+                        promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[0].content[j].file.file_id));
+                    }
+                    Promise.all(promises).then(function (result) {
+
+                        for (var k = 0; k < result.length; k++) {
+                            result[k] = result[k].slice(2);
+                        }
+
+                        res.render('template', {
+                            content: content,
+                            'title': moduleType,
+                            descriptionAudio: result.shift(),
+                            description: "Dette er en beskrivelse af testen",
+                            audioFiles: result
+                        });
+
+                    });
+                } else {
+                    console.log("NO MATCH");
+                }
+            }
+
+
+        }
     });
 });
 
 
 router.post('/clozetest_answer', function (req, res) {
-    var db = req.db;
-
-    var answers = req.body.answers;
-
-    var collection = db.get('students');
-
-    collection.update({
-        "studentID": studentID
-    }, {
-        "$push": {
-            "tests": {
-                "type": 'clozetest',
-                "answers": JSON.parse(answers)
-            }
-        }
-    }, function (err, doc) {
+    
+    //det første der sker, er at 'writeTo' mappen tømmes 
+    empty('./public/writeTo', false, function (err, removed, failed) {
         if (err) {
-            res.send("There was a problem adding the information to the database.");
-        } else {
-            res.redirect(kursistModules[0]);
-            kursistModules.shift();
+            console.error(err);
         }
+    });
+
+    console.log('test');
+    // arrays that should hold data fields from the client form
+    var inputAnswers = [];
+    // var inputContentAnswers = [];
+
+    var form = new formidable.IncomingForm();
+
+    // parse the request and handle fields data
+
+    form.parse(req, function (err, fields, files) {
+
+        inputAnswers = [];
+        var temp = Object.keys(fields);
+        for (i = 0; i < temp.length; i++) {
+            inputAnswers.push(fields[temp[i]]);
+        }
+        var mod = {
+            moduleType: 'Clozetest',
+            answers: inputAnswers
+        }
+
+        studentClass.findOneAndUpdate({
+            studentID: studentID
+        }, 'modules', function (err, student) {
+            if (err) {
+                res.send(err);
+            } else {
+                console.log("STUDENT: " + student);
+                student.modules.push(mod);
+
+                student.save(function (err) {
+                    if (err) console.log(err);
+                    res.redirect(kursistModules[0]);
+                    kursistModules.shift();
+                });
+            }
+        });
     });
 });
 
