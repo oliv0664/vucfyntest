@@ -190,7 +190,7 @@ router.post('/index_addinfo', function (req, res) {
                 //push en ny test i tests arrayet
                 teacher.tests.push({
                     date: new Date(),
-                    totalModules: teacherModules.length,
+                    totalModules: teacherModules.length-1,
                     modules: []
                 });
     
@@ -414,7 +414,7 @@ router.post(encodeURI('/clozetest'), function (req, res) {
         // organize data fields into temporary arrays for reference 
         var tempInputContent = Object.keys(fields); 
         var j=0; 
-        for (i = 0; i < tempInputContent.length * 2; i=i+2) {
+        for (i = 0; i < tempInputContent.length; i=i+2) {
             console.log("I " + i);
             // here we use reference to get the exact property from the object 
             // remember answers are separated 
@@ -460,40 +460,43 @@ router.post(encodeURI('/clozetest'), function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET INTERPRET*/
 
 router.get(encodeURI('/tekstforståelse_lærer'), function (req, res) {
-    res.render('tekstforstaaelse_lærer', {
+    res.render('tekstforståelse_lærer', {
         title: 'Tekstforståelse'
     });
 });
 
 
 router.post(encodeURI('/tekstforståelse'), function (req, res) {
-   var inputContent = [];
+    var inputContent = [];
     var inputContentAnswers = [];
+    var inputTexts = []; 
+    var inputQuestions = []; 
 
     var form = new formidable.IncomingForm();
 
     // parse the request and handle fields data
     form.parse(req, function (err, fields, files) {
 
-        
+        //CODE TO DO!!!!!! 
+        //Vi skal have både tekster, spørgsmål og svarmuligheder
+        //Problemet er, de er uafhængige i længder
+        //Der kan være forskellige antal tekster, spørgsmål og svarmuligheder
         console.log("FIELDS content: ", fields);
-// organize data fields into temporary arrays for reference 
+        // organize data fields into temporary arrays for reference 
 
-        var tempInputContentAnswers = Object.keys(fields);
+        var tempInputTexts = Object.keys(fields).filter(input => input.length < 6);
+        var tempInputContent = Object.keys(fields).filter(input => input.length >= 6 && input.length <= 9);
+        var tempInputContentAnswers = Object.keys(fields).filter(input => input.length > 9);
+
         var j = 0;
-        for (i = 0; i < tempInputContentAnswers.length * 2; i = i + 2) {
+        for (var i = 0; i < tempInputContentTexts.length; i++) {
             console.log("I " + i);
             // here we use reference to get the exact property from the object 
             // remember answers are separated 
-            inputContent.push({
-                index: "question " + j
+            inputTexts.push({
+                index: "text " + i, 
+                text: fields[tempInputTexts[i]]
             });
-
-            inputContentAnswers.push({
-                index: "answer " + j,
-                answer: fields[tempInputContentAnswers[j]]
-            });
-            j++;
         }
 
     });
@@ -521,7 +524,7 @@ router.post(encodeURI('/tekstforståelse'), function (req, res) {
         });
     });
 // heeeey heeey 
-    res.redirect("/tekstforstaaelse_laerer");
+    // res.redirect("/tekstforstaaelse_laerer");
 
 });
 
@@ -739,12 +742,16 @@ router.get(encodeURI('/orddiktat_kursist'), function (req, res) {
                 if (id_db == id_serv) {
                     var audio_files = [];
                     var promises = [];
-                    var content = teacher[0].tests[i].modules[0].content; //0 = orddiktat
-                    var moduleType = teacher[0].tests[i].modules[0].moduleType;
+                    var totalLen = teacher[0].tests[i].totalModules;
+                    var currentLen = kursistModules.length;
+                    console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);  
+                    var index = totalLen - currentLen;  
+                    var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
+                    var moduleType = teacher[0].tests[i].modules[index].moduleType;
 
-                    promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[0].audio.file_id));
-                    for (var j = 0; j < teacher[0].tests[i].modules[0].content.length; j++) {
-                        promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[0].content[j].file.file_id));
+                    promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[index].audio.file_id));
+                    for (var j = 0; j < teacher[0].tests[i].modules[index].content.length; j++) {
+                        promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[index].content[j].file.file_id));
                     }
                     Promise.all(promises).then(function (result) {
 
@@ -847,12 +854,16 @@ router.get(encodeURI('/vrøvleord_kursist'), function (req, res) {
                 if (id_db == id_serv) {
                     var audio_files = [];
                     var promises = [];
-                    var content = teacher[0].tests[i].modules[0].content; //0 = orddiktat
-                    var moduleType = teacher[0].tests[i].modules[0].moduleType;
+                    var totalLen = teacher[0].tests[i].totalModules;
+                    var currentLen = kursistModules.length;
+                    console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);  
+                    var index = totalLen - currentLen;
+                    var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
+                    var moduleType = teacher[0].tests[i].modules[index].moduleType;
 
-                    promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[0].audio.file_id));
-                    for (var j = 0; j < teacher[0].tests[i].modules[0].content.length; j++) {
-                        promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[0].content[j].file.file_id));
+                    promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[index].audio.file_id));
+                    for (var j = 0; j < teacher[0].tests[i].modules[index].content.length; j++) {
+                        promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[index].content[j].file.file_id));
                     }
                     Promise.all(promises).then(function (result) {
 
@@ -955,12 +966,16 @@ router.get('/clozetest_kursist', function (req, res) {
                 if (id_db == id_serv) {
                     var audio_files = [];
                     var promises = [];
-                    var content = teacher[0].tests[i].modules[0].content; //0 = orddiktat
-                    var moduleType = teacher[0].tests[i].modules[0].moduleType;
+                    var totalLen = teacher[0].tests[i].totalModules;
+                    var currentLen = kursistModules.length;
+                    console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);  
+                    var index = totalLen - currentLen;
+                    var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
+                    var moduleType = teacher[0].tests[i].modules[index].moduleType;
 
-                    promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[0].audio.file_id));
-                    for (var j = 0; j < teacher[0].tests[i].modules[0].content.length; j++) {
-                        promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[0].content[j].file.file_id));
+                    promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[index].audio.file_id));
+                    for (var j = 0; j < teacher[0].tests[i].modules[index].content.length; j++) {
+                        promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[index].content[j].file.file_id));
                     }
                     Promise.all(promises).then(function (result) {
 

@@ -53,7 +53,7 @@
             id: 'lineField' + lineCount,
             size: (size - 6),
             required: true
-        }).text("Kursist input");
+        }).text(" Kursist input ");
 
 
         // tilføj endnu et tekststykke
@@ -73,7 +73,7 @@
             type: 'file',
             class: 'h2size',
             id: 'file' + lineCount,
-            //name: 'files[]', //[file]
+            name: 'file'+lineCount, //[file]
             accept: 'audio/*',
             onchange: 'readURL(this)',
             required: true

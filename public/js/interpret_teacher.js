@@ -93,7 +93,7 @@
             class: 'h2size',
             id: 'text' + textCount,
             form: 'form',
-            name: 'texts' + textCount,
+            name: 'txt' + textCount,
             placeholder: 'Indtast tekst her',
             size: size,
             required: true
@@ -190,7 +190,7 @@
             class: 'h2size',
             id: 'question' + questionCount,
             type: 'text',
-            //name: 'questions[' + questionCount + ']',
+            name: 'question',
             placeholder: 'Indsæt spørgsmål her',
             size: size
         });
@@ -242,7 +242,7 @@
             class: 'h2size',
             id: 'correct' + ids[id],
             type: 'radio',
-            name: 'correct' + id,
+            name: 'correct_for_q' + id,
             required: true
         }).val(ids[id]);
 
@@ -251,7 +251,7 @@
             type: 'text',
             class: 'h2size',
             id: 'answer' + id + ids[id],
-            name: 'q ' + id + ' option ' + ids[id] ,
+            name: 'q' + id + ' opt' + ids[id] ,
             placeholder: 'Indtast svarmulighed'
         });
 
