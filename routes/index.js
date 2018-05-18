@@ -542,35 +542,38 @@ router.get(encodeURI('/brev_lærer'), function (req, res) {
 
 router.post(encodeURI('/brev'), function (req, res) {
 
-    //    // TODO MONGOOSE 6
-    //    var db = req.db;
-    //
-    //    var file = req.body.file;
-    //    var time = req.body.time;
-    //
-    //    var collection = db.get('teachers');
-    //    collection.update({
-    //        "initials": initials
-    //    }, {
-    //        "$push": {
-    //            "tests": {
-    //                "type": "brev",
-    //                "file": file,
-    //                "content": [{
-    //                    "time": time
-    //                }]
-    //            }
-    //        }
-    //    }, function (err, doc) {
-    //        if (err) {
-    //            res.send("There was a problem adding the information to the database.");
-    //        } else {
-    ////            // REDIRECT SHOULD BE IN HERE WHEN MONGOOSE LOGIC IS
-    //        }
-    //    });
-    res.redirect(teacherModules[0]);
-    teacherModules.shift();
-    console.log('next module should be ' + teacherModules[0]);
+    var inputContent = [{}];
+    var inputContentAnswers = [{}];
+
+    var form = new formidable.IncomingForm();
+
+    // // parse the request and handle fields data
+    form.parse(req, function (err, fields, files) {
+    
+    });
+
+    // handle all the files together with fields data
+    // the output  - mod - is an object containing module data
+    formHandler(req.url, form, inputContent, inputContentAnswers, function (mod) {
+
+        // find the correct teachers test 
+        teacherClass.findOneAndUpdate({
+            initials: initials
+        }, 'tests', function (err, teacher) {
+            if (err) {
+                res.send(err);
+            } else {
+                console.log("TEACHER: " + teacher);
+                teacher.tests[teacher.tests.length - 1].modules.push(mod);
+
+                teacher.save(function (err) {
+                    if (err) console.log(err);
+                    res.redirect(teacherModules[0]);
+                    teacherModules.shift();
+                });
+            }
+        });
+    });
 });
 
 
@@ -1108,47 +1111,104 @@ router.post('/tekstforstaaelse_answer', function (req, res) {
 
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
 router.get('/brev_kursist', function (req, res) {
-    var db = req.db;
-    var collection = db.get('teachers');
-
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    collection.findOne({
-        _id: teacherID
-        //        initials: 'TEST2'
+    teacherClass.find({
+        "tests._id": teacherID
+    }, function (err, teacher) {
+        if (err) {
+            console.log(err);
+        } else {
 
-    }, function (e, docs) {
-        res.render('brev_kursist', {
-            "data": docs.tests[4],
-            title: 'brev'
-        });
-        g_moduleCount++;
+            var id_serv = JSON.stringify(teacherID);
+
+            for (var i = 0; i < teacher[0].tests.length; i++) {
+                var id_db = JSON.stringify(teacher[0].tests[i]._id);
+
+                if (id_db == id_serv) {
+                    var audio_files = [];
+                    var promises = [];
+                    var totalLen = teacher[0].tests[i].totalModules;
+                    var currentLen = kursistModules.length;
+                    console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);  
+                    var index = totalLen - currentLen;
+                    var moduleType = teacher[0].tests[i].modules[index].moduleType;
+
+                    promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[index].audio.file_id));
+                    for (var j = 0; j < teacher[0].tests[i].modules[index].content.length; j++) {
+                        //i brevet er det en tekst fil der bliver hentet, ikke en lydfil
+                        promises.push(mongo.readFromDB('file' + j + '.pdf', teacher[0].tests[i].modules[index].content[j].file.file_id));
+                    }
+                    Promise.all(promises).then(function (result) {
+
+                        for (var k = 0; k < result.length; k++) {
+                            result[k] = result[k].slice(2);
+                        }
+
+                        res.render('template', {
+                            content: result,
+                            'title': moduleType,
+                            descriptionAudio: result.shift(),
+                            description: "Dette er en beskrivelse af testen"
+                        });
+
+                    });
+                } else {
+                    console.log("NO MATCH");
+                }
+            }
+
+
+        }
     });
 });
 
 router.post('/brev_answer', function (req, res) {
-    var db = req.db;
-
-    var answers = req.body.answers;
-    console.log(answers);
-
-    var collection = db.get('students');
-
-    collection.update({
-        "studentID": studentID
-    }, {
-        "$push": {
-            "tests": {
-                "type": "brev",
-                "answers": JSON.parse(answers)
-            }
-        }
-    }, function (err, doc) {
+    
+    //det første der sker, er at 'writeTo' mappen tømmes 
+    empty('./public/writeTo', false, function (err, removed, failed) {
         if (err) {
-            res.send("There was a problem adding the information to the database.");
-        } else {
-            res.redirect(kursistModules[0]);
+            console.error(err);
         }
+    });
+
+    console.log('test');
+    // arrays that should hold data fields from the client form
+    var inputAnswers = [];
+    // var inputContentAnswers = [];
+
+    var form = new formidable.IncomingForm();
+
+    // parse the request and handle fields data
+
+    form.parse(req, function (err, fields, files) {
+
+        inputAnswers = [];
+        var temp = Object.keys(fields);
+        for (i = 0; i < temp.length; i++) {
+            inputAnswers.push(fields[temp[i]]);
+        }
+        var mod = {
+            moduleType: 'Brev',
+            answers: inputAnswers
+        }
+
+        studentClass.findOneAndUpdate({
+            studentID: studentID
+        }, 'modules', function (err, student) {
+            if (err) {
+                res.send(err);
+            } else {
+                console.log("STUDENT: " + student);
+                student.modules.push(mod);
+
+                student.save(function (err) {
+                    if (err) console.log(err);
+                    res.redirect(kursistModules[0]);
+                    kursistModules.shift();
+                });
+            }
+        });
     });
 });
 
@@ -1396,7 +1456,7 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
             //this is the content from the teacher test
             //this should be saved in mongoDB 'teachers' collection 
             for (var i = 1; i < file_data.length; i++) {
-                console.log("FILES FILES FILES ", inputCont[i - 1]);
+                console.log("FILES FILES FILES ", file_data);
                 inputCont[i - 1].file = file_data[i];
             }
 
