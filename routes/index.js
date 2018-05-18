@@ -493,9 +493,11 @@ router.post(encodeURI('/tekstforståelse'), function (req, res) {
             texts: []
         };
         for (var i = 0; i < tempInputTexts.length; i++) {
-            textObj.texts.push(fields[tempInputTexts[i]]);
+            
+            inputContent.push({
+                text: fields[tempInputTexts[i]]
+            });
         }
-        inputContent.push(textObj);
 
         console.log('howManyQuestions: ' + howManyQuestions.length);
         for (var i = 0; i < howManyQuestions.length; i++) {
@@ -529,7 +531,7 @@ router.post(encodeURI('/tekstforståelse'), function (req, res) {
                     });
                 }
             }
-            inputContent.push(obj);
+            inputQuestions.push(obj);
 
         }
 
@@ -548,6 +550,7 @@ router.post(encodeURI('/tekstforståelse'), function (req, res) {
                 res.send(err);
             } else {
                 console.log("TEACHER: " + teacher);
+                mod.inputQuestions = inputQuestions; 
                 teacher.tests[teacher.tests.length - 1].modules.push(mod);
 
                 teacher.save(function (err) {
@@ -984,7 +987,7 @@ router.post(encodeURI('/vrøvleord_answer'), function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET CLOZETEST */
 
 //henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
-router.get('/clozetest_kursist', function (req, res) {
+router.get(encodeURI('/clozetest_kursist'), function (req, res) {
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
@@ -1040,7 +1043,7 @@ router.get('/clozetest_kursist', function (req, res) {
 });
 
 
-router.post('/clozetest_answer', function (req, res) {
+router.post(encodeURI('/clozetest_answer'), function (req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
     empty('./public/writeTo', false, function (err, removed, failed) {
@@ -1094,7 +1097,7 @@ router.post('/clozetest_answer', function (req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET INTERPRET */
 
 //henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
-router.get('/tekstforståelse_kursist', function (req, res) {
+router.get(encodeURI('/tekstforståelse_kursist'), function (req, res) {
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     teacherClass.find({
@@ -1117,6 +1120,7 @@ router.get('/tekstforståelse_kursist', function (req, res) {
                     console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);  
                     var index = totalLen - currentLen;
                     var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
+                    var inputQuestions = teacher[0].tests[i].modules[index].inputQuestions; 
                     var moduleType = teacher[0].tests[i].modules[index].moduleType;
 
                     promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[index].audio.file_id));
@@ -1131,6 +1135,7 @@ router.get('/tekstforståelse_kursist', function (req, res) {
 
                         res.render('template', {
                             content: content,
+                            questions: inputQuestions, 
                             'title': moduleType,
                             descriptionAudio: result.shift(),
                             description: "Dette er en beskrivelse af testen",
@@ -1149,7 +1154,7 @@ router.get('/tekstforståelse_kursist', function (req, res) {
 });
 
 
-router.post('/tekstforstaaelse_answer', function (req, res) {
+router.post(encodeURI('/tekstforståelse_answer'), function (req, res) {
     var db = req.db;
 
     var answers = req.body.answers;
