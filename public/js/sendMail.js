@@ -1,7 +1,7 @@
 $(function () {
 
-    $('#form').bind('submit', function (event) {
-        event.preventDefault(); //this will prevent the default submit
+    $('#form').one('click', function(){
+        //event.preventDefault(); //this will prevent the default submit
         var mailRecipient = $('#mailReciever').val();
         console.log('you typed: ', mailRecipient);
         $.ajax({

@@ -4,7 +4,6 @@
     <title>Slutside</title>
     <script src="/jquery/jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
-    <script src="/js/sendMail.js"></script>
 </head>
 
 <body>
@@ -17,10 +16,11 @@
     </description>
     
     <main>
-        <form id="form" action="/send_mail" method="post">
+
+        <form method="post" action="/send_mail">
             <h3 class="h3size">Skriv mailadresse på din lærer her:</h3>
             <input id="mailReciever" type="text" name="mail" placeholder="Email">
-            <input class="h3size" type="submit">  
+            <input type="submit" class="h3size"> 
         </form>
     </main>
 </body>
