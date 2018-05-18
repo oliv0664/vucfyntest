@@ -190,7 +190,7 @@
             class: 'h2size',
             id: 'question' + questionCount,
             type: 'text',
-            name: 'question',
+            name: 'q' + questionCount,
             placeholder: 'Indsæt spørgsmål her',
             size: size
         });

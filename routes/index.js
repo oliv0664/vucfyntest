@@ -154,24 +154,24 @@ router.post('/welcome_addinfo', function (req, res) {
 
 
 router.post('/index_addinfo', function (req, res) {
-    
+
     var form = new formidable.IncomingForm();
 
 
     form.parse(req, function (err, fields, files) {
         teacherModules = Object.keys(fields);
         initials = fields[teacherModules.shift()];
-        teacherModules.push('nextpage'); 
+        teacherModules.push('nextpage');
 
-        console.log("TEACHERMODULES ", teacherModules); 
-        
+        console.log("TEACHERMODULES ", teacherModules);
+
         teacherClass.findOne({
             initials: initials
         }, function (err, teacher) {
             if (err) {
                 console.log(err);
             } else {
-    
+
                 //hvis der ikke eksisterer en teacher med de initialer
                 if (!teacher) {
                     console.log("NEW TEACHER");
@@ -186,14 +186,14 @@ router.post('/index_addinfo', function (req, res) {
                     console.log("ADD TO EXISTING TEACHER");
                     teacher.totalTests++;
                 }
-    
+
                 //push en ny test i tests arrayet
                 teacher.tests.push({
                     date: new Date(),
-                    totalModules: teacherModules.length-1,
+                    totalModules: teacherModules.length - 1,
                     modules: []
                 });
-    
+
                 //gem til db og redirect view 
                 teacher.save(function (err, test) {
                     if (err) {
@@ -207,7 +207,7 @@ router.post('/index_addinfo', function (req, res) {
                 });
             }
         });
-    }); 
+    });
 
     // // the array MUST be emptied so that no duplicates are psuhed in
     // teacherModules = [];
@@ -266,61 +266,61 @@ router.post(encodeURI('/orddiktat'), function (req, res) {
     // parse the request and handle fields data
     // var parsePromise = new Promise(function(resolve, reject) {
 
-        form.parse(req, function (err, fields, files) {
-            
-            console.log("asdasdasdasdasdasd", fields);
-            // organize data fields into temporary arrays for reference 
-            var tempInputContent = Object.keys(fields).filter(input => input.length < 12);
-            var tempInputContentAnswers = Object.keys(fields).filter(input => input.length > 12);
-            
-            var j = 0;
-            for (i = 0; i < tempInputContentAnswers.length * 2; i = i + 2) {
-                console.log("I " + i);
-                // here we use reference to get the exact property from the object 
-                // remember answers are separated 
-                inputContent.push({
-                    index: "question " + j,
-                    line1: fields[tempInputContent[i]],
-                    line2: fields[tempInputContent[i + 1]]
-                });
+    form.parse(req, function (err, fields, files) {
 
-                inputContentAnswers.push({
-                    index: "answer " + j,
-                    answer: fields[tempInputContentAnswers[j]]
-                });
-                j++;
-            }
-            // resolve(); 
-        });
+        console.log("asdasdasdasdasdasd", fields);
+        // organize data fields into temporary arrays for reference 
+        var tempInputContent = Object.keys(fields).filter(input => input.length < 12);
+        var tempInputContentAnswers = Object.keys(fields).filter(input => input.length > 12);
+
+        var j = 0;
+        for (i = 0; i < tempInputContentAnswers.length * 2; i = i + 2) {
+            console.log("I " + i);
+            // here we use reference to get the exact property from the object 
+            // remember answers are separated 
+            inputContent.push({
+                index: "question " + j,
+                line1: fields[tempInputContent[i]],
+                line2: fields[tempInputContent[i + 1]]
+            });
+
+            inputContentAnswers.push({
+                index: "answer " + j,
+                answer: fields[tempInputContentAnswers[j]]
+            });
+            j++;
+        }
+        // resolve(); 
+    });
     // });
 
     // handle all the files together with fields data
     // the output  - mod - is an object containing module data
     // parsePromise.then(function(result) {
-        console.log("JEG GIDER IKKE VENTE"); 
-        formHandler(req.url, form, inputContent, inputContentAnswers, function (mod) {
-            
-            // find the correct teachers test 
-            
-            teacherClass.findOneAndUpdate({
-                initials: initials
-            }, 'tests', function (err, teacher) {
-                if (err) {
-                    res.send(err);
-                } else {
-                    console.log("TEACHER: " + initials);
-                    teacher.tests[teacher.tests.length - 1].modules.push(mod);
-                    
-                    teacher.save(function (err) {
-                        if (err) console.log(err);
-                        res.redirect(teacherModules[0]);
-                        teacherModules.shift();
-                    });
-                }
-            });
+    console.log("JEG GIDER IKKE VENTE");
+    formHandler(req.url, form, inputContent, inputContentAnswers, function (mod) {
+
+        // find the correct teachers test 
+
+        teacherClass.findOneAndUpdate({
+            initials: initials
+        }, 'tests', function (err, teacher) {
+            if (err) {
+                res.send(err);
+            } else {
+                console.log("TEACHER: " + initials);
+                teacher.tests[teacher.tests.length - 1].modules.push(mod);
+
+                teacher.save(function (err) {
+                    if (err) console.log(err);
+                    res.redirect(teacherModules[0]);
+                    teacherModules.shift();
+                });
+            }
         });
-        
     });
+
+});
 
 // });
 
@@ -412,22 +412,22 @@ router.post(encodeURI('/clozetest'), function (req, res) {
         console.log("FIELDS: ", fields);
 
         // organize data fields into temporary arrays for reference 
-        var tempInputContent = Object.keys(fields); 
-        var j=0; 
-        for (i = 0; i < tempInputContent.length; i=i+2) {
+        var tempInputContent = Object.keys(fields);
+        var j = 0;
+        for (i = 0; i < tempInputContent.length; i = i + 2) {
             console.log("I " + i);
             // here we use reference to get the exact property from the object 
             // remember answers are separated 
             inputContent.push({
                 index: "question " + j,
                 lineText: fields[tempInputContent[i]],
-                lineText2: fields[tempInputContent[i+1]]
+                lineText2: fields[tempInputContent[i + 1]]
             });
 
             inputContentAnswers.push({
                 index: "answer " + j
             });
-            j++; 
+            j++;
         }
 
     });
@@ -469,8 +469,8 @@ router.get(encodeURI('/tekstforståelse_lærer'), function (req, res) {
 router.post(encodeURI('/tekstforståelse'), function (req, res) {
     var inputContent = [];
     var inputContentAnswers = [];
-    var inputTexts = []; 
-    var inputQuestions = []; 
+    var inputTexts = [];
+    var inputQuestions = [];
 
     var form = new formidable.IncomingForm();
 
@@ -481,28 +481,63 @@ router.post(encodeURI('/tekstforståelse'), function (req, res) {
         //Vi skal have både tekster, spørgsmål og svarmuligheder
         //Problemet er, de er uafhængige i længder
         //Der kan være forskellige antal tekster, spørgsmål og svarmuligheder
-        console.log("FIELDS content: ", fields);
+        //        console.log("FIELDS content: ", fields);
         // organize data fields into temporary arrays for reference 
 
-        var tempInputTexts = Object.keys(fields).filter(input => input.length < 6);
-        var tempInputContent = Object.keys(fields).filter(input => input.length >= 6 && input.length <= 9);
-        var tempInputContentAnswers = Object.keys(fields).filter(input => input.length > 9);
 
-        var j = 0;
-        for (var i = 0; i < tempInputContentTexts.length; i++) {
-            console.log("I " + i);
-            // here we use reference to get the exact property from the object 
-            // remember answers are separated 
-            inputTexts.push({
-                index: "text " + i, 
-                text: fields[tempInputTexts[i]]
-            });
+        var howManyQuestions = Object.keys(fields).filter(input => input.length > 12);
+        var bigTemp = [];
+        tempInputTexts = Object.keys(fields).filter(input => input.includes('txt'));
+
+        var textObj = {
+            texts: []
+        };
+        for (var i = 0; i < tempInputTexts.length; i++) {
+            textObj.texts.push(fields[tempInputTexts[i]]);
+        }
+        inputContent.push(textObj);
+
+        console.log('howManyQuestions: ' + howManyQuestions.length);
+        for (var i = 0; i < howManyQuestions.length; i++) {
+
+            var tempInputContent = Object.keys(fields).filter(input => input.includes(
+                'q' + i
+            ));
+
+            bigTemp.push(tempInputContent);
+        }
+        for (i = 0; i < bigTemp.length; i++) {
+            //            console.log("question" +i +": " + fields[bigTemp[i][0]]);
+            // spørgsmålet skal komme her 
+            var obj = {
+                question: fields[bigTemp[i][0]],
+                options: []
+            };
+            for (j = 0; j < bigTemp[i].length; j++) {
+
+                if (bigTemp[i][j].length > 5 && bigTemp[i][j].length < 10) {
+
+                    //                    console.log("Option" + j +": " + fields[bigTemp[i][j]]);
+                    obj.options.push(fields[bigTemp[i][j]]);
+
+                } else if (bigTemp[i][j].length > 10) {
+
+                    //                    console.log("rightAns: ", fields[bigTemp[i][j]]);
+                    inputContentAnswers.push({
+                        index: "question " + i,
+                        answer: fields[bigTemp[i][j]]
+                    });
+                }
+            }
+            inputContent.push(obj);
+
         }
 
+        console.log("KIIIG HEEER111111: ", inputContent);
+        console.log("KIIIG HEEER222222: ", inputContentAnswers);
     });
 
-    // handle all the files together with fields data
-    // the output  - mod - is an object containing module data
+
     formHandler(req.url, form, inputContent, inputContentAnswers, function (mod) {
 
         // find the correct teachers test 
@@ -523,8 +558,7 @@ router.post(encodeURI('/tekstforståelse'), function (req, res) {
             }
         });
     });
-// heeeey heeey 
-    // res.redirect("/tekstforstaaelse_laerer");
+
 
 });
 
@@ -744,8 +778,8 @@ router.get(encodeURI('/orddiktat_kursist'), function (req, res) {
                     var promises = [];
                     var totalLen = teacher[0].tests[i].totalModules;
                     var currentLen = kursistModules.length;
-                    console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);  
-                    var index = totalLen - currentLen;  
+                    console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);
+                    var index = totalLen - currentLen;
                     var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
                     var moduleType = teacher[0].tests[i].modules[index].moduleType;
 
@@ -856,7 +890,7 @@ router.get(encodeURI('/vrøvleord_kursist'), function (req, res) {
                     var promises = [];
                     var totalLen = teacher[0].tests[i].totalModules;
                     var currentLen = kursistModules.length;
-                    console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);  
+                    console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);
                     var index = totalLen - currentLen;
                     var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
                     var moduleType = teacher[0].tests[i].modules[index].moduleType;
@@ -948,7 +982,7 @@ router.post(encodeURI('/vrøvleord_answer'), function (req, res) {
 
 //henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
 router.get('/clozetest_kursist', function (req, res) {
-    
+
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     teacherClass.find({
@@ -968,7 +1002,7 @@ router.get('/clozetest_kursist', function (req, res) {
                     var promises = [];
                     var totalLen = teacher[0].tests[i].totalModules;
                     var currentLen = kursistModules.length;
-                    console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);  
+                    console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);
                     var index = totalLen - currentLen;
                     var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
                     var moduleType = teacher[0].tests[i].modules[index].moduleType;
@@ -1004,7 +1038,7 @@ router.get('/clozetest_kursist', function (req, res) {
 
 
 router.post('/clozetest_answer', function (req, res) {
-    
+
     //det første der sker, er at 'writeTo' mappen tømmes 
     empty('./public/writeTo', false, function (err, removed, failed) {
         if (err) {
@@ -1328,11 +1362,11 @@ router.post('/upload', function (req, res) {
 //});
 
 function formHandler(url, incForm, inputCont, inputContAns, callback) {
-   
+
     var files = [];
 
-    incForm.on('error', function(err) {
-        console.log("ERROR ", err); 
+    incForm.on('error', function (err) {
+        console.log("ERROR ", err);
     });
 
     incForm.on('fileBegin', function (name, file) {
@@ -1344,7 +1378,7 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
     });
 
     incForm.on('file', function (name, file) {
-        files.push([file]); 
+        files.push([file]);
     });
 
     incForm.on('end', function () {
@@ -1360,12 +1394,12 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
 
                     var fileUpload = files[i][0].name;
                     console.log("4 " + fileUpload);
-                    
+
                     var mongo = require('../public/js/MongoHandler');
                     //when MongoHandler is done with upload to MongoDB return result
                     //check if there is audiofile
                     if (fileUpload != '') {
-                        console.log("NOT EMPTY FILE"); 
+                        console.log("NOT EMPTY FILE");
                         return mongo.writeToDB(fileUpload, fileUpload)
                             .then(function (result) {
                                 console.log("FILEUPLOAD " + i + " FINISHED ", result);
@@ -1375,7 +1409,7 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
                                 console.log(err);
                             });
                     } else {
-                        console.log("EMPTY FGILEEEE"); 
+                        console.log("EMPTY FGILEEEE");
                     }
                 })
             );
@@ -1384,7 +1418,7 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
 
         //once all the promises are done
         Promise.all(promises).then(function (file_data) {
- 
+
             //when files are uploaded, they are removed from 'readFrom' folder
             empty('./public/readfrom', false, function (err, removed, failed) {
                 if (err) {
