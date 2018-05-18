@@ -1061,20 +1061,56 @@ router.post('/clozetest_answer', function (req, res) {
 
 //henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
 router.get('/tekstforståelse_kursist', function (req, res) {
-    var db = req.db;
-    var collection = db.get('teachers');
-
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    collection.findOne({
-        _id: teacherID
-    }, function (e, docs) {
-        //console.log(docs.tests[g_moduleCount]);
-        res.render('tekstforståelse_kursist', {
-            "data": docs.tests[3],
-            title: 'tekstforståelse'
-        });
-        g_moduleCount++;
+    teacherClass.find({
+        "tests._id": teacherID
+    }, function (err, teacher) {
+        if (err) {
+            console.log(err);
+        } else {
+
+            var id_serv = JSON.stringify(teacherID);
+
+            for (var i = 0; i < teacher[0].tests.length; i++) {
+                var id_db = JSON.stringify(teacher[0].tests[i]._id);
+
+                if (id_db == id_serv) {
+                    var audio_files = [];
+                    var promises = [];
+                    var totalLen = teacher[0].tests[i].totalModules;
+                    var currentLen = kursistModules.length;
+                    console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);  
+                    var index = totalLen - currentLen;
+                    var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
+                    var moduleType = teacher[0].tests[i].modules[index].moduleType;
+
+                    promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[index].audio.file_id));
+                    for (var j = 0; j < teacher[0].tests[i].modules[index].content.length; j++) {
+                        promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[index].content[j].file.file_id));
+                    }
+                    Promise.all(promises).then(function (result) {
+
+                        for (var k = 0; k < result.length; k++) {
+                            result[k] = result[k].slice(2);
+                        }
+
+                        res.render('template', {
+                            content: content,
+                            'title': moduleType,
+                            descriptionAudio: result.shift(),
+                            description: "Dette er en beskrivelse af testen",
+                            audioFiles: result
+                        });
+
+                    });
+                } else {
+                    console.log("NO MATCH");
+                }
+            }
+
+
+        }
     });
 });
 
@@ -1246,6 +1282,12 @@ router.get('/getAllData', function (req, res) {
     // });
 });
 
+router.get('/tak', function (req, res) {
+    res.render('tak', {
+        title: 'Tak'
+    });
+});
+
 router.post('/send_mail', function (req, res) {
 
     var testID;
@@ -1257,24 +1299,7 @@ router.post('/send_mail', function (req, res) {
             console.log(err);
         } else {
 
-
-            // var mail = req.body.mail;
-            // console.log(mail);
-
-            // var msg = mailSender.htmlBuilder(testResult);
-            // mailSender.sendMail(mail, msg);
-
-            // res.redirect("finalpage");
-            //code to get correct answers 
             testID = student.teacherID;
-
-            // for(var i=0; i<student.modules.length; i++) {
-            //     student_answers.push({
-            //         moduleType: student.modules[i].moduleType,
-            //         answers: student.modules[i].answers 
-            //     });  
-            // } 
-
 
             teacherClass.findOne({
                 'tests._id': testID
@@ -1295,6 +1320,7 @@ router.post('/send_mail', function (req, res) {
                             var mail = req.body.mail;
                             var msg = mailSender.htmlBuilder(final_score);
                             mailSender.sendMail(mail, msg);
+                            res.redirect('tak'); 
                         }
                     }
                 }

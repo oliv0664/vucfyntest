@@ -1,47 +1,46 @@
-<html>
+<script>
+    var a = 0; 
 
-<head>
+    function playAudio(index) {
+        var d = document.getElementById("d" + index);
+        var audBut = document.getElementById("audBut" + index);
+        var sound = document.getElementById("file" + index);
+        if(sound.paused) {
+            sound.load();  
+            sound.play();
+            if(a>0) { 
+                d.removeChild(audBut);
+                a=0;  
+            } else { a++; }
+        }
+    }
+</script>
 
-    <meta charset="utf-8">
+<form id="form" method="post" action="/tekstforståelse_answer" enctype="multipart/form-data">
 
-    <script src="/jquery/jquery-3.2.1.min.js"></script>
-    <script src="/js/interpret_participant.js"></script>
-    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
-
-
-</head>
-
-<body onload="initializeTest((<%=JSON.stringify(data)%>));">
-
-    <div id="header">
-        <img class="header" id="head_1" src="images/VUC_logo.png" height="100">
-        <h3 class="header" id="head_2">NIVEAUAFKLARINGSTEST</h3>
-        <h3 class="header" id="head_3">VUC FYN ODENSE</h3>
+    
+    <div class="textDiv">
+        <% for(var i=0; i<content[0].texts.length; i++) { %>
+            <div class="blockDiv">
+                <div id="<%= 'd'+i %>" class="audDiv">
+                    <input class="aud" id="<%= 'audBut'+i %>" type="button" onclick="playAudio(<%= i %>)">
+                </div>
+                <div><%= content[0].texts[i]</div>
+            </div>
+        <% } %>
     </div>
 
-    <div class="section">
-        <h1 class="title" id="h1_1">TEKSTFORSTÅELSE</h1>
+    <% for(var j=1; j<content.length; j++) { %>
+        <div class="contentDiv">
+            <div><%= content[j].question %></div>
+            
+            <% for(var k=0; k<content.length; k++) { %>
+                <!-- <span><%= content[j].options[k]</span> -->
+                <input type="radio" name="<%= j %>" value="<%= content[j].options[k]">
+            <% } %>
+        </div>
+    <% } %>
 
+    <input type="submit">
 
-        <form id="form" method="post" action="/tekstforståelse_answer">
-
-            <div id="subsection">
-                <h2>Her er en tekst du skal læse. Når du har læst teksten, og klikker på knappen "næste", er der nogle opgaver du skal løse. Du kan ikke komme tilbage til teksten</h2>
-                <button class="h2size" type="button" id="start">Start</button>
-            </div>
-    
-            <div id="subsubsection"></div>
-    
-            <div id="bottom">
-                <input type="hidden" id="answers" name="answers">
-            </div>
-    
-        </form>
-    </div>
-
-
-    
-
-</body>
-
-</html>
+</form>
