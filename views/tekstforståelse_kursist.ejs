@@ -26,21 +26,21 @@
                     <input class="aud" id="<%= 'audBut'+i %>" type="button" onclick="playAudio(<%= i %>)">
                 </div>
                 <audio id="<%= 'file'+i %>" src="<%= audioFiles[i] %>"></audio>
-                <div><%= content[i].text %></div>
+                <div><%= content.texts[i].text %></div>
             </div>
         <% } %>
     </div>
 
-    <% for(var j=0; j<questions.length; j++) { %>
-        <div class="contentDiv">
-            <div><%= questions[j].question %></div>
+    <div class="contentDiv">
+        <% for(var j=0; j<content.questions.length; j++) { %>
+            <div><%= content.questions[j].question %></div>
             
-            <% for(var k=0; k<questions[j].options.length; k++) { %>
+            <% for(var k=0; k<content.questions[j].options.length; k++) { %>
                 <!-- <span><%= content[j].options[k]</span> -->
-                <input type="radio" name="<%= j %>" value="<%= questions[j].options[k] %>">
+                <input type="radio" name="<%= j %>" value="<%= content.questions[j].options[k] %>">
             <% } %>
-        </div>
-    <% } %>
+        <% } %>
+    </div>
 
     <input type="submit">
 

@@ -494,7 +494,7 @@ router.post(encodeURI('/tekstforståelse'), function (req, res) {
         };
         for (var i = 0; i < tempInputTexts.length; i++) {
             
-            inputContent.push({
+            inputTexts.push({
                 text: fields[tempInputTexts[i]]
             });
         }
@@ -533,14 +533,13 @@ router.post(encodeURI('/tekstforståelse'), function (req, res) {
             }
             inputQuestions.push(obj);
 
-        }
-
-        console.log("KIIIG HEEER111111: ", inputContent);
+        } 
+        console.log("KIIIG HEEER111111: ", inputTexts);
         console.log("KIIIG HEEER222222: ", inputContentAnswers);
     });
 
 
-    formHandler(req.url, form, inputContent, inputContentAnswers, function (mod) {
+    formHandler(req.url, form, inputTexts, inputContentAnswers, function (mod) {
 
         // find the correct teachers test 
         teacherClass.findOneAndUpdate({
@@ -550,7 +549,15 @@ router.post(encodeURI('/tekstforståelse'), function (req, res) {
                 res.send(err);
             } else {
                 console.log("TEACHER: " + teacher);
-                mod.inputQuestions = inputQuestions; 
+                console.log("MODMODMODMODMOD ", mod); 
+
+                mod.content = {
+                    texts: inputTexts,
+                    questions: inputQuestions
+                }; 
+
+                // mod.content.push(inputQuestions); 
+                // mod.inputQuestions = inputQuestions; 
                 teacher.tests[teacher.tests.length - 1].modules.push(mod);
 
                 teacher.save(function (err) {
@@ -988,7 +995,6 @@ router.post(encodeURI('/vrøvleord_answer'), function (req, res) {
 
 //henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
 router.get(encodeURI('/clozetest_kursist'), function (req, res) {
-
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     teacherClass.find({
@@ -1132,10 +1138,10 @@ router.get(encodeURI('/tekstforståelse_kursist'), function (req, res) {
                         for (var k = 0; k < result.length; k++) {
                             result[k] = result[k].slice(2);
                         }
-
+                        console.log(moduleType);
                         res.render('template', {
                             content: content,
-                            questions: inputQuestions, 
+                            // questions: inputQuestions, 
                             'title': moduleType,
                             descriptionAudio: result.shift(),
                             description: "Dette er en beskrivelse af testen",
