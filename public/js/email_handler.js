@@ -40,7 +40,7 @@ module.exports = {
         var html; 
 
         for(var i=0; i<results.length; i++) {
-            html += '<p>Spørgsmål ' + i+1 + '</p>'; 
+            html += '<p>Spørgsmål ' + (i+1) + '</p>'; 
             html += '<p>kursist svar: ' + results[i].student_answer + '</p>'; 
             html += '<p>korrekt svar: ' + results[i].correct_answer + '</p>';
             html += '<p>points' + results[i].point + '</p>';

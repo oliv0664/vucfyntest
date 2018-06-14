@@ -477,14 +477,7 @@ router.post(encodeURI('/tekstforståelse'), function (req, res) {
     // parse the request and handle fields data
     form.parse(req, function (err, fields, files) {
 
-        //CODE TO DO!!!!!! 
-        //Vi skal have både tekster, spørgsmål og svarmuligheder
-        //Problemet er, de er uafhængige i længder
-        //Der kan være forskellige antal tekster, spørgsmål og svarmuligheder
-        //        console.log("FIELDS content: ", fields);
-        // organize data fields into temporary arrays for reference 
-
-
+        
         var howManyQuestions = Object.keys(fields).filter(input => input.length > 12);
         var bigTemp = [];
         tempInputTexts = Object.keys(fields).filter(input => input.includes('txt'));
@@ -524,10 +517,12 @@ router.post(encodeURI('/tekstforståelse'), function (req, res) {
 
                 } else if (bigTemp[i][j].length > 10) {
 
-                    //                    console.log("rightAns: ", fields[bigTemp[i][j]]);
+                    var correct_index = fields['correct_for_q'+i]; 
+                    var correct = fields['q'+i+' opt'+correct_index]; 
+                    
                     inputContentAnswers.push({
                         index: "question " + i,
-                        answer: fields[bigTemp[i][j]]
+                        answer: correct
                     });
                 }
             }
@@ -1130,8 +1125,8 @@ router.get(encodeURI('/tekstforståelse_kursist'), function (req, res) {
                     var moduleType = teacher[0].tests[i].modules[index].moduleType;
 
                     promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[index].audio.file_id));
-                    for (var j = 0; j < teacher[0].tests[i].modules[index].content.length; j++) {
-                        promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[index].content[j].file.file_id));
+                    for (var j = 0; j < teacher[0].tests[i].modules[index].content.texts.length; j++) {
+                        promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[index].content.texts[j].file.file_id));
                     }
                     Promise.all(promises).then(function (result) {
 
@@ -1161,28 +1156,51 @@ router.get(encodeURI('/tekstforståelse_kursist'), function (req, res) {
 
 
 router.post(encodeURI('/tekstforståelse_answer'), function (req, res) {
-    var db = req.db;
-
-    var answers = req.body.answers;
-    //console.log("non parsed " + answers);
-    //console.log("parsed " + JSON.parse(answers));
-    var collection = db.get('students');
-    collection.update({
-        "studentID": studentID
-    }, {
-        "$push": {
-            "tests": {
-                "type": "tekstforståelse",
-                "answers": JSON.parse(answers)
-            }
-        }
-    }, function (err, doc) {
+    //det første der sker, er at 'writeTo' mappen tømmes 
+    empty('./public/writeTo', false, function (err, removed, failed) {
         if (err) {
-            res.send("There was a problem adding the information to the database.");
-        } else {
-            res.redirect(kursistModules[0]);
-            kursistModules.shift();
+            console.error(err);
         }
+    });
+
+    // arrays that should hold data fields from the client form
+    var inputAnswers = [];
+    // var inputContentAnswers = [];
+
+    var form = new formidable.IncomingForm();
+
+    // parse the request and handle fields data
+
+    form.parse(req, function (err, fields, files) {
+
+        
+        inputAnswers = [];
+        var temp = Object.keys(fields);
+        for (i = 0; i < temp.length; i++) {
+            inputAnswers.push(fields[temp[i]]);
+        }
+        
+        var mod = {
+            moduleType: 'Tekstforståelse',
+            answers: inputAnswers
+        }
+
+        studentClass.findOneAndUpdate({
+            studentID: studentID
+        }, 'modules', function (err, student) {
+            if (err) {
+                res.send(err);
+            } else {
+                console.log("STUDENT: " + student);
+                student.modules.push(mod);
+
+                student.save(function (err) {
+                    if (err) console.log(err);
+                    res.redirect(kursistModules[0]);
+                    kursistModules.shift();
+                });
+            }
+        });
     });
 });
 
