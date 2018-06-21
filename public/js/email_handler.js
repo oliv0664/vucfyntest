@@ -36,15 +36,33 @@ module.exports = {
 
     htmlBuilder: function(results) {
 
-
         var html; 
+        
+        html = `<table border="1" style="border-collapse:collapse">
+                <tr>
+                    <td>Lærer initialer</td>
+                    <td>Kursist ID</td>`;
 
-        for(var i=0; i<results.length; i++) {
-            html += '<p>Spørgsmål ' + (i+1) + '</p>'; 
-            html += '<p>kursist svar: ' + results[i].student_answer + '</p>'; 
-            html += '<p>korrekt svar: ' + results[i].correct_answer + '</p>';
-            html += '<p>points' + results[i].point + '</p>';
-            html += '<br>'
+        for(var i=2; i<results.length; i++) {
+            html += '<td>Modultype</td>'; 
+            for(var j=0; j<results[i].answers.length; j++) {
+                html += '<td>Spørgsmål ' + (j+1) + '</td>'; 
+            }
+        }
+
+        html += '</tr>'; 
+
+        
+        html += '<tr><td>' + results[0] + '</td><td>' + results[1]+ '</td>';
+
+        for(var i=2; i<results.length; i++) {
+            html += '<td>' + results[i].type + '</td>'
+            
+            for(var j=0; j<results[i].answers.length; j++) {
+                html += `<td>kursist svar: ` + results[i].answers[j].student_answer + `<br>
+                korrekt svar: ` + results[i].answers[j].correct_answer + `</br>
+                points: ` + results[i].answers[j].point + `</td>`; 
+            }
         }
 
         return html; 

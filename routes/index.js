@@ -241,6 +241,61 @@ router.post('/index_addinfo', function (req, res) {
 
 });
 
+
+
+
+router.get(encodeURI('/kursistinfo_lærer'), function (req, res) {
+    res.render('kursistinfo_lærer', {
+        title: 'Kursistinfo'
+    });
+});
+
+router.post(encodeURI('/kursistinfo'), function (req, res) {
+
+    var mod; 
+
+    var form = new formidable.IncomingForm();
+
+    form.parse(req, function (err, fields, files) {
+        var temp = Object.keys(fields); 
+        var inputElements = []; 
+        var contentAnswer = []; 
+        for(var i=0; i<temp.length; i++) {
+            inputElements.push(fields[temp[i]]); 
+            contentAnswer.push({index: 'answer' + i}); 
+        }
+
+        mod = {
+            moduleType: 'Kursistinfo',
+            content: inputElements,
+            contentAnswer
+        }
+
+    });
+
+    teacherClass.findOneAndUpdate({
+        initials: initials
+    }, 'tests', function (err, teacher) {
+        if (err) {
+            res.send(err);
+        } else {
+            console.log("TEACHER: " + initials);
+            teacher.tests[teacher.tests.length - 1].modules.push(mod);
+
+            teacher.save(function (err) {
+                if (err) console.log(err);
+                res.redirect(teacherModules[0]);
+                teacherModules.shift();
+            });
+        }
+    });
+  
+
+});
+
+
+
+
 /* ALLE FUNKTIONER DER ER TILKNYTTET WORDDICTATE */
 
 //henter hjemmesiden 'worddictate_teacher' 
@@ -758,6 +813,92 @@ router.post(encodeURI('/startpage_addinfo'), function (req, res) {
 
 //initials = 'tintin';
 var g_moduleCount = 0;
+
+
+router.get(encodeURI('/kursistinfo_kursist'), function (req, res) {
+
+    teacherClass.find({
+        "tests._id": teacherID
+    }, function (err, teacher) {
+        if (err) {
+            console.log(err);
+        } else {
+
+            var id_serv = JSON.stringify(teacherID);
+
+            for (var i = 0; i < teacher[0].tests.length; i++) {
+                var id_db = JSON.stringify(teacher[0].tests[i]._id);
+
+                if (id_db == id_serv) {
+                    var totalLen = teacher[0].tests[i].totalModules;
+                    var currentLen = kursistModules.length;
+                    var index = totalLen - currentLen;
+                    var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
+                    var moduleType = teacher[0].tests[i].modules[index].moduleType;
+
+                    res.render('template', {
+                        content: content,
+                        'title': moduleType,
+                        description: "Dette er en beskrivelse af testen",
+                        descriptionAudio: null
+                    });
+
+                  
+                } else {
+                    console.log("NO MATCH");
+                }
+            }
+        }
+    });
+});
+
+router.post(encodeURI('/kursistinfo_answer'), function (req, res) {
+
+    //det første der sker, er at 'writeTo' mappen tømmes 
+    empty('./public/writeTo', false, function (err, removed, failed) {
+        if (err) {
+            console.error(err);
+        }
+    });
+
+    // arrays that should hold data fields from the client form
+    var inputAnswers = [];
+
+    var form = new formidable.IncomingForm();
+
+    // parse the request and handle fields data
+    form.parse(req, function (err, fields, files) {
+
+        inputAnswers = [];
+        var temp = Object.keys(fields);
+        for (i = 0; i < temp.length; i++) {
+            inputAnswers.push(fields[temp[i]]);
+        }
+        var mod = {
+            moduleType: 'Kursistinfo',
+            answers: inputAnswers
+        }
+
+        studentClass.findOneAndUpdate({
+            studentID: studentID
+        }, 'modules', function (err, student) {
+            if (err) {
+                res.send(err);
+            } else {
+                console.log("STUDENT: " + student);
+                student.modules.push(mod);
+
+                student.save(function (err) {
+                    if (err) console.log(err);
+                    res.redirect(kursistModules[0]);
+                    kursistModules.shift();
+                });
+            }
+        });
+    });
+
+});
+
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET WORDDICTATE */
 
@@ -1381,6 +1522,7 @@ router.post('/send_mail', function (req, res) {
                         if (id_serv == id_db) {
                             var final_score = evaluateScore(i, student, teacher);
                             var mail = req.body.mail;
+                            console.log("MAIL MAIL MAIL:::: ", final_score); 
                             var msg = mailSender.htmlBuilder(final_score);
                             mailSender.sendMail(mail, msg);
                             res.redirect('tak'); 
@@ -1395,20 +1537,37 @@ router.post('/send_mail', function (req, res) {
 
 function evaluateScore(testIndex, student, teacher) {
     var final_score = [];
+    
+    var teacher_id = teacher.initials;
+    final_score.push(teacher_id);
+
+    var student_id = student.studentID;
+    final_score.push(student_id);
+    
+    
     for (var j = 0; j < student.modules.length; j++) {
+        var module_score = {}; 
+        var module_type = student.modules[j].moduleType;
+        module_score.type = module_type;  
+        var module_answers = []; 
+
         for (var k = 0; k < student.modules[j].answers.length; k++) {
             var point = 0;
             var student_answer = student.modules[j].answers[k];
             var correct_answer = teacher.tests[testIndex].modules[j].contentAnswer[k].answer;
-            if (student_answer == correct_answer) {
+            if(correct_answer == null) {
+                correct_answer = "Intet korrekt svar"; 
+            } else if (student_answer == correct_answer) {
                 point = 1;
             }
-            final_score.push({
+            module_answers.push({
                 student_answer: student_answer,
                 correct_answer: correct_answer,
                 point: point
             });
         }
+        module_score.answers = module_answers; 
+        final_score.push(module_score); 
     }
     return final_score;
 }

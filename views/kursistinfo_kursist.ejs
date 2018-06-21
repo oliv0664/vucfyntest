@@ -1,0 +1,28 @@
+<style>
+    .blockDiv {
+        width: 100%;
+        margin-bottom: 20px; 
+    }
+
+    text_input {
+        margin-left: 5vw; 
+        width: 40vw; 
+    }
+</style>
+
+<script>
+    var element = document.getElementById('descAud'); 
+    element.parentNode.removeChild(element); 
+</script>
+
+<form id="form" method="post" action="/kursistinfo_answer" enctype="multipart/form-data">
+
+    <% for(var i=0; i<content.length; i++) { %>
+        <div class="blockDiv">
+            <span><%= content[i] %></span>
+            <input class="text_input" type="text" name="<%= 'answer_' + i %>" placeholder="Skriv svar her">
+        </div>
+    <% } %>
+
+    <input type="submit">
+</form>
