@@ -257,17 +257,54 @@ router.post(encodeURI('/kursistinfo'), function (req, res) {
     var form = new formidable.IncomingForm();
 
     form.parse(req, function (err, fields, files) {
+        console.log("INFO INFO INFO ", fields);
         var temp = Object.keys(fields); 
-        var inputElements = []; 
+        console.log("INFO INFO INFO 222222 ", temp); 
+
+        var inputContent = []; 
         var contentAnswer = []; 
+
         for(var i=0; i<temp.length; i++) {
-            inputElements.push(fields[temp[i]]); 
+            var type = temp[i].split(' '); 
+            if(type[0] == 'text') {
+                var object = {
+                    type: 'text',
+                    input: fields[temp[i]]
+                }; 
+                inputContent.push(object); 
+            } else {
+                var object = {
+                    type: type[0],
+                    input: fields[temp[i]]
+                }
+                var last = temp[i].split(' '); 
+                var choices = []; 
+                console.log("1 ", i);
+                i++; 
+                console.log("2 ", i);
+                while(last[1] == type[1]) {
+                    choices.push(fields[temp[i]]);
+                    i++;  
+                    if(i == temp.length) {
+                        break; 
+                    }
+                    last = temp[i].split(' '); 
+                    console.log("3 ", i);  
+                } 
+                i--; 
+                object.choices = choices;
+                inputContent.push(object);  
+            }
+
+            console.log("YAYAYAYAAYAYAYAYA ", inputContent);
+            
+            //inputElements.push(fields[temp[i]]); 
             contentAnswer.push({index: 'answer' + i}); 
         }
-
+        
         mod = {
             moduleType: 'Kursistinfo',
-            content: inputElements,
+            content: inputContent,
             contentAnswer
         }
 

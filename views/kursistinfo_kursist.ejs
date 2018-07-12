@@ -18,10 +18,37 @@
 <form id="form" method="post" action="/kursistinfo_answer" enctype="multipart/form-data">
 
     <% for(var i=0; i<content.length; i++) { %>
-        <div class="blockDiv">
-            <span><%= content[i] %></span>
-            <input class="text_input" type="text" name="<%= 'answer_' + i %>" placeholder="Skriv svar her">
-        </div>
+        <% if(content[i].type == 'text') { %>
+            <div class="blockDiv">
+                <span><%= content[i].input %></span>
+                <input class="text_input" type="text" name="<%= 'answer_' + i %>" placeholder="Skriv svar her">
+            </div>
+        <% } else if(content[i].type == 'checkbox') { %>
+            <div class="blockDiv">
+                <span><%= content[i].input %></span><br>
+                <% for(var j=0; j<content[i].choices.length; j++) { %>
+                    <input type="checkbox" name="<%= 'answer_' + i %>" value="<%= content[i].choices[j] %>">
+                    <span><%= content[i].choices[j] %></span>
+                <% } %>
+            </div>
+        <% } else if(content[i].type == 'radio') { %>
+            <div class="blockDiv">
+                <span><%= content[i].input %></span><br>
+                <% for(var j=0; j<content[i].choices.length; j++) { %>
+                    <input type="radio" name="<%= 'answer_' + i %>" value="<%= content[i].choices[j] %>">
+                    <span><%= content[i].choices[j] %></span>
+                <% } %>
+            </div>
+        <% } else if(content[i].type == 'dropdown') { %>
+            <div class="blockDiv">
+                <span><%= content[i].input %></span><br>
+                <select>
+                    <% for(var j=0; j<content[i].choices.length; j++) { %>
+                        <option value="<%= content[i].choices[j] %>"><%= content[i].choices[j] %></option>        
+                    <% } %>
+                </select>
+            </div>
+        <% } %>
     <% } %>
 
     <input type="submit">
