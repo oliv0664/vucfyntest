@@ -1,9 +1,13 @@
 {
     "name": "nodetest1",
+    "engines": {
+        "node": ">=50.9"
+    },
     "version": "6.11.5",
     "private": true,
     "scripts": {
-        "start": "nodemon ./bin/www"
+        "start": "node ./bin/www",
+        "deploy": "gcloud app deploy"
     },
     "dependencies": {
         "body-parser": "^1.18.2",
@@ -15,7 +19,7 @@
         "formidable": "^1.1.1",
         "gridfs-stream": "^1.1.1",
         "jade": "~1.11.0",
-        "mongodb": "^2.2.25",
+        "mongodb": "^2.2.35",
         "mongoose": "^4.12.3",
         "monk": "^6.0.5",
         "morgan": "^1.9.0",
