@@ -11,8 +11,8 @@ var mongo = require('mongodb');
 // var url = 'localhost:27017/vucfyntest'
 var mongoose = require('mongoose');
 var Grid = require('gridfs-stream');
-// var mongoDB = 'mongodb://localhost/vucfyntest';
-var mongoDB = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb';
+var mongoDB = 'mongodb://localhost/vucfyntest';
+// var mongoDB = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb';
 
 
 var fs = require('fs');
