@@ -1,8 +1,5 @@
 {
     "name": "nodetest1",
-    "engines": {
-        "node": ">=50.9"
-    },
     "version": "6.11.5",
     "private": true,
     "scripts": {
