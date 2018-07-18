@@ -11,8 +11,8 @@ var mongo = require('mongodb');
 // var url = 'localhost:27017/vucfyntest'
 var mongoose = require('mongoose');
 var Grid = require('gridfs-stream');
-var mongoDB = 'mongodb://localhost/vucfyntest';
-// var mongoDB = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb';
+// var mongoDB = 'mongodb://localhost/vucfyntest';
+var mongoDB = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb';
 
 
 var fs = require('fs');
@@ -35,7 +35,7 @@ mongoose.connect(mongoDB, options);
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.on('connected', function(){console.log('connected correctly to db.');  });
+db.on('connected', function() { console.log('connected correctly to db.'); });
 
 Grid.mongo = mongoose.mongo;
 
@@ -59,39 +59,39 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function (req, res, next) {
-    res.setHeader('Content-Type', 'text/html; charset=utf-8'); 
+app.use(function(req, res, next) {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
     req.db = db;
     next();
 });
 
 
 
-checkIdInUrl = function (req, res, next) {
+checkIdInUrl = function(req, res, next) {
     var isWelcome = req.url.slice(0, 8);
     if (isWelcome === '/welcome' && req.url != '/welcome_addinfo') {
         // begin interception
-//        console.log('Checking url for teacher ID...')
+        //        console.log('Checking url for teacher ID...')
         req.db = db;
         console.log('Checking db for entries');
         var collection = teacherClass.find();
-        
+
         var idUrl = req.url.slice(8);
 
         // get the id reference to the collection docs
         collection.find({}).then((docs) => {
             var match = false;
 
-            for (i = 0; i<docs.length; i++) {
+            for (i = 0; i < docs.length; i++) {
 
-                for(j=0; j<docs[i].tests.length; j++){
+                for (j = 0; j < docs[i].tests.length; j++) {
 
                     // is technically != the teachers id anymore!.
-                    console.log("ID " +docs[i].tests[j]._id);
+                    console.log("ID " + docs[i].tests[j]._id);
                     idTeacher = docs[i].tests[j]._id;
-                    
+
                     if (idUrl == idTeacher) {
-                        app.set('idTeacher',idTeacher);
+                        app.set('idTeacher', idTeacher);
                         match = true;
                         console.log('there is a match, now redirecting to the correct page');
                         res.render('welcome', {
@@ -123,14 +123,14 @@ app.use('/', index);
 
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function(err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};

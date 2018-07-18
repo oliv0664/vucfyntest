@@ -6,7 +6,7 @@
     "version": "6.11.5",
     "private": true,
     "scripts": {
-        "start": "nodemon ./bin/www",
+        "start": "node ./bin/www",
         "deploy": "gcloud app deploy"
     },
     "dependencies": {
