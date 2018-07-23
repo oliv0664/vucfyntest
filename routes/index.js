@@ -127,7 +127,6 @@ function setTestIndex(index) {
 
 router.post('/welcome_addinfo', function(req, res) {
 
-<<<<<<< HEAD
 	//var db = req.db;
 	console.log('before anything: ', studentModules);
 	studentID = req.body.id;
