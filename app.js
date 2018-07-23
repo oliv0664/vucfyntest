@@ -141,9 +141,4 @@ app.use(function(err, req, res, next) {
     res.render('error');
 });
 
-var server = app.listen(4080, function() {
-    console.log('Ready on port %d', server.address().port);
-});
-
-
 module.exports = app;
