@@ -11,6 +11,8 @@ var moduleSchema = new Schema({
     audio: String,
     content: { type: Array, default: [] },
     contentAnswers: { type: Array, default: [] }
+}, {
+    usePushEach: true
 });
 //
 //var moduleClass = mongoose.model('modules', moduleSchema); 
@@ -24,7 +26,9 @@ var teacherSchema = new Schema({
         date: Date,
         totalModules: Number,
         modules: { type: Array, default: [] }
-	}]
+    }]
+}, {
+    usePushEach: true
 });
 
 
