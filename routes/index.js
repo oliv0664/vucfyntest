@@ -7,7 +7,6 @@ var fs = require('fs');
 var nodemailer = require('nodemailer');
 var empty = require('empty-folder');
 
-var p; 
 var mailSender = require('./../public/js/email_handler');
 var teacherClass = require('./../public/models/teacherSchema.js');
 var teacher = new teacherClass();
