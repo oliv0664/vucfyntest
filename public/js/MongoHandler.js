@@ -5,7 +5,7 @@ var mongoDB = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb';
 
 var Grid = require('gridfs-stream');
 var fs = require('fs');
-
+var p; 
 
 var options = {
     useMongoClient: true
