@@ -1,5 +1,6 @@
 $(function() {
 
+
     //add text input field
     $('#addButton1').click(function() {
 
@@ -38,7 +39,7 @@ $(function() {
 
     //add checkbox input
     $('#addButton2').click(function() {
-        
+
         //get number of elements 
         var len = $('#section div').length;
         //create empty div to hold input fields
@@ -83,6 +84,8 @@ $(function() {
             .append('<br>')
             .append(checkbox_element); 
         $('#section').append(element); 
+
+        addCheckbox('checkbox_button' + len);
     }); 
 
     function addCheckbox(id) {
@@ -107,7 +110,9 @@ $(function() {
 
     function remCheckbox(id) {
         var id = id.substring(22);
-        $('#checkbox_element'+id+' span').last().remove(); 
+        if($('#checkbox_element'+id+' span').length > 1) {
+            $('#checkbox_element'+id+' span').last().remove(); 
+        }
     }
 
 
@@ -130,7 +135,7 @@ $(function() {
             type: 'text',
             name: 'radio '+len+' text',
             placeholder: 'Skriv en titel til radioknapperne'
-        }).width('40vw');
+        }).width('40vw'); 
 
         var add_radio = $('<button/>').attr({
             type: 'button',
@@ -158,7 +163,9 @@ $(function() {
             .append(rem_radio)
             .append('<br>')
             .append(radio_element); 
-        $('#section').append(element); 
+        $('#section').append(element);
+
+        addRadio('radio_button' + len);
     }); 
 
     function addRadio(id) {
@@ -183,7 +190,9 @@ $(function() {
 
     function remRadio(id) {
         var id = id.substring(19);
-        $('#radio_element'+id+' span').last().remove(); 
+        if($('#radio_element'+id+' span').length > 1) {
+            $('#radio_element'+id+' span').last().remove(); 
+        }
     }
 
 
@@ -234,7 +243,9 @@ $(function() {
             .append(rem_dropdown)
             .append('<br>')
             .append(dropdown_element); 
-        $('#section').append(element); 
+        $('#section').append(element);
+
+        addDropdown('dropdown_button' + len); 
     }); 
 
     function addDropdown(id) {
@@ -259,7 +270,9 @@ $(function() {
 
     function remDropdown(id) {
         var id = id.substring(22);
-        $('#dropdown_element'+id+' span').last().remove(); 
+        if($('#dropdown_element'+id+' span').length > 1) {
+            $('#dropdown_element'+id+' span').last().remove();
+        } 
     }
 
 
