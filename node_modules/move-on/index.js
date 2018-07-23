@@ -18,7 +18,7 @@ module.exports.all = function(){
 
 function _moveOn(){
   return (function(list,userContext,finalThen,finalCatch){
-    args(arguments,[Array,[Object,null],Function,Function],(o)=>{
+    args(arguments,[Array,'object|instance|null',Function,Function],(o)=>{
       throw new TypeError(`${warn(moduleName)}: ${o.message}`);
     });
     for(let fun of list){
