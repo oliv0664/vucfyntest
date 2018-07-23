@@ -1710,7 +1710,7 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
                     var fileUpload = files[i][0].name;
                     console.log("4 " + fileUpload);
 
-                    var mongo = require('../public/js/MongoHandler');
+                    var mongo = require('../public/js/mongoHandler');
                     //when MongoHandler is done with upload to MongoDB return result
                     //check if there is audiofile
                     if (fileUpload != '') {
