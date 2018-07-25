@@ -7,12 +7,16 @@ var bodyParser = require('body-parser');
 var ready = false;
 var teacherClass = require('./public/models/teacherSchema.js');
 var mongo = require('mongodb');
+
+var compression = require('compression'); //ADDED FOR PRODUCTION VERSION
+var helmet = require('helmet'); //ADDED FOR PRODUCTION VERSION
+
 //var monk = require('monk');
 // var url = 'localhost:27017/vucfyntest'
 var mongoose = require('mongoose');
 var Grid = require('gridfs-stream');
 // var mongoDB = 'mongodb://localhost/vucfyntest';
-var mongoDB = 'mongodb://vucfyn:test2018@ds237475.mlab.com:37475/vucfyntestdb';
+var mongoDB = process.env.MONGODB_URI || 'mongodb://vucfyn:test2018@ds237475.mlab.com:37475/vucfyntestdb';
 
 
 var fs = require('fs');
@@ -42,6 +46,11 @@ Grid.mongo = mongoose.mongo;
 var index = require('./routes/index');
 
 var app = express();
+
+//ADDED FOR PRODUCTION VERSION
+app.use(compression()); //compress the HTTP response 
+app.use(helmet()); //protect app by setting appropriate HTTP headers
+
 var idUrl;
 var idTeacher;
 

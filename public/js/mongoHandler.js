@@ -1,7 +1,7 @@
 var path = require('path');
 var mongoose = require('mongoose');
 // var mongoDB = 'mongodb://localhost/vucfyntest';
-var mongoDB = 'mongodb://vucfyn:test2018@ds237475.mlab.com:37475/vucfyntestdb';
+var mongoDB = process.env.MONGODB_URI || 'mongodb://vucfyn:test2018@ds237475.mlab.com:37475/vucfyntestdb';
 
 var Grid = require('gridfs-stream');
 var fs = require('fs');
