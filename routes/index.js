@@ -1688,7 +1688,9 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
         console.log("1");
         //check if there is audio file
         if (file.name != '') {
+            console.log("1.1 ", file.name);
             file.path = 'public/readFrom/' + file.name;
+            console.log("1.2 ", file.path);
         }
     });
 
