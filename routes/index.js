@@ -1693,6 +1693,7 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
     });
 
     incForm.on('file', function(name, file) {
+        console.log("2");
         files.push([file]);
     });
 
