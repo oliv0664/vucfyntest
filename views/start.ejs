@@ -1,0 +1,34 @@
+<html>
+
+<head>
+	<script src="/jquery/jquery-3.2.1.min.js"></script>
+	<script src="/js/test.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+</head>
+
+<body>
+
+	<div id="header">
+		<img class="header" id="head_1" src="images/VUC_logo.png" height="100">
+		<h3 class="header" id="head_2">NIVEAUAFKLARINGSTEST</h3>
+		<h3 class="header" id="head_3">VUC FYN ODENSE</h3>
+	</div>
+
+	<h4>Velkommen til VUC Fyns niveauafklaringstest. Her kan du enten lave en ny test, eller "snart" gense tidligere tests</h4>
+
+	<button onclick="newTest()">Lav ny test</button>
+
+	<h5> Eller  </h5>
+	
+	<form id="form" method="post" action="/oversigt_info">
+		<label for="init"> Se tidligere tests. Indtast dine intialer: </label>
+		<input id="init" name="init_field" type="text" placeholder="indtast initialer her" >
+		<button id="searc_init" type="submit"> Find! </button>
+	</form>
+
+
+
+</body>
+
+</html>
