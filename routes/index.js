@@ -25,59 +25,58 @@ var tjek;
 
 /* GET home page. */
 
-router.get('/', function (req, res, next) {
-	res.render('start', {
-		title: 'Express'
-	});
-	initials = "";
+router.get('/', function(req, res, next) {
+    res.render('start', {
+        title: 'Express'
+    });
+    initials = "";
 });
 
-router.get('/index', function (req, res, next) {
-	res.render('index', {
-		title: 'Express'
-	});
-	teacherModules = [];
+router.get('/index', function(req, res, next) {
+    res.render('index', {
+        title: 'Express'
+    });
+    teacherModules = [];
 });
 
-router.get('/oversigt', function (req, res, next) {
-	teacherClass.findOne({
-		"initials": tjek
-	}, function (err, teacher) {
-		if (err) {
-			console.log(err);
-		} else {
-			if(teacher != null){
-				
-			console.log("KIG HER 2 " + teacher);
-			console.log("KIG HER 2 " + teacher.totalTests);
-			console.log("KIG HER 2 " + teacher.tests);
-			res.render('oversigt', {
-				title: 'Express',
-				content: teacher
-			});
-			}
-			else {
-				res.send("Initialerne findes ikke!");
-			}
-		}
-	});
+router.get('/oversigt', function(req, res, next) {
+    teacherClass.findOne({
+        "initials": tjek
+    }, function(err, teacher) {
+        if (err) {
+            console.log(err);
+        } else {
+            if (teacher != null) {
+
+                console.log("KIG HER 2 " + teacher);
+                console.log("KIG HER 2 " + teacher.totalTests);
+                console.log("KIG HER 2 " + teacher.tests);
+                res.render('oversigt', {
+                    title: 'Express',
+                    content: teacher
+                });
+            } else {
+                res.send("Initialerne findes ikke!");
+            }
+        }
+    });
 });
-router.post('/oversigt_info', function (req, res, next) {
-	tjek = req.body.init_field;
-	console.log("KIG HER 1");
-	console.log(tjek);
-	res.redirect('oversigt');
+router.post('/oversigt_info', function(req, res, next) {
+    tjek = req.body.init_field;
+    console.log("KIG HER 1");
+    console.log(tjek);
+    res.redirect('oversigt');
 });
 
-router.get('/filepicker', function (req, res, next) {
-	res.render('filepicker', {
-		title: 'Filepicker'
-	});
+router.get('/filepicker', function(req, res, next) {
+    res.render('filepicker', {
+        title: 'Filepicker'
+    });
 });
-router.get('/error', function (req, res, next) {
-	res.render('error', {
-		title: 'page not found'
-	});
+router.get('/error', function(req, res, next) {
+    res.render('error', {
+        title: 'page not found'
+    });
 });
 
 
@@ -99,162 +98,162 @@ router.get('/error', function (req, res, next) {
 //    });
 //});
 function setupStudentModules(modulesArray) {
-	var tempArray = [];
-	for (var i = 0; i < modulesArray.length; i++) {
-		console.log("MODULETYPE " + modulesArray[i].moduleType);
-		tempArray.push(modulesArray[i].moduleType + '_kursist');
-	}
-	tempArray.push('finalpage');
-	return tempArray;
+    var tempArray = [];
+    for (var i = 0; i < modulesArray.length; i++) {
+        console.log("MODULETYPE " + modulesArray[i].moduleType);
+        tempArray.push(modulesArray[i].moduleType + '_kursist');
+    }
+    tempArray.push('finalpage');
+    return tempArray;
 }
 
 function getId() {
-	var id = '5a785e4b3867e72b94b2baba';
-	console.log('getID is running');
-	return id;
+    var id = '5a785e4b3867e72b94b2baba';
+    console.log('getID is running');
+    return id;
 }
 
 var testIndex;
 
 function getTestIndex() {
-	return testIndex;
+    return testIndex;
 }
 
 function setTestIndex(index) {
-	testIndex = index;
+    testIndex = index;
 }
 
 
 router.post('/welcome_addinfo', function(req, res) {
 
 
-	//var db = req.db;
-	console.log('before anything: ', studentModules);
-	studentID = req.body.id;
-	teacherID = req.app.get('idTeacher');
-	console.log(studentID + " YNLPYPHTASCSACASC");
+    //var db = req.db;
+    console.log('before anything: ', studentModules);
+    studentID = req.body.id;
+    teacherID = req.app.get('idTeacher');
+    console.log(studentID + " YNLPYPHTASCSACASC");
 
-	//var collection = db.get('students');
-	teacherClass.find().where({
-		'tests._id': teacherID
-	}).exec(function (err, teacher) {
-		if (err) {
-			res.send(err);
-		} else {
-			// find relevnt teacher data to student 
-			console.log(teacher[0].tests[0].modules[0].moduleType);
-			// make student object with data
-			var id_serv = JSON.stringify(teacherID);
+    //var collection = db.get('students');
+    teacherClass.find().where({
+        'tests._id': teacherID
+    }).exec(function(err, teacher) {
+        if (err) {
+            res.send(err);
+        } else {
+            // find relevnt teacher data to student 
+            console.log(teacher[0].tests[0].modules[0].moduleType);
+            // make student object with data
+            var id_serv = JSON.stringify(teacherID);
 
-			for (var i = 0; i < teacher[0].tests.length; i++) {
+            for (var i = 0; i < teacher[0].tests.length; i++) {
 
-				var id_db = JSON.stringify(teacher[0].tests[i]._id);
-				if (id_db == id_serv) {
+                var id_db = JSON.stringify(teacher[0].tests[i]._id);
+                if (id_db == id_serv) {
 
-					kursistModules = setupStudentModules(teacher[0].tests[i].modules);
+                    kursistModules = setupStudentModules(teacher[0].tests[i].modules);
 
-					studentClass.findOneAndUpdate({
-						studentID: studentID
-					}, 'modules', function (err, student) {
-						if (err) {
-							res.send(err);
-						} else {
+                    studentClass.findOneAndUpdate({
+                        studentID: studentID
+                    }, 'modules', function(err, student) {
+                        if (err) {
+                            res.send(err);
+                        } else {
 
-							if (!student) {
-								student = new studentClass({
-									studentID: studentID,
-									teacherID: teacherID,
-									studentinfo: {},
-									modules: []
-								});
-								console.log("STUDENT: ", kursistModules);
+                            if (!student) {
+                                student = new studentClass({
+                                    studentID: studentID,
+                                    teacherID: teacherID,
+                                    studentinfo: {},
+                                    modules: []
+                                });
+                                console.log("STUDENT: ", kursistModules);
 
-								student.save(function (err) {
-									if (err) {
-										console.log(err);
-									}
+                                student.save(function(err) {
+                                    if (err) {
+                                        console.log(err);
+                                    }
 
-									res.redirect(kursistModules[0]);
-									kursistModules.shift();
-								});
-							} else {
-								res.send('ID ER TAGET!');
-							}
-						}
-					});
+                                    res.redirect(kursistModules[0]);
+                                    kursistModules.shift();
+                                });
+                            } else {
+                                res.send('ID ER TAGET!');
+                            }
+                        }
+                    });
 
-				}
+                }
 
-			}
+            }
 
-		}
+        }
 
-	});
+    });
 });
 
-router.post('/index_addinfo', function (req, res) {
+router.post('/index_addinfo', function(req, res) {
 
-	var form = new formidable.IncomingForm();
+    var form = new formidable.IncomingForm();
 
 
-	form.parse(req, function (err, fields, files) {
-		teacherModules = Object.keys(fields);
-		initials = fields[teacherModules.shift()];
-		teacherModules.push('nextpage');
+    form.parse(req, function(err, fields, files) {
+        teacherModules = Object.keys(fields);
+        initials = fields[teacherModules.shift()];
+        teacherModules.push('nextpage');
 
-		console.log("TEACHERMODULES ", teacherModules);
+        console.log("TEACHERMODULES ", teacherModules);
 
-		teacherClass.findOne({
-			initials: initials
-		}, function (err, teacher) {
-			if (err) {
-				console.log(err);
-			} else {
+        teacherClass.findOne({
+            initials: initials
+        }, function(err, teacher) {
+            if (err) {
+                console.log(err);
+            } else {
 
-				//hvis der ikke eksisterer en teacher med de initialer
-				if (!teacher) {
-					console.log("NEW TEACHER");
-					//opret en ny
-					teacher = new teacherClass({
-						initials: initials,
-						totalTests: 1,
-						tests: []
-					});
-					//ellers tilføj til eksisterende
-				} else {
-					console.log("ADD TO EXISTING TEACHER");
-					teacher.totalTests++;
-				}
+                //hvis der ikke eksisterer en teacher med de initialer
+                if (!teacher) {
+                    console.log("NEW TEACHER");
+                    //opret en ny
+                    teacher = new teacherClass({
+                        initials: initials,
+                        totalTests: 1,
+                        tests: []
+                    });
+                    //ellers tilføj til eksisterende
+                } else {
+                    console.log("ADD TO EXISTING TEACHER");
+                    teacher.totalTests++;
+                }
 
-				//push en ny test i tests arrayet
-				teacher.tests.push({
-					date: new Date(),
-					totalModules: teacherModules.length - 1,
-					modules: []
-				});
+                //push en ny test i tests arrayet
+                teacher.tests.push({
+                    date: new Date(),
+                    totalModules: teacherModules.length - 1,
+                    modules: []
+                });
 
-				//gem til db og redirect view 
-				teacher.save(function (err, test) {
-					if (err) {
-						console.log(err);
-					} else {
-						setTestIndex(test.tests[test.tests.length - 1].id)
-						console.log("SAVED: " + test.tests[test.tests.length - 1].id);
-						res.redirect(teacherModules[0]);
-						teacherModules.shift();
-					}
-				});
-			}
-		});
-	});    
+                //gem til db og redirect view 
+                teacher.save(function(err, test) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        setTestIndex(test.tests[test.tests.length - 1].id)
+                        console.log("SAVED: " + test.tests[test.tests.length - 1].id);
+                        res.redirect(teacherModules[0]);
+                        teacherModules.shift();
+                    }
+                });
+            }
+        });
+    });
 });
 
 
 
-router.get(encodeURI('/kursistinfo_lærer'), function (req, res) {
-	res.render('kursistinfo_lærer', {
-		title: 'Kursistinfo'
-	});
+router.get(encodeURI('/kursistinfo_lærer'), function(req, res) {
+    res.render('kursistinfo_lærer', {
+        title: 'Kursistinfo'
+    });
 });
 
 router.post(encodeURI('/kursistinfo'), function(req, res) {
@@ -310,7 +309,7 @@ router.post(encodeURI('/kursistinfo'), function(req, res) {
         }
 
         mod = {
-            moduleType: 'Kursistinfo',
+            moduleType: 'kursistinfo',
             content: inputContent,
             contentAnswer
         }
@@ -342,15 +341,15 @@ router.post(encodeURI('/kursistinfo'), function(req, res) {
 
 //henter hjemmesiden 'worddictate_teacher' 
 
-router.get(encodeURI('/orddiktat_lærer'), function (req, res) {
-	res.render('orddiktat_lærer', {
-		title: 'Orddiktat'
-	});
+router.get(encodeURI('/orddiktat_lærer'), function(req, res) {
+    res.render('orddiktat_lærer', {
+        title: 'Orddiktat'
+    });
 });
 
 router.post(encodeURI('/orddiktat'), function(req, res) {
 
-	
+
     //this code uploads all files from view to readFrom folder
     //then it uploads all files to MongoDB
     //mangler en bedre navngivning af filer i DB, så de kan findes igen 
@@ -755,104 +754,104 @@ router.get(encodeURI('/startpage'), function(req, res) {
 router.post(encodeURI('/startpage_addinfo'), function(req, res) {
 
 
-	// var db = req.db;
-	//    console.log(req.body);
-	//    console.log("DOES THIS EXISt " + studentID);
-	//    var firstname = req.body.firstname;
-	//    var lastname = req.body.lastname;
-	//    var age = req.body.age;
-	//    var mothertong_dk = req.body.mothertong_dk;
-	//    var tong_input = req.body.tong_input;
-	//    var years_in_dk = req.body.years_in_dk;
-	//    var edu_in_dk = req.body.edu_in_dk;
-	//    var pass_test = req.body.pass_test;
-	//    var eg_test = req.body.eg_test;
-	//
-	//
-	//
-	//    var speciel_edu = req.body.speciel_edu;
-	//    var speciel_edu_adult = req.body.speciel_edu_adult;
-	//    var eg_edu = req.body.eg_edu;
-	//
-	//    var years_in_edu = req.body.years_in_edu;
-	//    var years_in_edu_home = req.body.years_in_edu_home;
-	//    var exam_finish = req.body.exam_finish;
-	//    var eg_exam = req.body.eg_exam;
-	//    var eg_exam_country = req.body.eg_exam_country;
-	//    var edu_finish = req.body.edu_finish;
-	//    var eg_edu_finish = req.body.eg_edu_finish;
-	//    var eg_edu_finish_country = req.body.eg_edu_finish_country;
-	//    var read_write_con = req.body.read_write_con;
-	//    var eg_con = req.body.eg_con;
-	//
-	//    var in_job = req.body.in_job;
-	//    var eg_job = req.body.eg_job;
-	//    var read_write_in_job = req.body.read_write_in_job;
-	//    var eg_read_write_in_job = req.body.eg_read_write_in_job;
-	//    var read_in_job = req.body.read_in_job;
-	//    var write_in_job = req.body.write_in_job;
-	//    var lang_in_job = req.body.lang_in_job;
-	//
-	//    var why_fvu = req.body.why_fvu;
-	//
-	//    var improvement = req.body.improvement;
-	//    var eg_improvement = req.body.eg_improvement;
-	//
-	////    var collection = db.get('students');
-	//
-	//    
-	//   studentClass.find()({
-	//        "studentID": studentID
-	//    }, {
-	//        $set: {
-	//            //"id": initials,
-	//            "Fornavn": firstname,
-	//            "Efternavn": lastname,
-	//            "Alder": age,
-	//            "Har du andet end dansk som modersmål": mothertong_dk,
-	//            "Hvad er dit modersmål": tong_input,
-	//            "Hvor længe har du boet i Danmark": years_in_dk,
-	//            "Har du fået undervisning i dansk": edu_in_dk,
-	//            "Har du bestået nogen prøver": pass_test,
-	//            "Evt hvilke(n)": eg_test,
-	//            "Har du modtaget specialundervisningen i skolen": speciel_edu,
-	//            "Har du modtaget specialundervisning som voksen": speciel_edu_adult,
-	//            "Evt i hvilke(t) fag og hvor længe": eg_edu,
-	//            "Hvor længe har du gået i skole": years_in_edu,
-	//            "Hvor længe har du gået i skole i dit hjemland": years_in_edu_home,
-	//            "Har du afsluttende eksamen fra din skole": exam_finish,
-	//            "Evt i hvilke(n)": eg_exam,
-	//            "Fra hvilket land": eg_exam_country,
-	//            "Har du en uddannelse": edu_finish,
-	//            "Evt hvilken": eg_edu_finish,
-	//            "Evt fra hvilket land": eg_edu_finish_country,
-	//            "Har dine læse- og stavevanskeligheder haft betydning for skole og uddannelse": read_write_con,
-	//            "Evt på hvilken måde": eg_con,
-	//            "Er du i job": in_job,
-	//            "Evt hvilket": eg_job,
-	//            "Indgår der læsning eller skrivning i dit job": read_write_in_job,
-	//            "Evt hvordan": eg_read_write_in_job,
-	//            "Hvordan klarer du at læse på jobbet": read_in_job,
-	//            "Hvordan klarer du at skrive på jobbet": write_in_job,
-	//            "Hvilket sprog taler du mest på dit job": lang_in_job,
-	//            "Hvorfor vil du gerne gå til FVU-læsning": why_fvu,
-	//            "Hvad vil du gerne blive bedre til": improvement,
-	//            "Andet": eg_improvement,
-	//            //"time": "12:00:00",
-	//            "tests": []
-	//        }
-	//    }, function (err, doc) {
-	//        if (err) {
-	//
-	//            res.send("There was a problem adding the information to the database.");
-	//
-	//        } else {
+    // var db = req.db;
+    //    console.log(req.body);
+    //    console.log("DOES THIS EXISt " + studentID);
+    //    var firstname = req.body.firstname;
+    //    var lastname = req.body.lastname;
+    //    var age = req.body.age;
+    //    var mothertong_dk = req.body.mothertong_dk;
+    //    var tong_input = req.body.tong_input;
+    //    var years_in_dk = req.body.years_in_dk;
+    //    var edu_in_dk = req.body.edu_in_dk;
+    //    var pass_test = req.body.pass_test;
+    //    var eg_test = req.body.eg_test;
+    //
+    //
+    //
+    //    var speciel_edu = req.body.speciel_edu;
+    //    var speciel_edu_adult = req.body.speciel_edu_adult;
+    //    var eg_edu = req.body.eg_edu;
+    //
+    //    var years_in_edu = req.body.years_in_edu;
+    //    var years_in_edu_home = req.body.years_in_edu_home;
+    //    var exam_finish = req.body.exam_finish;
+    //    var eg_exam = req.body.eg_exam;
+    //    var eg_exam_country = req.body.eg_exam_country;
+    //    var edu_finish = req.body.edu_finish;
+    //    var eg_edu_finish = req.body.eg_edu_finish;
+    //    var eg_edu_finish_country = req.body.eg_edu_finish_country;
+    //    var read_write_con = req.body.read_write_con;
+    //    var eg_con = req.body.eg_con;
+    //
+    //    var in_job = req.body.in_job;
+    //    var eg_job = req.body.eg_job;
+    //    var read_write_in_job = req.body.read_write_in_job;
+    //    var eg_read_write_in_job = req.body.eg_read_write_in_job;
+    //    var read_in_job = req.body.read_in_job;
+    //    var write_in_job = req.body.write_in_job;
+    //    var lang_in_job = req.body.lang_in_job;
+    //
+    //    var why_fvu = req.body.why_fvu;
+    //
+    //    var improvement = req.body.improvement;
+    //    var eg_improvement = req.body.eg_improvement;
+    //
+    ////    var collection = db.get('students');
+    //
+    //    
+    //   studentClass.find()({
+    //        "studentID": studentID
+    //    }, {
+    //        $set: {
+    //            //"id": initials,
+    //            "Fornavn": firstname,
+    //            "Efternavn": lastname,
+    //            "Alder": age,
+    //            "Har du andet end dansk som modersmål": mothertong_dk,
+    //            "Hvad er dit modersmål": tong_input,
+    //            "Hvor længe har du boet i Danmark": years_in_dk,
+    //            "Har du fået undervisning i dansk": edu_in_dk,
+    //            "Har du bestået nogen prøver": pass_test,
+    //            "Evt hvilke(n)": eg_test,
+    //            "Har du modtaget specialundervisningen i skolen": speciel_edu,
+    //            "Har du modtaget specialundervisning som voksen": speciel_edu_adult,
+    //            "Evt i hvilke(t) fag og hvor længe": eg_edu,
+    //            "Hvor længe har du gået i skole": years_in_edu,
+    //            "Hvor længe har du gået i skole i dit hjemland": years_in_edu_home,
+    //            "Har du afsluttende eksamen fra din skole": exam_finish,
+    //            "Evt i hvilke(n)": eg_exam,
+    //            "Fra hvilket land": eg_exam_country,
+    //            "Har du en uddannelse": edu_finish,
+    //            "Evt hvilken": eg_edu_finish,
+    //            "Evt fra hvilket land": eg_edu_finish_country,
+    //            "Har dine læse- og stavevanskeligheder haft betydning for skole og uddannelse": read_write_con,
+    //            "Evt på hvilken måde": eg_con,
+    //            "Er du i job": in_job,
+    //            "Evt hvilket": eg_job,
+    //            "Indgår der læsning eller skrivning i dit job": read_write_in_job,
+    //            "Evt hvordan": eg_read_write_in_job,
+    //            "Hvordan klarer du at læse på jobbet": read_in_job,
+    //            "Hvordan klarer du at skrive på jobbet": write_in_job,
+    //            "Hvilket sprog taler du mest på dit job": lang_in_job,
+    //            "Hvorfor vil du gerne gå til FVU-læsning": why_fvu,
+    //            "Hvad vil du gerne blive bedre til": improvement,
+    //            "Andet": eg_improvement,
+    //            //"time": "12:00:00",
+    //            "tests": []
+    //        }
+    //    }, function (err, doc) {
+    //        if (err) {
+    //
+    //            res.send("There was a problem adding the information to the database.");
+    //
+    //        } else {
 
-	console.log("######## student modules: " + kursistModules[0]);
-	res.redirect(kursistModules[0]);
-	kursistModules.shift();
+    console.log("######## student modules: " + kursistModules[0]);
+    res.redirect(kursistModules[0]);
+    kursistModules.shift();
 
-	//        }
+    //        }
 });
 //});
 
