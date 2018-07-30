@@ -17,8 +17,8 @@ var mongoose = require('mongoose');
 var Grid = require('gridfs-stream');
 
 // var mongoDB = 'mongodb://localhost/vucfyntest';
-var mongoDB = process.env.MONGODB_URI || 'mongodb://vucfyn:test2018@ds237475.mlab.com:37475/vucfyntestdb';
-
+var mongoDB = 'mongodb://vucfyn:test2018@ds237475.mlab.com:37475/vucfyntestdb';
+//process.env.MONGODB_URI || 
 
 
 var fs = require('fs');
