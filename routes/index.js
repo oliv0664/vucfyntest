@@ -871,6 +871,8 @@ var g_moduleCount = 0;
 
 router.get(encodeURI('/kursistinfo_kursist'), function (req, res) {
 
+
+
     teacherClass.find({
         "tests._id": teacherID
     }, function (err, teacher) {
@@ -908,7 +910,7 @@ router.get(encodeURI('/kursistinfo_kursist'), function (req, res) {
 
 router.post(encodeURI('/kursistinfo_answer'), function (req, res) {
 
-
+    HandleTestCounter(teacherID);
     //det første der sker, er at 'writeTo' mappen tømmes 
     empty('./public/writeTo', false, function (err, removed, failed) {
         if (err) {
@@ -964,7 +966,6 @@ router.get(encodeURI('/orddiktat_kursist'), function (req, res) {
     // teacherID = JSON.stringify(teacherID); 
 
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-
     teacherClass.find({
         "tests._id": teacherID
     }, function (err, teacher) {
@@ -1016,45 +1017,7 @@ router.get(encodeURI('/orddiktat_kursist'), function (req, res) {
     });
 });
 
-function HandleTestCounter(testId) {
-    console.log(testId);
-    var isThisLastModule = kursistModules.length === 1;
-    if (isThisLastModule) {
-        console.log('this is the last module, now we update the test counter');
 
-        teacherClass.findOneAndUpdate({
-                "tests._id": testId
-            }, {},
-            function (err, teacher) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log('se her>>> ' + teacher.initials + ' ' + teacher.tests.length);
-                    for (i = 0; i < teacher.tests.length; i++) {
-                        if (JSON.stringify(testId) == JSON.stringify(teacher.tests[i]._id)) {
-                            console.log('test count before: ' +
-                                teacher.tests[i].totalTestTaken
-                            );
-
-                            teacher.tests[i].totalTestTaken++;
-
-                            console.log('new test count after: ' +
-                                teacher.tests[i].totalTestTaken
-                            );
-                        }
-                    }
-                    teacher.save();
-                }
-            });
-
-
-
-
-    } else {
-        console.log('this is not the last module');
-    }
-
-};
 
 router.post(encodeURI('/orddiktat_answer'), function (req, res) {
 
@@ -1175,7 +1138,7 @@ router.get(encodeURI('/vrøvleord_kursist'), function (req, res) {
 
 
 router.post(encodeURI('/vrøvleord_answer'), function (req, res) {
-
+    HandleTestCounter(teacherID);
     //det første der sker, er at 'writeTo' mappen tømmes 
     empty('./public/writeTo', false, function (err, removed, failed) {
         if (err) {
@@ -1288,6 +1251,7 @@ router.get(encodeURI('/clozetest_kursist'), function (req, res) {
 router.post(encodeURI('/clozetest_answer'), function (req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
+    HandleTestCounter(teacherID);
     empty('./public/writeTo', false, function (err, removed, failed) {
         if (err) {
             console.error(err);
@@ -1342,6 +1306,7 @@ router.post(encodeURI('/clozetest_answer'), function (req, res) {
 router.get(encodeURI('/tekstforståelse_kursist'), function (req, res) {
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
+
     teacherClass.find({
         "tests._id": teacherID
     }, function (err, teacher) {
@@ -1398,6 +1363,7 @@ router.get(encodeURI('/tekstforståelse_kursist'), function (req, res) {
 
 router.post(encodeURI('/tekstforståelse_answer'), function (req, res) {
     //det første der sker, er at 'writeTo' mappen tømmes 
+    HandleTestCounter(teacherID);
     empty('./public/writeTo', false, function (err, removed, failed) {
         if (err) {
             console.error(err);
@@ -1504,6 +1470,8 @@ router.get('/brev_kursist', function (req, res) {
 router.post('/brev_answer', function (req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
+    HandleTestCounter(teacherID);
+
     empty('./public/writeTo', false, function (err, removed, failed) {
         if (err) {
             console.error(err);
