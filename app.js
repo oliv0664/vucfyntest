@@ -111,7 +111,48 @@ checkIdInUrl = function (req, res, next) {
         });
 
 
-    } else {
+    } else if(isWelcome === '/test_da'){
+		  req.db = db;
+        console.log('Checking db for entries');
+        var collection = teacherClass.find();
+        
+        var idUrl = req.url.slice(8);
+
+        // get the id reference to the collection docs
+        collection.find({}).then((docs) => {
+            var match = false;
+
+            for (i = 0; i<docs.length; i++) {
+
+                for(j=0; j<docs[i].tests.length; j++){
+
+                    // is technically != the teachers id anymore!.
+                    console.log("ID " +docs[i].tests[j]._id);
+                    idTeacher = docs[i].tests[j]._id;
+                    
+                    if (idUrl == idTeacher) {
+                        app.set('idTeacher',idTeacher);
+                        match = true;
+                        console.log('there is a match, now redirecting to the correct page');
+                        res.render('test_data', {
+                            title: 'main page',
+							content: {
+								_id: idTeacher
+							}
+                        });
+                        //                   next();
+                    }
+                }
+
+            }
+            if (!match) {
+                console.log('there is no match, redirect to error');
+                res.redirect('/error');
+            }
+        });
+
+		
+	} else {
         req.db = db;
         next();
     }

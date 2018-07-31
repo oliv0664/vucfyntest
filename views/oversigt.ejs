@@ -44,8 +44,8 @@
 			</td>
 			<td>                <a href="/welcome<%= content.tests[i]._id %>">link</a></td>
 
-			<td> 0(funktionalitet mangler) </td>
-			<td> <button class="seeAnswer" value="<%= content.tests[i]._id %>"> Se svar (mangler) </button></td>
+			<td> <%= content.tests[i].totalTestTaken %> </td>
+			<td> <button class="seeAnswer" value="<%= content.tests[i]._id %>"> Se svar </button></td>
 		</tr>
 	</tbody>
                 

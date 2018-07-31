@@ -14,7 +14,8 @@ $(function () {
 	});
 	$('.seeAnswer').click(function(){
 		var val = $(this).val();	
-	alert(val + " skal sendes med videre til næste side");
+//	alert(val + " skal sendes med videre til næste side");
+		window.location.href = '/test_da'+val;
 	});
 });
 
