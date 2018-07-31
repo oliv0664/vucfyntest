@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* Full-width input fields */
+        
+       
+        
+        .header > *{
+            display: inline-block
+        }
+        
+        
+        input[type=text],
+        input[type=password] {
+            width: 25%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            display: block;
+    
+        }
+
+        /* Set a style for all buttons */
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        /* Extra styles for the cancel button */
+
+       
+        /* Center the image and position the close button */
+
+        .imgcontainer {
+            text-align: center;
+            position: relative;
+        }
+
+        img.avatar {
+            width: 40%;
+            border-radius: 50%;
+        }
+
+        .container {
+            padding: 16px;
+        }
+
+        span.psw {
+            float: right;
+            padding-top: 16px;
+        }
+
+    
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 50vw;
+            height: auto;
+            /* Could be more or less, depending on screen size */
+        }
+
+
+
+        /* Add Zoom Animation */
+
+        .animate {
+            -webkit-animation: animatezoom 0.6s;
+            animation: animatezoom 0.6s
+        }
+
+        @-webkit-keyframes animatezoom {
+            from {
+                -webkit-transform: scale(0)
+            }
+            to {
+                -webkit-transform: scale(1)
+            }
+        }
+
+        @keyframes animatezoom {
+            from {
+                transform: scale(0)
+            }
+            to {
+                transform: scale(1)
+            }
+        }
+
+        /* Change styles for span and cancel button on extra small screens */
+
+        @media screen and (max-width: 300px) {
+            span.psw {
+                display: block;
+                float: none;
+            }
+            .cancelbtn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+ 
+
+
+        <form class="modal-content animate" action="/action_page.php">
+            <div class="imgcontainer">
+                <div class="header">
+                    <h3>Lærer login</h3>
+                    <img src="/public/images/VUC_logo.png" height="10%" width="10%" align="left">
+
+                </div>
+
+            </div>
+
+            <div class="container">
+                <label for="uname"><b>Initialer</b></label>
+                <input type="text" placeholder="Skriv initialer" name="uname" required>
+
+                <label for="psw"><b>Adganskode</b></label>
+                <input type="password" placeholder="Skriv adgangskode" name="psw" required>
+
+                <button type="submit">Login</button>
+                <label>
+        <input type="checkbox" checked="checked" name="remember"> Husk mig
+      </label>
+                <span class="psw">Forgot <a href="#">password?</a></span>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+            </div>
+        </form>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById('id01');
+
+
+    </script>
+
+</body>
+</html>

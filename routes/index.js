@@ -1518,7 +1518,6 @@ router.post('/brev_answer', function (req, res) {
     });
 });
 
-var testResult;
 router.get('/finalpage', function (req, res) {
     res.render('finalpage', {
         title: 'finalpage'
