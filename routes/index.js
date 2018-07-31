@@ -1585,18 +1585,26 @@ router.get('/finalpage', function (req, res) {
 	});
 });
 
-router.get('/getAllData', function (req, res) {
-	console.log('initials test: ' + initials);
+router.get('/getStudentData', function (req, res) {
+    var idTeacher = req.query.teacherID;
+    var idStudent = req.query.studentID;  
+    console.log('TEACHER ID FROM CLIENT: ' + idTeacher);
+    console.log('STUDENT ID FROM CLIENT: ' + idStudent);
 
-	teacherClass.find({
-		initials: initials
-	}, function (err, docs) {
+	studentClass.find({
+        "teacherID": idTeacher,
+        "studentID": idStudent
+	}, function (err, students) {
 		if (err) {
 			console.log(err);
 		} else {
-			console.log(docs);
+			console.log("DATA FROM DB ABOUT STUDENTS: ", students);
 
-			res.send(JSON.stringify(docs[0].tests[docs[0].tests.length - 1]._id));
+
+            //code to match ids 
+
+
+			res.send(JSON.stringify(students));
 		}
 	});
 

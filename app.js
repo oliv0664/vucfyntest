@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var ready = false;
 var teacherClass = require('./public/models/teacherSchema.js');
+var studentClass = require('./public/models/studentSchema.js');
 var mongo = require('mongodb');
 //var monk = require('monk');
 // var url = 'localhost:27017/vucfyntest'
@@ -134,13 +135,39 @@ checkIdInUrl = function (req, res, next) {
                         app.set('idTeacher',idTeacher);
                         match = true;
                         console.log('there is a match, now redirecting to the correct page');
-                        res.render('test_data', {
-                            title: 'main page',
-							content: {
-								_id: idTeacher
-							}
-                        });
-                        //                   next();
+                        
+                        
+                        
+                        
+                        //code to get answers from student db
+
+                        studentClass.find({
+                            "teacherID": idTeacher
+                        }, function(err, student) {
+                            if(err) {
+                                console.log(err); 
+                            } else {
+                                console.log("TEACHER ID FROM STUDENT DB ", student);
+                                
+                                var studentIDs = []; 
+
+                                for(var i=0; i<student.length; i++) {
+                                    studentIDs.push(student[i].studentID); 
+                                }
+
+                                res.render('test_data', {
+                                    title: 'main page',
+                                    content: {
+                                        idTeacher: idTeacher,
+                                        studentIDs: studentIDs
+                                    }
+                                });
+                            }
+                        }); 
+
+
+                        
+                        
                     }
                 }
 

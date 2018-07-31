@@ -1,16 +1,37 @@
+$(function() {
+    // var len = $('div[id^=s]').length; 
+    // for(var i=0; i<len; i++) {
+    //     $('#s'+i).click(function() {
+    //         alert(this.id); 
+    //     }); 
+    // }
+}); 
 
 
-function getData() {
-    var link;
+function getStudentData(studentID, teacherID, index) {
     $.ajax({
-        url: '/getAllData',
+        url: '/getStudentData',
         method: 'GET',
-        data: {}
+        data: {
+            teacherID,
+            studentID
+        }
     })
     .done(function (dataStr) {
-        // handle DataStr
-        console.log('Clientside id jhauh: ' + dataStr);
-        $('#testLink').text("welcome" + JSON.parse(dataStr));
+        var a = JSON.parse(dataStr);
+        console.log(a.length);
+        console.log(a[0].modules);
+        var i = index.id.slice(1); 
+        console.log(i); 
+
+
+        //To do.. 
+        //Vis kursist svar på viewet på en pænt opstillet måde 
+
+
+        var $answers = $('<div/>').text(a[0].modules[0].moduleType); 
+        $('#s'+i).append($answers); 
+        //return dataStr; 
     });
-     
+    
 }
