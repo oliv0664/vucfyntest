@@ -27,7 +27,7 @@ var tjek;
 
 
 router.get('/', function (req, res, next) {
-    res.render('start', {
+    res.render('login', {
         title: 'Express'
     });
     initials = "";
