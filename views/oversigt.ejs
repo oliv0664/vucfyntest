@@ -18,42 +18,52 @@
 	</div>
 
 	<h2>Velkommen <%=content.initials%></h2>
+
+	<form id="form" method="post" action="/show_answers">
 	<table border="1" cellpadding="30">
 		<thead>
 			<tr>
 				<td colspan="4">
-					<h3>Du har <%= content.totalTests %> quiz(zer). Her kan du se en oversigt over dine quizzer: </h4>
+					<h3>Du har<%= content.totalTests %> quiz(zer). Her kan du se en oversigt over dine quizzer: </h4>
 				</td>
 			</tr>
 			<tr>
-			<td> Dato for oprindelse</td>
-			<td> Links </td>
-			<td> Antal svar</td>
-			<td> Quiz data</td>
-		</tr>
-			</thead>
-		<% for(var i=0; i < content.totalTests; i++) { %> 
-	<tbody>
+				<td> Dato for oprindelse</td>
+				<td> Links </td>
+				<td> Antal svar</td>
+				<td> Quiz data</td>
+			</tr>
+		</thead>
+
+		<% for(var i=0; i < content.totalTests; i++) { %>
+		<tbody>
 		<tr>
-			<td><button class="ul_btn">+</button> Quiz <%=i+1%> <%=content.tests[i].date.toLocaleDateString() %>:
-			<ul class="ul_show" style="display: none">
-			<% for(var j=0; j < content.tests[i].totalModules; j++) { %>
-				<li><%=content.tests[i].modules[j].moduleType %></li>
-				<% } %>
-			</ul>
-			</td>
-			<td>                <a href="/welcome<%= content.tests[i]._id %>">link</a></td>
+			<td>
+				<button class="ul_btn">+</button> Quiz <%=i+1%><%=content.tests[i].date.toLocaleDateString() %>:
+				<ul class="ul_show" style="display: none">
+					<% for(var j=0; j < content.tests[i].totalModules; j++) { %>
+						<li>
+							<%=content.tests[i].modules[j].moduleType %>
+						</li>
+						<% } %>
+					</ul>
+				</td>
+				<td>
+					<a href="/welcome<%= content.tests[i]._id %>">link</a>
+				</td>
+				<td>
+					<%= content.tests[i].totalTestTaken %>
+				</td>
+				<td>
+					<input type="submit" class="seeAnswer" value="Se svar" name="<%= content.tests[i]._id %>">
+					<!-- <input type="hidden" name="<%= content.tests[i]._id %>"> -->
+				</td>
+			</tr>
+		</tbody>	
+		<% } %>
 
-			<td> <%= content.tests[i].totalTestTaken %> </td>
-			<td> <button class="seeAnswer" value="<%= content.tests[i]._id %>"> Se svar </button></td>
-		</tr>
-	</tbody>
-                
-    <% } %>
-</table>
-
-	
-
+	</table>
+	</form>
 
 </body>
 

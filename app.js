@@ -112,74 +112,76 @@ checkIdInUrl = function (req, res, next) {
         });
 
 
-    } else if(isWelcome === '/test_da'){
-		  req.db = db;
-        console.log('Checking db for entries');
-        var collection = teacherClass.find();
+    } 
+    // else if(isWelcome === '/test_da'){
+	// 	  req.db = db;
+    //     console.log('Checking db for entries');
+    //     var collection = teacherClass.find();
         
-        var idUrl = req.url.slice(8);
+    //     var idUrl = req.url.slice(8);
+    //     console.log("ID URL " + idUrl); 
+    //     // get the id reference to the collection docs
+    //     collection.find({}).then((docs) => {
+    //         var match = false;
 
-        // get the id reference to the collection docs
-        collection.find({}).then((docs) => {
-            var match = false;
+    //         for (i = 0; i<docs.length; i++) {
 
-            for (i = 0; i<docs.length; i++) {
+    //             for(j=0; j<docs[i].tests.length; j++){
 
-                for(j=0; j<docs[i].tests.length; j++){
-
-                    // is technically != the teachers id anymore!.
-                    console.log("ID " +docs[i].tests[j]._id);
-                    idTeacher = docs[i].tests[j]._id;
+    //                 // is technically != the teachers id anymore!.
+    //                 console.log("ID " +docs[i].tests[j]._id);
+    //                 idTeacher = docs[i].tests[j]._id;
                     
-                    if (idUrl == idTeacher) {
-                        app.set('idTeacher',idTeacher);
-                        match = true;
-                        console.log('there is a match, now redirecting to the correct page');
+    //                 if (idUrl == idTeacher) {
+    //                     app.set('idTeacher',idTeacher);
+    //                     match = true;
+    //                     console.log('there is a match, now redirecting to the correct page');
                         
                         
                         
                         
-                        //code to get answers from student db
+    //                     //code to get answers from student db
 
-                        studentClass.find({
-                            "teacherID": idTeacher
-                        }, function(err, student) {
-                            if(err) {
-                                console.log(err); 
-                            } else {
-                                console.log("TEACHER ID FROM STUDENT DB ", student);
+    //                     studentClass.find({
+    //                         "teacherID": idTeacher
+    //                     }, function(err, student) {
+    //                         if(err) {
+    //                             console.log(err); 
+    //                         } else {
+    //                             console.log("TEACHER ID FROM STUDENT DB ", student);
                                 
-                                var studentIDs = []; 
+    //                             var studentIDs = []; 
 
-                                for(var i=0; i<student.length; i++) {
-                                    studentIDs.push(student[i].studentID); 
-                                }
+    //                             for(var i=0; i<student.length; i++) {
+    //                                 studentIDs.push(student[i].studentID); 
+    //                             }
 
-                                res.render('test_data', {
-                                    title: 'main page',
-                                    content: {
-                                        idTeacher: idTeacher,
-                                        studentIDs: studentIDs
-                                    }
-                                });
-                            }
-                        }); 
+    //                             res.render('test_data', {
+    //                                 title: 'main page',
+    //                                 content: {
+    //                                     idTeacher: idTeacher,
+    //                                     studentIDs: studentIDs
+    //                                 }
+    //                             });
+    //                         }
+    //                     }); 
 
 
                         
                         
-                    }
-                }
+    //                 }
+    //             }
 
-            }
-            if (!match) {
-                console.log('there is no match, redirect to error');
-                res.redirect('/error');
-            }
-        });
+    //         }
+    //         if (!match) {
+    //             console.log('there is no match, redirect to error');
+    //             res.redirect('/error');
+    //         }
+    //     });
 
 		
-	} else {
+    // } 
+    else {
         req.db = db;
         next();
     }

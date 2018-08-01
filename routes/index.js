@@ -6,6 +6,7 @@ var formidable = require('formidable');
 var fs = require('fs');
 var nodemailer = require('nodemailer');
 var empty = require('empty-folder');
+var url = require('url');
 
 var mailSender = require('./../public/js/email_handler');
 var teacherClass = require('./../public/models/teacherSchema.js');
@@ -40,6 +41,13 @@ router.get('/index', function (req, res, next) {
     teacherModules = [];
 });
 
+router.post('/oversigt_info', function (req, res, next) {
+    tjek = req.body.init_field;
+    console.log("KIG HER 1");
+    console.log(tjek);
+    res.redirect('oversigt');
+});
+
 router.get('/oversigt', function (req, res, next) {
     teacherClass.findOne({
         "initials": tjek
@@ -62,16 +70,46 @@ router.get('/oversigt', function (req, res, next) {
         }
     });
 });
-router.post('/oversigt_info', function (req, res, next) {
-    tjek = req.body.init_field;
-    console.log("KIG HER 1");
-    console.log(tjek);
-    res.redirect('oversigt');
+
+
+router.post('/show_answers', function (req, res) {
+    console.log("SHOW ", Object.keys(req.body)[0]);
+    var data = Object.keys(req.body)[0];
+
+    res.redirect(url.format({
+        pathname: '/test_data',
+        query: {
+            'data': data
+        }
+    }));
 });
 
 router.get('/test_data', function (req, res, next) {
-    res.render('test_data', {
-        title: 'dataside for tests'
+    console.log("POSTED VALUE " + req.query.data);
+    var idTeacher = req.query.data;
+
+    studentClass.find({
+        "teacherID": idTeacher
+    }, function (err, student) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("TEACHER ID FROM STUDENT DB ", student);
+
+            var studentIDs = [];
+
+            for (var i = 0; i < student.length; i++) {
+                studentIDs.push(student[i].studentID);
+            }
+
+            res.render('test_data', {
+                title: 'Test data',
+                content: {
+                    idTeacher: idTeacher,
+                    studentIDs: studentIDs
+                }
+            });
+        }
     });
 });
 
@@ -1526,37 +1564,71 @@ router.get('/finalpage', function (req, res) {
 
 router.get('/getStudentData', function (req, res) {
     var idTeacher = req.query.teacherID;
-    var idStudent = req.query.studentID;  
+    var idStudent = req.query.studentID;
     console.log('TEACHER ID FROM CLIENT: ' + idTeacher);
     console.log('STUDENT ID FROM CLIENT: ' + idStudent);
 
-	studentClass.find({
+
+    var student_data;
+
+    studentClass.find({
         "teacherID": idTeacher,
         "studentID": idStudent
-	}, function (err, students) {
-		if (err) {
-			console.log(err);
-		} else {
-			console.log("DATA FROM DB ABOUT STUDENTS: ", students);
+    }, function (err, students) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("DATA FROM DB ABOUT STUDENTS: ", students);
+            student_data = students;
+            
+            var final_score; 
+        
+            teacherClass.find({
+                "tests._id": idTeacher
+            }, function (err, teacher) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("DATA FROM DB ABOUT TEACHER: ", teacher);
+                    
+                    var id_serv = JSON.stringify(idTeacher);
+                    
+                    for (var i = 0; i < teacher[0].tests.length; i++) {
+                        var id_db = JSON.stringify(teacher[0].tests[i]._id);
+        
+                        if (id_serv == id_db) {
+                            console.log("1111 ", student_data[0]);
+                            console.log("2222 ", teacher[0]);
+                            final_score = evaluateScore(i, student_data[0], teacher[0]); 
+                            console.log("FINAL SCORE ", final_score); 
+                            res.send(JSON.stringify(final_score));
+                        }
+                    }
+        
+                }
+            });
+        }
+    });
 
 
-            //code to match ids 
+    
+});
 
+// }).exec(function(err, user) {
+//     if(err) console.log(err);
+//     else {
+//         console.log("DONE!"); 
+//         res.send(JSON.stringify(final_score));
+//     }
+// var db = req.db;
+// var collection = db.get('teachers');
+// collection.findOne({
+//     "initials": initials
+// }, function (e, docs) {
 
-			res.send(JSON.stringify(students));
-		}
-	});
-}); 
-
-	// var db = req.db;
-	// var collection = db.get('teachers');
-	// collection.findOne({
-	//     "initials": initials
-	// }, function (e, docs) {
-
-	//     console.log('Who am I? ', docs._id);
-	//     res.send(JSON.stringify(docs._id));
-	// });
+//     console.log('Who am I? ', docs._id);
+//     res.send(JSON.stringify(docs._id));
+// });
 // =======
 // router.get('/getAllData', function (req, res) {
 //     console.log('initials test: ' + initials);
@@ -1837,8 +1909,8 @@ function HandleTestCounter(testId) {
         console.log('this is the last module, now we update the test counter');
 
         teacherClass.findOneAndUpdate({
-                "tests._id": testId
-            }, {},
+            "tests._id": testId
+        }, {},
             function (err, teacher) {
                 if (err) {
                     console.log(err);
