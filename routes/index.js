@@ -1546,7 +1546,7 @@ router.get('/getStudentData', function (req, res) {
 			res.send(JSON.stringify(students));
 		}
 	});
-
+}
 
 	// var db = req.db;
 	// var collection = db.get('teachers');
