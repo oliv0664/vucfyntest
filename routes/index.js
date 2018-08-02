@@ -356,7 +356,7 @@ router.post(encodeURI('/kursistinfo'), function (req, res) {
         }
 
         mod = {
-            moduleType: 'kursistinfo',
+            moduleType: 'Kursistinfo',
             content: inputContent,
             contentAnswer
         }
