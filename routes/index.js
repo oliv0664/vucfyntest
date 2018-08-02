@@ -28,7 +28,7 @@ var tjek;
 
 
 router.get('/', function (req, res, next) {
-    res.render('login', {
+    res.render('start', {  //login
         title: 'Express'
     });
     initials = "";
@@ -356,7 +356,7 @@ router.post(encodeURI('/kursistinfo'), function (req, res) {
         }
 
         mod = {
-            moduleType: 'Kursistinfo',
+            moduleType: 'kursistinfo',
             content: inputContent,
             contentAnswer
         }
@@ -1725,7 +1725,16 @@ function evaluateScore(testIndex, student, teacher) {
         for (var k = 0; k < student.modules[j].answers.length; k++) {
             var point = 0;
             var student_answer = student.modules[j].answers[k];
-            var correct_answer = teacher.tests[testIndex].modules[j].contentAnswer[k].answer;
+
+            
+            if(module_type.toLowerCase() == "kursistinfo") {
+                var correct_answer = teacher.tests[testIndex].modules[j].content[k].input;
+            } else {
+                var correct_answer = teacher.tests[testIndex].modules[j].contentAnswer[k].answer;
+            }
+            
+
+            
             if (correct_answer == null) {
                 correct_answer = "Intet korrekt svar";
             } else if (student_answer == correct_answer) {

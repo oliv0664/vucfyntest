@@ -30,15 +30,10 @@
 	<% for(var i=0; i<content.studentIDs.length; i++) { %>
 		<div id="<%= 's'+i %>" class="contentDiv">Kursist ID: <%=content.studentIDs[i]%></div>
 		<button id="<%= 'b'+i %>" onclick="getStudentData('<%=content.studentIDs[i]%>', '<%=content.idTeacher%>', this)">+</button>
-		<button id="<%= 'r'+i %>" onclick="removeAnswers(this)">-</button>
+		<button id="<%= 'r'+i %>" onclick="removeAnswers(this)" hidden>-</button>
 		<div id="<%= 'd'+i %>"></div>
 	<% } %>
 	
-		
-	<h3>Denne side er stadig under udvikling</h3>
-
-	
-
 
 </body>
 
