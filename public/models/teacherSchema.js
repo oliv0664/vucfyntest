@@ -25,6 +25,7 @@ var teacherSchema = new Schema({
     tests: [{
         date: Date,
         totalModules: Number,
+		totalTestTaken: {type: Number, default: 0},
         modules: { type: Array, default: [] }
     }]
 }, {
