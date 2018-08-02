@@ -2,7 +2,7 @@
     "name": "nodetest1",
     "version": "6.11.5",
     "engines": {
-        "node": "9.2.1"
+        "node": "8.11.3"
     },
     "private": true,
     "scripts": {
@@ -20,7 +20,7 @@
         "formidable": "^1.2.1",
         "gridfs-stream": "^1.1.1",
         "helmet": "^3.13.0",
-        "heroku": "^7.7.4",
+        "heroku": "^7.7.8",
         "mongodb": "^3.1.1",
         "mongoose": "^4.13.14",
         "monk": "^6.0.6",
