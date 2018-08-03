@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var generator = require('generate-password');
 
 
 
@@ -21,6 +22,15 @@ var moduleSchema = new Schema({
 
 var teacherSchema = new Schema({
     initials: String,
+	password: { type: String,
+			   default: function(){
+				   return generator.generate({
+					   length: 14,
+					   numbers: true,
+					   uppercase: true
+				   });
+			   }
+			  },
     totalTests: Number,
     tests: [{
         date: Date,

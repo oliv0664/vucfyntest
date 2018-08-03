@@ -26,17 +26,22 @@
 <script>
     var a = 0; 
 
+    //TO DO
+    //knapper må kun kunne trykkes på 2 gange
+
     function playAudio(index) {
-        var d = document.getElementById("d" + index);
-        var audBut = document.getElementById("audBut" + index);
-        var sound = document.getElementById("file" + index);
+        var ind = index.id.slice(6);
+        var d = document.getElementById("d" + ind);
+        var audBut = document.getElementById("audBut" + ind);
+        var sound = document.getElementById("file" + ind);
         if(sound.paused) {
             sound.load();  
             sound.play();
-            if(a>0) { 
-                d.removeChild(audBut);
-                a=0;  
-            } else { a++; }
+            if(count[ind]>0) { 
+                d.removeChild(audBut);  
+            } else { 
+                count[ind]++; 
+            }
         }
     }
 </script>
@@ -46,7 +51,8 @@
     <% for(var i=0; i<content.length; i++) { %> 
         <div class="blockDiv">    
             <div id="<%= 'd'+i %>" class="audDiv"> 
-                <input class="aud" id="<%= 'audBut'+i %>" type="button" onclick="playAudio(<%= i %>)">
+                <input class="aud" id="<%= 'audBut'+i %>" type="button" onclick="playAudio(this)">
+                <span id="<%= 's'+i %>" hidden>0</span>
             </div>
             
             <div class="contentDiv">    
