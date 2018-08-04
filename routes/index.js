@@ -27,31 +27,17 @@ var tjek;
 /* GET home page. */
 
 
-<<<<<<< HEAD
-router.get('/', function (req, res, next) {
-	initials = "";
-	res.render('login', { //login
-		title: 'Express'
-	});
-});
-router.get('/start', function (req, res, next) {
-	res.render('start', { //login
-		title: 'Express'
-	});
-
-=======
 router.get('/', function(req, res, next) {
     initials = "";
     res.render('login', { //login
         title: 'Express'
-
     });
 });
 router.get('/start', function(req, res, next) {
     res.render('start', { //login
         title: 'Express'
     });
->>>>>>> develop2
+
 });
 
 router.post('/signin', function(req, res, next) {
@@ -87,25 +73,11 @@ router.post('/signin', function(req, res, next) {
 });
 
 
-<<<<<<< HEAD
-router.get('/index', function (req, res, next) {
-=======
 router.get('/index', function(req, res, next) {
->>>>>>> develop2
     res.render('index', {
         title: 'Express'
     });
     teacherModules = [];
-<<<<<<< HEAD
-});
-
-router.post('/oversigt_info', function (req, res, next) {
-    tjek = req.body.init_field;
-    console.log("KIG HER 1");
-    console.log(tjek);
-    res.redirect('oversigt');
-=======
->>>>>>> develop2
 });
 
 router.post('/oversigt_info', function(req, res, next) {
@@ -115,17 +87,10 @@ router.post('/oversigt_info', function(req, res, next) {
     res.redirect('oversigt');
 });
 
-<<<<<<< HEAD
-router.get('/oversigt', function (req, res, next) {
-    teacherClass.findOne({
-        "initials": tjek
-    }, function (err, teacher) {
-=======
 router.get('/oversigt', function(req, res, next) {
     teacherClass.findOne({
         "initials": tjek
     }, function(err, teacher) {
->>>>>>> develop2
         if (err) {
             console.log(err);
         } else {
@@ -146,16 +111,10 @@ router.get('/oversigt', function(req, res, next) {
 });
 
 
-<<<<<<< HEAD
-router.post('/show_answers', function (req, res) {
-
-	console.log("SHOW ", Object.keys(req.body)[0]);
-	var data = Object.keys(req.body)[0];
-=======
 router.post('/show_answers', function(req, res) {
+
     console.log("SHOW ", Object.keys(req.body)[0]);
     var data = Object.keys(req.body)[0];
->>>>>>> develop2
 
     res.redirect(url.format({
         pathname: '/test_data',
@@ -194,20 +153,12 @@ router.get('/test_data', function(req, res, next) {
     });
 });
 
-<<<<<<< HEAD
-router.get('/filepicker', function (req, res, next) {
-=======
 router.get('/filepicker', function(req, res, next) {
->>>>>>> develop2
     res.render('filepicker', {
         title: 'Filepicker'
     });
 });
-<<<<<<< HEAD
-router.get('/error', function (req, res, next) {
-=======
 router.get('/error', function(req, res, next) {
->>>>>>> develop2
     res.render('error', {
         title: 'page not found'
     });
@@ -259,74 +210,8 @@ function setTestIndex(index) {
 }
 
 
-<<<<<<< HEAD
-router.post('/welcome_addinfo', function (req, res) {
-
-
-	//var db = req.db;
-	console.log('before anything: ', studentModules);
-	studentID = req.body.id;
-	teacherID = req.app.get('idTeacher');
-	console.log(studentID + " YNLPYPHTASCSACASC");
-
-	//var collection = db.get('students');
-	teacherClass.find().where({
-		'tests._id': teacherID
-	}).exec(function (err, teacher) {
-		if (err) {
-			res.send(err);
-		} else {
-			// find relevnt teacher data to student 
-			console.log(teacher[0].tests[0].modules[0].moduleType);
-			// make student object with data
-			var id_serv = JSON.stringify(teacherID);
-
-			for (var i = 0; i < teacher[0].tests.length; i++) {
-
-				var id_db = JSON.stringify(teacher[0].tests[i]._id);
-				if (id_db == id_serv) {
-
-					kursistModules = setupStudentModules(teacher[0].tests[i].modules);
-
-					studentClass.findOneAndUpdate({
-						studentID: studentID
-					}, 'modules', function (err, student) {
-						if (err) {
-							res.send(err);
-						} else {
-
-							if (!student) {
-								student = new studentClass({
-									studentID: studentID,
-									teacherID: teacherID,
-									studentinfo: {},
-									modules: []
-								});
-								console.log("STUDENT: ", kursistModules);
-
-								student.save(function (err) {
-									if (err) {
-										console.log(err);
-									}
-
-									res.redirect(kursistModules[0]);
-									kursistModules.shift();
-								});
-							} else {
-								res.send('ID ER TAGET!');
-							}
-						}
-					});
-
-				}
-
-			}
-
-		}
-
-	});
-=======
 router.post('/welcome_addinfo', function(req, res) {
+
 
     //var db = req.db;
     console.log('before anything: ', studentModules);
@@ -390,7 +275,6 @@ router.post('/welcome_addinfo', function(req, res) {
         }
 
     });
->>>>>>> develop2
 });
 
 router.post('/index_addinfo', function(req, res) {
@@ -452,11 +336,7 @@ router.post('/index_addinfo', function(req, res) {
 
 
 
-<<<<<<< HEAD
-router.get(encodeURI('/kursistinfo_lærer'), function (req, res) {
-=======
 router.get(encodeURI('/kursistinfo_lærer'), function(req, res) {
->>>>>>> develop2
     res.render('kursistinfo_lærer', {
         title: 'Kursistinfo'
     });
@@ -550,11 +430,7 @@ router.post(encodeURI('/kursistinfo'), function(req, res) {
 
 //henter hjemmesiden 'worddictate_teacher' 
 
-<<<<<<< HEAD
-router.get(encodeURI('/orddiktat_lærer'), function (req, res) {
-=======
 router.get(encodeURI('/orddiktat_lærer'), function(req, res) {
->>>>>>> develop2
     res.render('orddiktat_lærer', {
         title: 'Orddiktat'
     });
@@ -964,116 +840,13 @@ router.get(encodeURI('/startpage'), function(req, res) {
     });
 });
 
-<<<<<<< HEAD
-router.post(encodeURI('/startpage_addinfo'), function (req, res) {
-
-	console.log("######## student modules: " + kursistModules[0]);
-	res.redirect(kursistModules[0]);
-	kursistModules.shift();
-
-
-=======
 router.post(encodeURI('/startpage_addinfo'), function(req, res) {
-
-    // var db = req.db;
-    //    console.log(req.body);
-    //    console.log("DOES THIS EXISt " + studentID);
-    //    var firstname = req.body.firstname;
-    //    var lastname = req.body.lastname;
-    //    var age = req.body.age;
-    //    var mothertong_dk = req.body.mothertong_dk;
-    //    var tong_input = req.body.tong_input;
-    //    var years_in_dk = req.body.years_in_dk;
-    //    var edu_in_dk = req.body.edu_in_dk;
-    //    var pass_test = req.body.pass_test;
-    //    var eg_test = req.body.eg_test;
-    //
-    //
-    //
-    //    var speciel_edu = req.body.speciel_edu;
-    //    var speciel_edu_adult = req.body.speciel_edu_adult;
-    //    var eg_edu = req.body.eg_edu;
-    //
-    //    var years_in_edu = req.body.years_in_edu;
-    //    var years_in_edu_home = req.body.years_in_edu_home;
-    //    var exam_finish = req.body.exam_finish;
-    //    var eg_exam = req.body.eg_exam;
-    //    var eg_exam_country = req.body.eg_exam_country;
-    //    var edu_finish = req.body.edu_finish;
-    //    var eg_edu_finish = req.body.eg_edu_finish;
-    //    var eg_edu_finish_country = req.body.eg_edu_finish_country;
-    //    var read_write_con = req.body.read_write_con;
-    //    var eg_con = req.body.eg_con;
-    //
-    //    var in_job = req.body.in_job;
-    //    var eg_job = req.body.eg_job;
-    //    var read_write_in_job = req.body.read_write_in_job;
-    //    var eg_read_write_in_job = req.body.eg_read_write_in_job;
-    //    var read_in_job = req.body.read_in_job;
-    //    var write_in_job = req.body.write_in_job;
-    //    var lang_in_job = req.body.lang_in_job;
-    //
-    //    var why_fvu = req.body.why_fvu;
-    //
-    //    var improvement = req.body.improvement;
-    //    var eg_improvement = req.body.eg_improvement;
-    //
-    ////    var collection = db.get('students');
-    //
-    //    
-    //   studentClass.find()({
-    //        "studentID": studentID
-    //    }, {
-    //        $set: {
-    //            //"id": initials,
-    //            "Fornavn": firstname,
-    //            "Efternavn": lastname,
-    //            "Alder": age,
-    //            "Har du andet end dansk som modersmål": mothertong_dk,
-    //            "Hvad er dit modersmål": tong_input,
-    //            "Hvor længe har du boet i Danmark": years_in_dk,
-    //            "Har du fået undervisning i dansk": edu_in_dk,
-    //            "Har du bestået nogen prøver": pass_test,
-    //            "Evt hvilke(n)": eg_test,
-    //            "Har du modtaget specialundervisningen i skolen": speciel_edu,
-    //            "Har du modtaget specialundervisning som voksen": speciel_edu_adult,
-    //            "Evt i hvilke(t) fag og hvor længe": eg_edu,
-    //            "Hvor længe har du gået i skole": years_in_edu,
-    //            "Hvor længe har du gået i skole i dit hjemland": years_in_edu_home,
-    //            "Har du afsluttende eksamen fra din skole": exam_finish,
-    //            "Evt i hvilke(n)": eg_exam,
-    //            "Fra hvilket land": eg_exam_country,
-    //            "Har du en uddannelse": edu_finish,
-    //            "Evt hvilken": eg_edu_finish,
-    //            "Evt fra hvilket land": eg_edu_finish_country,
-    //            "Har dine læse- og stavevanskeligheder haft betydning for skole og uddannelse": read_write_con,
-    //            "Evt på hvilken måde": eg_con,
-    //            "Er du i job": in_job,
-    //            "Evt hvilket": eg_job,
-    //            "Indgår der læsning eller skrivning i dit job": read_write_in_job,
-    //            "Evt hvordan": eg_read_write_in_job,
-    //            "Hvordan klarer du at læse på jobbet": read_in_job,
-    //            "Hvordan klarer du at skrive på jobbet": write_in_job,
-    //            "Hvilket sprog taler du mest på dit job": lang_in_job,
-    //            "Hvorfor vil du gerne gå til FVU-læsning": why_fvu,
-    //            "Hvad vil du gerne blive bedre til": improvement,
-    //            "Andet": eg_improvement,
-    //            //"time": "12:00:00",
-    //            "tests": []
-    //        }
-    //    }, function (err, doc) {
-    //        if (err) {
-    //
-    //            res.send("There was a problem adding the information to the database.");
-    //
-    //        } else {
 
     console.log("######## student modules: " + kursistModules[0]);
     res.redirect(kursistModules[0]);
     kursistModules.shift();
 
-    //        }
->>>>>>> develop2
+
 });
 
 
@@ -1083,23 +856,12 @@ var g_moduleCount = 0;
 
 router.get(encodeURI('/kursistinfo_kursist'), function(req, res) {
 
-<<<<<<< HEAD
-	teacherClass.find({
-		"tests._id": teacherID
-	}, function (err, teacher) {
-		if (err) {
-			console.log(err);
-		} else {
-=======
-
-
     teacherClass.find({
         "tests._id": teacherID
     }, function(err, teacher) {
         if (err) {
             console.log(err);
         } else {
->>>>>>> develop2
 
             var id_serv = JSON.stringify(teacherID);
 
@@ -1113,35 +875,12 @@ router.get(encodeURI('/kursistinfo_kursist'), function(req, res) {
                     var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
                     var moduleType = teacher[0].tests[i].modules[index].moduleType;
 
-<<<<<<< HEAD
-					res.render('template', {
-						content: content,
-						'title': moduleType,
-						description: "Dette er en beskrivelse af testen",
-						descriptionAudio: null
-					});
-					
-					} else {
-					console.log("NO MATCH");
-				}
-			}
-		}
-	});
-});
-
-router.post(encodeURI('/kursistinfo_answer'), function (req, res) {
-
-    HandleTestCounter(teacherID);
-    //det første der sker, er at 'writeTo' mappen tømmes 
-    empty('./public/writeTo', false, function (err, removed, failed) {
-=======
                     res.render('template', {
                         content: content,
                         'title': moduleType,
                         description: "Dette er en beskrivelse af testen",
                         descriptionAudio: null
                     });
-
 
                 } else {
                     console.log("NO MATCH");
@@ -1156,7 +895,6 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
     HandleTestCounter(teacherID);
     //det første der sker, er at 'writeTo' mappen tømmes 
     empty('./public/writeTo', false, function(err, removed, failed) {
->>>>>>> develop2
         if (err) {
             console.error(err);
         }
@@ -1168,18 +906,11 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
     var form = new formidable.IncomingForm();
 
     // parse the request and handle fields data
-<<<<<<< HEAD
-    form.parse(req, function (err, fields, files) {
-
-        inputAnswers = [];
-        var temp = Object.keys(fields);
-=======
     form.parse(req, function(err, fields, files) {
 
         inputAnswers = [];
         var temp = Object.keys(fields);
         console.log("KKKUUURRRSSSIIISSSTTTT ", fields);
->>>>>>> develop2
         for (i = 0; i < temp.length; i++) {
             inputAnswers.push(fields[temp[i]]);
         }
@@ -1190,22 +921,14 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
 
         studentClass.findOneAndUpdate({
             studentID: studentID
-<<<<<<< HEAD
-        }, 'modules', function (err, student) {
-=======
         }, 'modules', function(err, student) {
->>>>>>> develop2
             if (err) {
                 res.send(err);
             } else {
                 console.log("STUDENT: " + student);
                 student.modules.push(mod);
 
-<<<<<<< HEAD
-                student.save(function (err) {
-=======
                 student.save(function(err) {
->>>>>>> develop2
                     if (err) console.log(err);
                     res.redirect(kursistModules[0]);
                     kursistModules.shift();
@@ -1214,19 +937,12 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
         });
     });
 
-<<<<<<< HEAD
-				
-=======
->>>>>>> develop2
+
 });
 
 
 //henter 'worddictate_participant' og finder data i databasen, svarende til de indtastede initialer
-<<<<<<< HEAD
-router.get(encodeURI('/orddiktat_kursist'), function (req, res) {
-=======
 router.get(encodeURI('/orddiktat_kursist'), function(req, res) {
->>>>>>> develop2
 
     console.log("TEACHER ID: " + typeof JSON.stringify(teacherID));
     // teacherID = JSON.stringify(teacherID); 
@@ -1234,11 +950,7 @@ router.get(encodeURI('/orddiktat_kursist'), function(req, res) {
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     teacherClass.find({
         "tests._id": teacherID
-<<<<<<< HEAD
-    }, function (err, teacher) {
-=======
     }, function(err, teacher) {
->>>>>>> develop2
         if (err) {
             console.log(err);
         } else {
@@ -1262,11 +974,7 @@ router.get(encodeURI('/orddiktat_kursist'), function(req, res) {
                     for (var j = 0; j < teacher[0].tests[i].modules[index].content.length; j++) {
                         promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[index].content[j].file.file_id));
                     }
-<<<<<<< HEAD
-                    Promise.all(promises).then(function (result) {
-=======
                     Promise.all(promises).then(function(result) {
->>>>>>> develop2
 
                         for (var k = 0; k < result.length; k++) {
                             result[k] = result[k].slice(2);
@@ -1292,12 +1000,7 @@ router.get(encodeURI('/orddiktat_kursist'), function(req, res) {
 });
 
 
-<<<<<<< HEAD
-router.post(encodeURI('/orddiktat_answer'), function (req, res) {
-=======
-
 router.post(encodeURI('/orddiktat_answer'), function(req, res) {
->>>>>>> develop2
 
 
     //update teacher test counter.
@@ -1305,11 +1008,7 @@ router.post(encodeURI('/orddiktat_answer'), function(req, res) {
 
 
     //det første der sker, er at 'writeTo' mappen tømmes 
-<<<<<<< HEAD
-    empty('./public/writeTo', false, function (err, removed, failed) {
-=======
     empty('./public/writeTo', false, function(err, removed, failed) {
->>>>>>> develop2
         if (err) {
             console.error(err);
         }
@@ -1325,11 +1024,7 @@ router.post(encodeURI('/orddiktat_answer'), function(req, res) {
 
     // parse the request and handle fields data
 
-<<<<<<< HEAD
-    form.parse(req, function (err, fields, files) {
-=======
     form.parse(req, function(err, fields, files) {
->>>>>>> develop2
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1343,22 +1038,14 @@ router.post(encodeURI('/orddiktat_answer'), function(req, res) {
 
         studentClass.findOneAndUpdate({
             studentID: studentID
-<<<<<<< HEAD
-        }, 'modules', function (err, student) {
-=======
         }, 'modules', function(err, student) {
->>>>>>> develop2
             if (err) {
                 res.send(err);
             } else {
                 console.log("STUDENT: " + student);
                 student.modules.push(mod);
 
-<<<<<<< HEAD
-                student.save(function (err) {
-=======
                 student.save(function(err) {
->>>>>>> develop2
                     if (err) console.log(err);
                     //					isThisLastModule(kursistModules);
                     res.redirect(kursistModules[0]);
@@ -1370,21 +1057,13 @@ router.post(encodeURI('/orddiktat_answer'), function(req, res) {
 });
 
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
-<<<<<<< HEAD
-router.get(encodeURI('/vrøvleord_kursist'), function (req, res) {
-=======
 router.get(encodeURI('/vrøvleord_kursist'), function(req, res) {
->>>>>>> develop2
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     teacherClass.find({
         "tests._id": teacherID
-<<<<<<< HEAD
-    }, function (err, teacher) {
-=======
     }, function(err, teacher) {
->>>>>>> develop2
         if (err) {
             console.log(err);
         } else {
@@ -1408,11 +1087,7 @@ router.get(encodeURI('/vrøvleord_kursist'), function(req, res) {
                     for (var j = 0; j < teacher[0].tests[i].modules[index].content.length; j++) {
                         promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[index].content[j].file.file_id));
                     }
-<<<<<<< HEAD
-                    Promise.all(promises).then(function (result) {
-=======
                     Promise.all(promises).then(function(result) {
->>>>>>> develop2
 
                         for (var k = 0; k < result.length; k++) {
                             result[k] = result[k].slice(2);
@@ -1440,17 +1115,10 @@ router.get(encodeURI('/vrøvleord_kursist'), function(req, res) {
 
 /* ALLE FUNKTIONER DER ER TILKNYTTET WORDDICTATE */
 
-<<<<<<< HEAD
-router.post(encodeURI('/vrøvleord_answer'), function (req, res) {
-    HandleTestCounter(teacherID);
-    //det første der sker, er at 'writeTo' mappen tømmes 
-    empty('./public/writeTo', false, function (err, removed, failed) {
-=======
 router.post(encodeURI('/vrøvleord_answer'), function(req, res) {
     HandleTestCounter(teacherID);
     //det første der sker, er at 'writeTo' mappen tømmes 
     empty('./public/writeTo', false, function(err, removed, failed) {
->>>>>>> develop2
         if (err) {
             console.error(err);
         }
@@ -1465,11 +1133,7 @@ router.post(encodeURI('/vrøvleord_answer'), function(req, res) {
 
     // parse the request and handle fields data
 
-<<<<<<< HEAD
-    form.parse(req, function (err, fields, files) {
-=======
     form.parse(req, function(err, fields, files) {
->>>>>>> develop2
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1483,22 +1147,14 @@ router.post(encodeURI('/vrøvleord_answer'), function(req, res) {
 
         studentClass.findOneAndUpdate({
             studentID: studentID
-<<<<<<< HEAD
-        }, 'modules', function (err, student) {
-=======
         }, 'modules', function(err, student) {
->>>>>>> develop2
             if (err) {
                 res.send(err);
             } else {
                 console.log("STUDENT: " + student);
                 student.modules.push(mod);
 
-<<<<<<< HEAD
-                student.save(function (err) {
-=======
                 student.save(function(err) {
->>>>>>> develop2
                     if (err) console.log(err);
                     //					isThisLastModule(kursistModules);
                     res.redirect(kursistModules[0]);
@@ -1509,26 +1165,12 @@ router.post(encodeURI('/vrøvleord_answer'), function(req, res) {
     });
 });
 
-<<<<<<< HEAD
-router.get(encodeURI('/clozetest_kursist'), function (req, res) {
-=======
-
-
-/* ALLE FUNKTIONER DER ER TILKNYTTET CLOZETEST */
-
-//henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
-
 router.get(encodeURI('/clozetest_kursist'), function(req, res) {
->>>>>>> develop2
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     teacherClass.find({
         "tests._id": teacherID
-<<<<<<< HEAD
-    }, function (err, teacher) {
-=======
     }, function(err, teacher) {
->>>>>>> develop2
         if (err) {
             console.log(err);
         } else {
@@ -1552,11 +1194,7 @@ router.get(encodeURI('/clozetest_kursist'), function(req, res) {
                     for (var j = 0; j < teacher[0].tests[i].modules[index].content.length; j++) {
                         promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[index].content[j].file.file_id));
                     }
-<<<<<<< HEAD
-                    Promise.all(promises).then(function (result) {
-=======
                     Promise.all(promises).then(function(result) {
->>>>>>> develop2
 
                         for (var k = 0; k < result.length; k++) {
                             result[k] = result[k].slice(2);
@@ -1582,19 +1220,11 @@ router.get(encodeURI('/clozetest_kursist'), function(req, res) {
 });
 
 
-<<<<<<< HEAD
-router.post(encodeURI('/clozetest_answer'), function (req, res) {
-
-    //det første der sker, er at 'writeTo' mappen tømmes 
-    HandleTestCounter(teacherID);
-    empty('./public/writeTo', false, function (err, removed, failed) {
-=======
 router.post(encodeURI('/clozetest_answer'), function(req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
     HandleTestCounter(teacherID);
     empty('./public/writeTo', false, function(err, removed, failed) {
->>>>>>> develop2
         if (err) {
             console.error(err);
         }
@@ -1609,11 +1239,7 @@ router.post(encodeURI('/clozetest_answer'), function(req, res) {
 
     // parse the request and handle fields data
 
-<<<<<<< HEAD
-    form.parse(req, function (err, fields, files) {
-=======
     form.parse(req, function(err, fields, files) {
->>>>>>> develop2
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1627,22 +1253,14 @@ router.post(encodeURI('/clozetest_answer'), function(req, res) {
 
         studentClass.findOneAndUpdate({
             studentID: studentID
-<<<<<<< HEAD
-        }, 'modules', function (err, student) {
-=======
         }, 'modules', function(err, student) {
->>>>>>> develop2
             if (err) {
                 res.send(err);
             } else {
                 console.log("STUDENT: " + student);
                 student.modules.push(mod);
 
-<<<<<<< HEAD
-                student.save(function (err) {
-=======
                 student.save(function(err) {
->>>>>>> develop2
                     if (err) console.log(err);
                     res.redirect(kursistModules[0]);
                     kursistModules.shift();
@@ -1650,10 +1268,6 @@ router.post(encodeURI('/clozetest_answer'), function(req, res) {
             }
         });
     });
-<<<<<<< HEAD
-
-=======
->>>>>>> develop2
 });
 
 
@@ -1661,65 +1275,8 @@ router.post(encodeURI('/clozetest_answer'), function(req, res) {
 /* ALLE FUNKTIONER DER ER TILKNYTTET INTERPRET */
 
 //henter clozetest_participant og finder data i databasen, svarende til de indtastede initialer
-<<<<<<< HEAD
-router.get(encodeURI('/tekstforståelse_kursist'), function (req, res) {
-
-	//lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
-	//senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-
-	teacherClass.find({
-		"tests._id": teacherID
-	}, function (err, teacher) {
-		if (err) {
-			console.log(err);
-		} else {
-
-			var id_serv = JSON.stringify(teacherID);
-
-			for (var i = 0; i < teacher[0].tests.length; i++) {
-				var id_db = JSON.stringify(teacher[0].tests[i]._id);
-
-				if (id_db == id_serv) {
-					var audio_files = [];
-					var promises = [];
-					var totalLen = teacher[0].tests[i].totalModules;
-					var currentLen = kursistModules.length;
-					console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);
-					var index = totalLen - currentLen;
-					var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
-					var inputQuestions = teacher[0].tests[i].modules[index].inputQuestions;
-					var moduleType = teacher[0].tests[i].modules[index].moduleType;
-
-					promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[index].audio.file_id));
-					for (var j = 0; j < teacher[0].tests[i].modules[index].content.texts.length; j++) {
-						promises.push(mongo.readFromDB('file' + j + '.mp3', teacher[0].tests[i].modules[index].content.texts[j].file.file_id));
-					}
-					Promise.all(promises).then(function (result) {
-
-						for (var k = 0; k < result.length; k++) {
-							result[k] = result[k].slice(2);
-						}
-						console.log(moduleType);
-						res.render('template', {
-							content: content,
-							// questions: inputQuestions, 
-							'title': moduleType,
-							descriptionAudio: result.shift(),
-							description: "Dette er en beskrivelse af testen",
-							audioFiles: result
-						});
-
-					});
-				} else {
-					console.log("NO MATCH");
-				}
-			}
-
-
-		}
-	});
-=======
 router.get(encodeURI('/tekstforståelse_kursist'), function(req, res) {
+
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
 
@@ -1774,7 +1331,6 @@ router.get(encodeURI('/tekstforståelse_kursist'), function(req, res) {
 
         }
     });
->>>>>>> develop2
 });
 
 
@@ -1832,60 +1388,8 @@ router.post(encodeURI('/tekstforståelse_answer'), function(req, res) {
 
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
 
-<<<<<<< HEAD
-router.get('/brev_kursist', function (req, res) {
-
-	//lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
-	//senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-	teacherClass.find({
-		"tests._id": teacherID
-	}, function (err, teacher) {
-		if (err) {
-			console.log(err);
-		} else {
-
-			var id_serv = JSON.stringify(teacherID);
-
-			for (var i = 0; i < teacher[0].tests.length; i++) {
-				var id_db = JSON.stringify(teacher[0].tests[i]._id);
-
-				if (id_db == id_serv) {
-					var audio_files = [];
-					var promises = [];
-					var totalLen = teacher[0].tests[i].totalModules;
-					var currentLen = kursistModules.length;
-					console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);
-					var index = totalLen - currentLen;
-					var moduleType = teacher[0].tests[i].modules[index].moduleType;
-
-					promises.push(mongo.readFromDB('descriptionAudio.mp3', teacher[0].tests[i].modules[index].audio.file_id));
-					for (var j = 0; j < teacher[0].tests[i].modules[index].content.length; j++) {
-						//i brevet er det en tekst fil der bliver hentet, ikke en lydfil
-						promises.push(mongo.readFromDB('file' + j + '.pdf', teacher[0].tests[i].modules[index].content[j].file.file_id));
-					}
-					Promise.all(promises).then(function (result) {
-
-						for (var k = 0; k < result.length; k++) {
-							result[k] = result[k].slice(2);
-						}
-
-						res.render('template', {
-							content: result,
-							'title': moduleType,
-							descriptionAudio: result.shift(),
-							description: "Dette er en beskrivelse af testen"
-						});
-
-					});
-				} else {
-					console.log("NO MATCH");
-				}
-			}
-
-		}
-	});
-=======
 router.get('/brev_kursist', function(req, res) {
+
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     teacherClass.find({
@@ -1935,7 +1439,6 @@ router.get('/brev_kursist', function(req, res) {
 
         }
     });
->>>>>>> develop2
 });
 
 router.post('/brev_answer', function(req, res) {
@@ -2248,93 +1751,6 @@ router.post('/upload', function(req, res) {
 
 function formHandler(url, incForm, inputCont, inputContAns, callback) {
 
-<<<<<<< HEAD
-	var files = [];
-
-	incForm.on('error', function (err) {
-		console.log("ERROR ", err);
-	});
-
-	incForm.on('fileBegin', function (name, file) {
-		console.log("1");
-		//check if there is audio file
-		if (file.name != '') {
-			file.path = 'public/readFrom/' + file.name;
-		}
-	});
-
-	incForm.on('file', function (name, file) {
-		files.push([file]);
-	});
-
-	incForm.on('end', function () {
-		console.log("3");
-		console.log('FILES FILES FIES ', files[0][0].name);
-		//this is where the fun begins 
-
-		var promises = [];
-		for (var i = 0; i < files.length; i++) {
-			promises.push(
-				new Promise(function (resolve, reject) {
-					// files.map(function (item) {
-
-					var fileUpload = files[i][0].name;
-					console.log("4 " + fileUpload);
-
-					var mongo = require('../public/js/mongoHandler');
-					//when MongoHandler is done with upload to MongoDB return result
-					//check if there is audiofile
-					if (fileUpload != '') {
-						console.log("NOT EMPTY FILE");
-						return mongo.writeToDB(fileUpload, fileUpload)
-							.then(function (result) {
-								console.log("FILEUPLOAD " + i + " FINISHED ", result);
-								// file_data[i] = result;
-								resolve(result);
-							}, function (err) {
-								console.log(err);
-							});
-					} else {
-						console.log("EMPTY FGILEEEE");
-					}
-				})
-			);
-		}
-
-
-		//once all the promises are done
-		Promise.all(promises).then(function (file_data) {
-			//when files are uploaded, they are removed from 'readFrom' folder
-			empty('./public/readfrom', false, function (err, removed, failed) {
-				if (err) {
-					console.error(err);
-				}
-			});
-
-
-			//this is the content from the teacher test
-			//this should be saved in mongoDB 'teachers' collection 
-			for (var i = 1; i < file_data.length; i++) {
-				console.log("FILES FILES FILES ", file_data);
-				inputCont[i - 1].file = file_data[i];
-			}
-
-			var mod = {
-				moduleType: decodeURI(url).slice(1),
-				audio: file_data[0],
-				content: inputCont,
-				contentAnswer: inputContAns
-			};
-
-			console.log("MODULE: ", mod);
-
-
-
-			return callback(mod);
-
-		});
-	});
-=======
     var files = [];
 
     incForm.on('error', function(err) {
@@ -2390,7 +1806,6 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
 
         //once all the promises are done
         Promise.all(promises).then(function(file_data) {
-
             //when files are uploaded, they are removed from 'readFrom' folder
             empty('./public/readfrom', false, function(err, removed, failed) {
                 if (err) {
@@ -2421,7 +1836,6 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
 
         });
     });
->>>>>>> develop2
 };
 
 
