@@ -19,6 +19,7 @@ $(function () {
 //	alert(val + " skal sendes med videre til næste side");
 		window.location.href = '/test_da'+val;
 	});
+	
 });
 
 function newTest() {

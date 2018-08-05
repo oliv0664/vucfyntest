@@ -2,17 +2,27 @@
 
 <head>
 	<script src="/jquery/jquery-3.2.1.min.js"></script>
+	<script src="/js/handle_login.js"></script>
 	<script src="/js/test.js"></script>
 	<script>
 
 		//Skal laves til sessionStorage i stedet 
 		var cookieValue = document.cookie;
-		console.log(cookieValue); 
+		console.log(cookieValue);
+		var firstSplit = cookieValue.split('=')[1]; 
 		var obj = {
-			username: cookieValue.split('=')[1]
+			username: firstSplit
 		}
-		sessionStorage.setItem('user', JSON.stringify(obj)); 
-
+		console.log(obj); 
+		sessionStorage.setItem('currentUser', JSON.stringify(obj)); 
+		$(function(){
+		handleLogin();
+		});
+		function inDevelopment(){
+			alert('mangler stadig at blive udviklet, rolig Michael');
+		}
+		
+		
 	</script>
 
 <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
@@ -42,20 +52,14 @@
     
     <ol>
     <li><button onclick="newTest()">Lav ny test</button></li>
-    <li><form id="form" method="post" action="/oversigt_info">
-		<label for="init"></label>
-		<input id="init" name="init_field" type="text" placeholder="indtast dine initialer her" >
+    <li>
+		<form id="form" method="post" action="/oversigt_info">
 		<input id="searc_init" type="submit" value=" Oversigt over dine test ">
-	</form>
+		</form>
     </li>
+	<li id="MMR" style="display: none;"> <button type="button" onclick="inDevelopment()"> Opret ny bruger</button></li>
     </ol>
-
-
-
-	<h5> Eller  </h5>
 	
-	
-
 
 
 </body>
