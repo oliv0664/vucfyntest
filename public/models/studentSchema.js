@@ -18,6 +18,7 @@ var studentSchema = new Schema({
 
 
 
+
 var studentClass = mongoose.model('students', studentSchema);
 // var moduleClass = mongoose.model('teachers', moduleSchema); 
 
