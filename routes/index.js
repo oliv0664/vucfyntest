@@ -1893,13 +1893,19 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
                 if (err) {
                     console.error(err);
                 }
+                var dir = './public/readFrom';
+    
+                if (!fs.existsSync(dir)){
+                    fs.mkdirSync(dir);
+                }
+
+                fs.writeFile('./public/readFrom/.gitignore', '', (err) => {
+                    if (err) throw err;
+                
+                    console.log("The file was succesfully saved!");
+                }); 
             });
-
-            var dir = './public/readFrom';
-
-            if (!fs.existsSync(dir)){
-                fs.mkdirSync(dir);
-            }
+            
 
 
             //this is the content from the teacher test
@@ -1940,13 +1946,19 @@ function folderHandler() {
         if (err) {
             console.error(err);
         }
+        var dir = './public/writeTo';
+    
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
+
+        fs.writeFile('./public/writeTo/.gitignore', '', (err) => {
+            if (err) throw err;
+        
+            console.log("The file was succesfully saved!");
+        });
     });
 
-    var dir = './public/writeTo';
-
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
-    }
 }
 
 
