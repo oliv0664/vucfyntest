@@ -989,11 +989,7 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
 
     HandleTestCounter(teacherID);
     //det første der sker, er at 'writeTo' mappen tømmes 
-    empty('./public/writeTo', false, function(err, removed, failed) {
-        if (err) {
-            console.error(err);
-        }
-    });
+    folderHandler(); 
 
     // arrays that should hold data fields from the client form
     var inputAnswers = [];
@@ -1105,11 +1101,7 @@ router.post(encodeURI('/orddiktat_answer'), function(req, res) {
 
 
     //det første der sker, er at 'writeTo' mappen tømmes 
-    empty('./public/writeTo', false, function(err, removed, failed) {
-        if (err) {
-            console.error(err);
-        }
-    });
+    folderHandler(); 
 
     console.log('test');
     // arrays that should hold data fields from the client form
@@ -1218,11 +1210,7 @@ router.get(encodeURI('/vrøvleord_kursist'), function(req, res) {
 router.post(encodeURI('/vrøvleord_answer'), function(req, res) {
     HandleTestCounter(teacherID);
     //det første der sker, er at 'writeTo' mappen tømmes 
-    empty('./public/writeTo', false, function(err, removed, failed) {
-        if (err) {
-            console.error(err);
-        }
-    });
+    folderHandler(); 
 
     console.log('test');
     // arrays that should hold data fields from the client form
@@ -1330,11 +1318,7 @@ router.post(encodeURI('/clozetest_answer'), function(req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
     HandleTestCounter(teacherID);
-    empty('./public/writeTo', false, function(err, removed, failed) {
-        if (err) {
-            console.error(err);
-        }
-    });
+    folderHandler(); 
 
     console.log('test');
     // arrays that should hold data fields from the client form
@@ -1442,11 +1426,7 @@ router.get(encodeURI('/tekstforståelse_kursist'), function(req, res) {
 router.post(encodeURI('/tekstforståelse_answer'), function(req, res) {
     //det første der sker, er at 'writeTo' mappen tømmes 
     HandleTestCounter(teacherID);
-    empty('./public/writeTo', false, function(err, removed, failed) {
-        if (err) {
-            console.error(err);
-        }
-    });
+    folderHandler(); 
 
     // arrays that should hold data fields from the client form
     var inputAnswers = [];
@@ -1550,11 +1530,7 @@ router.post('/brev_answer', function(req, res) {
     //det første der sker, er at 'writeTo' mappen tømmes 
     HandleTestCounter(teacherID);
 
-    empty('./public/writeTo', false, function(err, removed, failed) {
-        if (err) {
-            console.error(err);
-        }
-    });
+    folderHandler(); 
 
     console.log('test');
     // arrays that should hold data fields from the client form
@@ -1919,6 +1895,12 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
                 }
             });
 
+            var dir = './public/readFrom';
+
+            if (!fs.existsSync(dir)){
+                fs.mkdirSync(dir);
+            }
+
 
             //this is the content from the teacher test
             //this should be saved in mongoDB 'teachers' collection 
@@ -1951,6 +1933,23 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
 //		console.log('this is the last module, now we update the test counter');
 //	}
 //};
+
+
+function folderHandler() {
+    empty('./public/writeTo', true, function(err, removed, failed) {
+        if (err) {
+            console.error(err);
+        }
+    });
+
+    var dir = './public/writeTo';
+
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+    }
+}
+
+
 function HandleTestCounter(testId) {
     console.log(testId);
     var isThisLastModule = kursistModules.length === 1;
