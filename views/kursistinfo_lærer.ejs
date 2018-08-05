@@ -15,31 +15,20 @@
     </style>
 
     <script>
-        // $(function() {
-        //     $('#form').bind('submit', function(event) {
-        //         event.preventDefault();
+        $(function() {
+            $('#form').bind('submit', function(event) {
+                event.preventDefault();
 
-        //         var user = sessionStorage.getItem('currentUser');
-        //         user = JSON.parse(user);
-        //         var teacherModules = [];
+                var user = sessionStorage.getItem('currentUser');
+                user = JSON.parse(user);
+                user.teacherModules.shift();
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+                $('#data').val(JSON.stringify(user));
 
-        //         var checkboxes = $('#teacher_data input:checkbox');
+                $(this).unbind('submit').submit();
+            });
 
-        //         for (var i = 0; i < checkboxes.length; i++) {
-        //             if (checkboxes[i].checked) {
-        //                 teacherModules.push(checkboxes[i].id);
-        //             }
-        //         }
-
-        //         user.teacherModules = teacherModules;
-        //         sessionStorage.setItem('currentUser', JSON.stringify(user));
-
-        //         $('#data').val(JSON.stringify(user));
-
-        //         $(this).unbind('submit').submit();
-        //     });
-
-        // });
+        });
     </script>
 
 </head>
@@ -68,6 +57,7 @@
         <button type="button" id="removeButton">Fjern indtastningsfelt</button>
 
         <div id="bottom">
+            <input type="hidden" id="data" name="data">
             <input class="submit" type="submit" value="Gem/Videre">
         </div>
     </form>

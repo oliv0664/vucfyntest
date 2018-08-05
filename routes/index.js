@@ -310,9 +310,9 @@ router.post('/index_addinfo', function(req, res) {
         console.log("&&& ", JSON.parse(fields.data));
         var data = JSON.parse(fields.data)
 
-        initials = data.username;
-        teacherModules = data.teacherModules;
-        teacherModules.push('nextpage');
+        var initials = data.username;
+        var teacherModules = data.teacherModules;
+        // teacherModules.push('nextpage');
 
         console.log("TEACHERMODULES ", teacherModules);
         console.log("INITIALs ", initials);
@@ -373,11 +373,21 @@ router.get(encodeURI('/kursistinfo_lærer'), function(req, res) {
 router.post(encodeURI('/kursistinfo'), function(req, res) {
 
     var mod;
+    var initials;
+    var teacherModules;
 
     var form = new formidable.IncomingForm();
 
     form.parse(req, function(err, fields, files) {
         console.log("INFO INFO INFO ", fields);
+
+        var data = JSON.parse(fields.data);
+        delete fields.data;
+
+        initials = data.username;
+        console.log(initials);
+        teacherModules = data.teacherModules;
+
         var temp = Object.keys(fields);
         console.log("INFO INFO INFO 222222 ", temp);
 
@@ -430,24 +440,25 @@ router.post(encodeURI('/kursistinfo'), function(req, res) {
             contentAnswer
         }
 
+
+        teacherClass.findOneAndUpdate({
+            initials: initials
+        }, 'tests', function(err, teacher) {
+            if (err) {
+                res.send(err);
+            } else {
+                console.log("TEACHER: " + teacher);
+                teacher.tests[teacher.tests.length - 1].modules.push(mod);
+
+                teacher.save(function(err) {
+                    if (err) console.log(err);
+                    res.redirect(teacherModules[0]);
+                    teacherModules.shift();
+                });
+            }
+        });
     });
 
-    teacherClass.findOneAndUpdate({
-        initials: initials
-    }, 'tests', function(err, teacher) {
-        if (err) {
-            res.send(err);
-        } else {
-            console.log("TEACHER: " + initials);
-            teacher.tests[teacher.tests.length - 1].modules.push(mod);
-
-            teacher.save(function(err) {
-                if (err) console.log(err);
-                res.redirect(teacherModules[0]);
-                teacherModules.shift();
-            });
-        }
-    });
 
 });
 
@@ -466,7 +477,8 @@ router.get(encodeURI('/orddiktat_lærer'), function(req, res) {
 
 router.post(encodeURI('/orddiktat'), function(req, res) {
 
-
+    var initials;
+    var teacherModules;
     //this code uploads all files from view to readFrom folder
     //then it uploads all files to MongoDB
     //mangler en bedre navngivning af filer i DB, så de kan findes igen 
@@ -484,6 +496,13 @@ router.post(encodeURI('/orddiktat'), function(req, res) {
     form.parse(req, function(err, fields, files) {
 
         console.log("asdasdasdasdasdasd", fields);
+
+        var data = JSON.parse(fields.data);
+        delete fields.data;
+
+        initials = data.username;
+        teacherModules = data.teacherModules;
+
         // organize data fields into temporary arrays for reference 
         var tempInputContent = Object.keys(fields).filter(input => input.length < 12);
         var tempInputContentAnswers = Object.keys(fields).filter(input => input.length > 12);
