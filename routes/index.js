@@ -15,6 +15,8 @@ var studentClass = require('./../public/models/studentSchema.js');
 var mongo = require('./../public/js/mongoHandler.js');
 var mongoose = require('mongoose');
 
+
+// %%% Skal gemmes i sessionStorage
 var teacherID;
 var studentID;
 var initials;
@@ -29,14 +31,16 @@ var tjek;
 
 router.get('/', function(req, res, next) {
     initials = "";
+
     res.render('login', { //login
         title: 'Express'
 
     });
 });
 router.get('/start', function(req, res, next) {
+    
     res.render('start', { //login
-        title: 'Express'
+        title: 'Start'
     });
 });
 
@@ -62,8 +66,25 @@ router.post('/signin', function(req, res, next) {
                     console.log('her er din teacher', teacher);
                     if (teacher.password != password)
                         res.redirect('/');
-                    else
+                    else {
+
+                        //Skal laves om så 'user' sendes til GET request som i test_data
+                        //her kan det så sendes til klienten, som kan gemme det i sessionStorage som objekt
+                        
+                        // res.redirect(url.format({
+                        //     pathname: '/start',
+                        //     query: {
+                        //         'user': user
+                        //     }
+                        // }));
+
+                        //ved get start skal der laves
+                        // var user = req.query.user;
+
+                        res.cookie('username', user);   
                         res.redirect('start');
+                    }
+
                 } else {
                     res.redirect('/');
                 }
@@ -213,8 +234,13 @@ router.post('/welcome_addinfo', function(req, res) {
 
     //var db = req.db;
     console.log('before anything: ', studentModules);
+    
+
+    // %%% Skal gemmes i Sessionstorage
     studentID = req.body.id;
     teacherID = req.app.get('idTeacher');
+
+
     console.log(studentID + " YNLPYPHTASCSACASC");
 
     //var collection = db.get('students');
@@ -951,7 +977,12 @@ router.get(encodeURI('/kursistinfo_kursist'), function(req, res) {
 
 
     teacherClass.find({
+
+
+        // %%% Skal hentes fra sessionStorage
         "tests._id": teacherID
+
+
     }, function(err, teacher) {
         if (err) {
             console.log(err);
@@ -987,7 +1018,12 @@ router.get(encodeURI('/kursistinfo_kursist'), function(req, res) {
 
 router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
 
+
+    // %%% Skal hentes fra sessionStorage
     HandleTestCounter(teacherID);
+
+
+
     //det første der sker, er at 'writeTo' mappen tømmes 
     folderHandler(); 
 
@@ -1011,7 +1047,11 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
         }
 
         studentClass.findOneAndUpdate({
+
+            // %%% Skal hentes fra sessionStorage
             studentID: studentID
+
+
         }, 'modules', function(err, student) {
             if (err) {
                 res.send(err);
@@ -1036,12 +1076,21 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
 //henter 'worddictate_participant' og finder data i databasen, svarende til de indtastede initialer
 router.get(encodeURI('/orddiktat_kursist'), function(req, res) {
 
-    console.log("TEACHER ID: " + typeof JSON.stringify(teacherID));
     // teacherID = JSON.stringify(teacherID); 
+    // %%% Skal hentes fra sessionStorage
+    console.log("TEACHER ID: " + typeof JSON.stringify(teacherID));
+    
 
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
+    
+    
     teacherClass.find({
+        
+        
+        // %%% Skal hentes fra sessionStorage
         "tests._id": teacherID
+
+
     }, function(err, teacher) {
         if (err) {
             console.log(err);
@@ -1097,6 +1146,7 @@ router.post(encodeURI('/orddiktat_answer'), function(req, res) {
 
 
     //update teacher test counter.
+    // %%% Skal hentes fra sessionStorage
     HandleTestCounter(teacherID);
 
 
@@ -1126,7 +1176,11 @@ router.post(encodeURI('/orddiktat_answer'), function(req, res) {
         }
 
         studentClass.findOneAndUpdate({
+
+            // %%% Skal hentes fra sessionStorage
             studentID: studentID
+
+
         }, 'modules', function(err, student) {
             if (err) {
                 res.send(err);
@@ -1155,7 +1209,11 @@ router.get(encodeURI('/vrøvleord_kursist'), function(req, res) {
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     teacherClass.find({
+
+        // %%% Skal hentes fra sessionStorage
         "tests._id": teacherID
+
+
     }, function(err, teacher) {
         if (err) {
             console.log(err);
@@ -1208,7 +1266,11 @@ router.get(encodeURI('/vrøvleord_kursist'), function(req, res) {
 
 
 router.post(encodeURI('/vrøvleord_answer'), function(req, res) {
+
+    // %%% Skal hentes fra sessionStorage
     HandleTestCounter(teacherID);
+
+
     //det første der sker, er at 'writeTo' mappen tømmes 
     folderHandler(); 
 
@@ -1234,7 +1296,11 @@ router.post(encodeURI('/vrøvleord_answer'), function(req, res) {
         }
 
         studentClass.findOneAndUpdate({
+
+            // %%% Skal hentes fra sessionStorage
             studentID: studentID
+
+
         }, 'modules', function(err, student) {
             if (err) {
                 res.send(err);
@@ -1263,7 +1329,12 @@ router.get(encodeURI('/clozetest_kursist'), function(req, res) {
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     teacherClass.find({
+
+        
+        // %%% Skal hentes fra sessionStorage
         "tests._id": teacherID
+
+
     }, function(err, teacher) {
         if (err) {
             console.log(err);
@@ -1317,7 +1388,12 @@ router.get(encodeURI('/clozetest_kursist'), function(req, res) {
 router.post(encodeURI('/clozetest_answer'), function(req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
+    
+    
+    // %%% Skal hentes fra sessionStorage
     HandleTestCounter(teacherID);
+
+
     folderHandler(); 
 
     console.log('test');
@@ -1342,7 +1418,11 @@ router.post(encodeURI('/clozetest_answer'), function(req, res) {
         }
 
         studentClass.findOneAndUpdate({
+
+            // %%% Skal hentes fra sessionStorage
             studentID: studentID
+
+
         }, 'modules', function(err, student) {
             if (err) {
                 res.send(err);
@@ -1370,7 +1450,11 @@ router.get(encodeURI('/tekstforståelse_kursist'), function(req, res) {
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
 
     teacherClass.find({
+
+        // %%% Skal hentes fra sessionStorage
         "tests._id": teacherID
+
+
     }, function(err, teacher) {
         if (err) {
             console.log(err);
@@ -1425,7 +1509,11 @@ router.get(encodeURI('/tekstforståelse_kursist'), function(req, res) {
 
 router.post(encodeURI('/tekstforståelse_answer'), function(req, res) {
     //det første der sker, er at 'writeTo' mappen tømmes 
+
+    // %%% Skal hentes fra sessionStorage
     HandleTestCounter(teacherID);
+
+
     folderHandler(); 
 
     // arrays that should hold data fields from the client form
@@ -1451,7 +1539,11 @@ router.post(encodeURI('/tekstforståelse_answer'), function(req, res) {
         }
 
         studentClass.findOneAndUpdate({
+
+            // %%% Skal hentes fra sessionStorage
             studentID: studentID
+
+
         }, 'modules', function(err, student) {
             if (err) {
                 res.send(err);
@@ -1477,7 +1569,11 @@ router.get('/brev_kursist', function(req, res) {
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     teacherClass.find({
+
+        // %%% Skal hentes fra sessionStorage
         "tests._id": teacherID
+
+
     }, function(err, teacher) {
         if (err) {
             console.log(err);
@@ -1528,7 +1624,9 @@ router.get('/brev_kursist', function(req, res) {
 router.post('/brev_answer', function(req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
+    // %%% Skal hentes fra sessionStorage
     HandleTestCounter(teacherID);
+
 
     folderHandler(); 
 
@@ -1554,7 +1652,11 @@ router.post('/brev_answer', function(req, res) {
         }
 
         studentClass.findOneAndUpdate({
+
+            // %%% Skal hentes fra sessionStorage
             studentID: studentID
+
+
         }, 'modules', function(err, student) {
             if (err) {
                 res.send(err);
@@ -1684,7 +1786,11 @@ router.post('/send_mail', function(req, res) {
     var testID;
 
     studentClass.findOne({
+
+        // %%% Skal hentes fra sessionStorage
         'studentID': studentID
+
+
     }, function(err, student) {
         if (err) {
             console.log(err);

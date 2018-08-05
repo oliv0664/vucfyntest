@@ -1,6 +1,8 @@
 
 $(function () {
 	console.log('ready');
+	
+	
 	$('.ul_btn').click(function () {
 		var x = $(this).siblings("ul:first");
 		console.log(x);
