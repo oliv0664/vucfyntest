@@ -1783,7 +1783,7 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
         //once all the promises are done
         Promise.all(promises).then(function(file_data) {
             //when files are uploaded, they are removed from 'readFrom' folder
-            empty('./public/readfrom', false, function(err, removed, failed) {
+            empty('./public/readfrom', true, function(err, removed, failed) {
                 if (err) {
                     console.error(err);
                 }
