@@ -38,7 +38,7 @@ router.get('/', function(req, res, next) {
     });
 });
 router.get('/start', function(req, res, next) {
-    
+
     res.render('start', { //login
         title: 'Start'
     });
@@ -70,7 +70,7 @@ router.post('/signin', function(req, res, next) {
 
                         //Skal laves om så 'user' sendes til GET request som i test_data
                         //her kan det så sendes til klienten, som kan gemme det i sessionStorage som objekt
-                        
+
                         // res.redirect(url.format({
                         //     pathname: '/start',
                         //     query: {
@@ -81,7 +81,7 @@ router.post('/signin', function(req, res, next) {
                         //ved get start skal der laves
                         // var user = req.query.user;
 
-                        res.cookie('username', user);   
+                        res.cookie('username', user);
                         res.redirect('start');
                     }
 
@@ -234,7 +234,7 @@ router.post('/welcome_addinfo', function(req, res) {
 
     //var db = req.db;
     console.log('before anything: ', studentModules);
-    
+
 
     // %%% Skal gemmes i Sessionstorage
     studentID = req.body.id;
@@ -307,11 +307,15 @@ router.post('/index_addinfo', function(req, res) {
 
 
     form.parse(req, function(err, fields, files) {
-        teacherModules = Object.keys(fields);
-        initials = fields[teacherModules.shift()];
+        console.log("&&& ", JSON.parse(fields.data));
+        var data = JSON.parse(fields.data)
+
+        initials = data.username;
+        teacherModules = data.teacherModules;
         teacherModules.push('nextpage');
 
         console.log("TEACHERMODULES ", teacherModules);
+        console.log("INITIALs ", initials);
 
         teacherClass.findOne({
             initials: initials
@@ -1025,7 +1029,7 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
 
 
     //det første der sker, er at 'writeTo' mappen tømmes 
-    folderHandler(); 
+    folderHandler();
 
     // arrays that should hold data fields from the client form
     var inputAnswers = [];
@@ -1079,14 +1083,14 @@ router.get(encodeURI('/orddiktat_kursist'), function(req, res) {
     // teacherID = JSON.stringify(teacherID); 
     // %%% Skal hentes fra sessionStorage
     console.log("TEACHER ID: " + typeof JSON.stringify(teacherID));
-    
+
 
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
-    
-    
+
+
     teacherClass.find({
-        
-        
+
+
         // %%% Skal hentes fra sessionStorage
         "tests._id": teacherID
 
@@ -1151,7 +1155,7 @@ router.post(encodeURI('/orddiktat_answer'), function(req, res) {
 
 
     //det første der sker, er at 'writeTo' mappen tømmes 
-    folderHandler(); 
+    folderHandler();
 
     console.log('test');
     // arrays that should hold data fields from the client form
@@ -1272,7 +1276,7 @@ router.post(encodeURI('/vrøvleord_answer'), function(req, res) {
 
 
     //det første der sker, er at 'writeTo' mappen tømmes 
-    folderHandler(); 
+    folderHandler();
 
     console.log('test');
     // arrays that should hold data fields from the client form
@@ -1330,7 +1334,7 @@ router.get(encodeURI('/clozetest_kursist'), function(req, res) {
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     teacherClass.find({
 
-        
+
         // %%% Skal hentes fra sessionStorage
         "tests._id": teacherID
 
@@ -1388,13 +1392,13 @@ router.get(encodeURI('/clozetest_kursist'), function(req, res) {
 router.post(encodeURI('/clozetest_answer'), function(req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
-    
-    
+
+
     // %%% Skal hentes fra sessionStorage
     HandleTestCounter(teacherID);
 
 
-    folderHandler(); 
+    folderHandler();
 
     console.log('test');
     // arrays that should hold data fields from the client form
@@ -1514,7 +1518,7 @@ router.post(encodeURI('/tekstforståelse_answer'), function(req, res) {
     HandleTestCounter(teacherID);
 
 
-    folderHandler(); 
+    folderHandler();
 
     // arrays that should hold data fields from the client form
     var inputAnswers = [];
@@ -1628,7 +1632,7 @@ router.post('/brev_answer', function(req, res) {
     HandleTestCounter(teacherID);
 
 
-    folderHandler(); 
+    folderHandler();
 
     console.log('test');
     // arrays that should hold data fields from the client form
@@ -2000,18 +2004,18 @@ function formHandler(url, incForm, inputCont, inputContAns, callback) {
                     console.error(err);
                 }
                 var dir = './public/readFrom';
-    
-                if (!fs.existsSync(dir)){
+
+                if (!fs.existsSync(dir)) {
                     fs.mkdirSync(dir);
                 }
 
                 fs.writeFile('./public/readFrom/.gitignore', '', (err) => {
                     if (err) throw err;
-                
+
                     console.log("The file was succesfully saved!");
-                }); 
+                });
             });
-            
+
 
 
             //this is the content from the teacher test
@@ -2053,14 +2057,14 @@ function folderHandler() {
             console.error(err);
         }
         var dir = './public/writeTo';
-    
-        if (!fs.existsSync(dir)){
+
+        if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir);
         }
 
         fs.writeFile('./public/writeTo/.gitignore', '', (err) => {
             if (err) throw err;
-        
+
             console.log("The file was succesfully saved!");
         });
     });
