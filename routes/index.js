@@ -395,7 +395,7 @@ router.post(encodeURI('/kursistinfo'), function(req, res) {
         }
 
         mod = {
-            moduleType: 'Kursistinfo',
+            moduleType: 'kursistinfo',
             content: inputContent,
             contentAnswer
         }
@@ -1006,7 +1006,7 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
             inputAnswers.push(fields[temp[i]]);
         }
         var mod = {
-            moduleType: 'Kursistinfo',
+            moduleType: 'kursistinfo',
             answers: inputAnswers
         }
 
