@@ -48,7 +48,7 @@ var teacherSchema = new Schema({
 			default: []
 		}
 	}]
-});
+}, {usePushEach: true});
 
 
 

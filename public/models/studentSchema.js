@@ -12,7 +12,7 @@ var studentSchema = new Schema({
         answers: { type: Array, default: [] }
     }]
    
-}); 
+},{usePushEach: true}); 
 
 
 
