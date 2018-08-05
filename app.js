@@ -30,9 +30,10 @@ var fs = require('fs');
 // });
 
 
-setInterval(function() {
-    http.get("http://sheltered-hamlet-93311.herokuapp.com");
-}, 300000);
+// DENNE KODE ER KUN TIL AT HOLE HEROKU OPPE
+//setInterval(function() {
+//    http.get("http://sheltered-hamlet-93311.herokuapp.com");
+//}, 300000);
 
 
 
