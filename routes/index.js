@@ -975,9 +975,10 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
 
 
     // %%% Skal hentes fra sessionStorage
-    HandleTestCounter(teacherID);
 
-
+    var teacherID;
+    var studentID;
+    var kursistModules;
 
     //det første der sker, er at 'writeTo' mappen tømmes 
     folderHandler();
@@ -989,6 +990,15 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
 
     // parse the request and handle fields data
     form.parse(req, function(err, fields, files) {
+
+        var data = JSON.parse(fields.data);
+        delete fields.data;
+
+        teacherID = data.teacherID;
+        studentID = data.studentID;
+        kursistModules = data.studentModules;
+
+        HandleTestCounter(teacherID);
 
         inputAnswers = [];
         var temp = Object.keys(fields);

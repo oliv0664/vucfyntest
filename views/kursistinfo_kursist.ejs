@@ -45,6 +45,23 @@
 
             console.log($('#check_1').val());
 
+            var user = JSON.parse(sessionStorage.getItem('currentUser'));
+            var teacherID = user.testID;
+            var studentID = user.studentID;
+            var studentModules = user.studentModules;
+            studentModules.shift();
+            user.studentModules = studentModules;
+
+            sessionStorage.setItem('currentUser', JSON.stringify(user));
+
+            var obj = {
+                teacherID: teacherID,
+                studentID: studentID,
+                studentModules: studentModules
+            }
+
+            $('#data').val(JSON.stringify(obj));
+
             $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
         });
     });
@@ -87,5 +104,6 @@
                         <% } %>
                             <% } %>
 
-                                <input type="submit">
+                                <input type="hidden" id="data" name="data">
+                                <input class="submit" type="submit" value="Gem/Videre">
 </form>
