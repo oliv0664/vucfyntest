@@ -1,6 +1,8 @@
 
 $(function () {
 	console.log('ready');
+	
+	
 	$('.ul_btn').click(function () {
 		var x = $(this).siblings("ul:first");
 		console.log(x);
@@ -17,6 +19,7 @@ $(function () {
 //	alert(val + " skal sendes med videre til næste side");
 		window.location.href = '/test_da'+val;
 	});
+	
 });
 
 function newTest() {

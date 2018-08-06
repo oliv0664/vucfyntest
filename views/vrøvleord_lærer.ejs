@@ -8,6 +8,22 @@
     <script src="/js/nonsense_teacher.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
 
+    <script>
+        $(function() {
+            $('#form').bind('submit', function(event) {
+                event.preventDefault();
+
+                var user = sessionStorage.getItem('currentUser');
+                user = JSON.parse(user);
+                user.teacherModules.shift();
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+                $('#data').val(JSON.stringify(user));
+
+                $(this).unbind('submit').submit();
+            });
+
+        });
+    </script>
 </head>
 
 <body>
@@ -17,7 +33,7 @@
         <h3 class="header" id="head_2">NIVEAUAFKLARINGSTEST</h3>
         <h3 class="header" id="head_3">VUC FYN ODENSE</h3>
     </div>
-    
+
     <form id="form" method="post" action="/vrøvleord" enctype="multipart/form-data">
         <div id="section">
             <h1 class="title" id="h1_1">VRØVLEORD</h1>
@@ -35,7 +51,8 @@
 
 
         <div id="bottom">
-            <input type="submit">
+            <input type="hidden" id="data" name="data">
+            <input class="submit" type="submit" value="Gem/Videre">
         </div>
 
     </form>

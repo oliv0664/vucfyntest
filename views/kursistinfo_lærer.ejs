@@ -10,11 +10,29 @@
 
     <style>
         #removeButton {
-            margin-top: 20px; 
+            margin-top: 20px;
         }
     </style>
 
+    <script>
+        $(function() {
+            $('#form').bind('submit', function(event) {
+                event.preventDefault();
+
+                var user = sessionStorage.getItem('currentUser');
+                user = JSON.parse(user);
+                user.teacherModules.shift();
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+                $('#data').val(JSON.stringify(user));
+
+                $(this).unbind('submit').submit();
+            });
+
+        });
+    </script>
+
 </head>
+
 <body>
 
     <div id="header">
@@ -24,14 +42,13 @@
     </div>
 
     <h1 class="title" id="h1_1">KURSISTINFO</h1>
-    Her kan du vælge hvilken information kursisten skal indtaste <br>
-    For eksempel: fornavn, efternavn, osv. 
+    Her kan du vælge hvilken information kursisten skal indtaste <br> For eksempel: fornavn, efternavn, osv.
 
 
     <form id="form" method="post" action="/kursistinfo" enctype="multipart/form-data">
         <div id="section">
         </div>
-        
+
         <button type="button" id="addButton1">Indsæt indtastningsfelt</button>
         <button type="button" id="addButton2">Indsæt afkrydsningsfelt</button>
         <button type="button" id="addButton3">Indsæt radioknapper</button>
@@ -40,7 +57,8 @@
         <button type="button" id="removeButton">Fjern indtastningsfelt</button>
 
         <div id="bottom">
-            <input type="submit">
+            <input type="hidden" id="data" name="data">
+            <input class="submit" type="submit" value="Gem/Videre">
         </div>
     </form>
 

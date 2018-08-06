@@ -8,6 +8,22 @@
     <script src="/js/letter_teacher.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
 
+    <script>
+        $(function() {
+            $('#form').bind('submit', function(event) {
+                event.preventDefault();
+
+                var user = sessionStorage.getItem('currentUser');
+                user = JSON.parse(user);
+                user.teacherModules.shift();
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+                $('#data').val(JSON.stringify(user));
+
+                $(this).unbind('submit').submit();
+            });
+
+        });
+    </script>
 </head>
 
 <body>
@@ -25,17 +41,17 @@
             <p>
                 Indsæt lydfil der beskriver opgaven
                 <input type="file" name="file" class="h2size" accept="audio/*" onchange="readURL(this)" required>
-                </p>
+            </p>
             <p>
-            Indsæt dokument der beskriver opgaven
-            <b>
+                Indsæt dokument der beskriver opgaven
+                <b>
                 (kan kun acceptere ren tekstdokumenter) 
             </b>
-            <input type="file" name="descriptiopn" class="h2size" accept="application/pdf" onchange="readURL(this)" required>
+                <input type="file" name="descriptiopn" class="h2size" accept="application/pdf" onchange="readURL(this)" required>
             </p>
-            
-<!--            <br> Indsæt hvor lang tid testen varer (hh:mm:ss)-->
-<!--            <input class="h2size" type="time" id="time" name="time" step="1">-->
+
+            <!--            <br> Indsæt hvor lang tid testen varer (hh:mm:ss)-->
+            <!--            <input class="h2size" type="time" id="time" name="time" step="1">-->
         </div>
 
 
@@ -47,7 +63,8 @@
 
         <div id="bottom">
             <input type="hidden" id="content" name="content">
-            <input type="submit">
+            <input type="hidden" id="data" name="data">
+            <input class="submit" type="submit" value="Gem/Videre">
         </div>
 
     </form>
