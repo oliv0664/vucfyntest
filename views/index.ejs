@@ -23,6 +23,7 @@
                         teacherModules.push(checkboxes[i].id);
                     }
                 }
+                teacherModules.push('nextpage');
 
                 user.teacherModules = teacherModules;
                 sessionStorage.setItem('currentUser', JSON.stringify(user));
