@@ -214,15 +214,7 @@ router.get('/error', function(req, res, next) {
 //        });
 //    });
 //});
-function setupStudentModules(modulesArray) {
-    var tempArray = [];
-    for (var i = 0; i < modulesArray.length; i++) {
-        console.log("MODULETYPE " + modulesArray[i].moduleType);
-        tempArray.push(modulesArray[i].moduleType + '_kursist');
-    }
-    tempArray.push('finalpage');
-    return tempArray;
-}
+
 
 function getId() {
     var id = '5a785e4b3867e72b94b2baba';
@@ -250,68 +242,53 @@ router.post('/welcome_addinfo', function(req, res) {
     // %%% Skal gemmes i Sessionstorage
     studentID = req.body.id;
     teacherID = JSON.parse(req.body.data);
-
+    kursistModules = JSON.parse(req.body.modules);
 
     console.log(studentID + " YNLPYPHTASCSACASC");
     console.log(teacherID + " YNLPYPHTASCSACASC");
 
     //var collection = db.get('students');
-    teacherClass.find().where({
-        'tests._id': teacherID
-    }).exec(function(err, teacher) {
+    studentClass.findOneAndUpdate({
+        studentID: studentID
+    }, 'modules', function(err, student) {
         if (err) {
             res.send(err);
         } else {
-            console.log(teacher);
-            // find relevnt teacher data to student 
-            console.log(teacher[0].tests[0].modules[0].moduleType);
-            // make student object with data
-            var id_serv = JSON.stringify(teacherID);
 
-            for (var i = 0; i < teacher[0].tests.length; i++) {
+            if (!student) {
+                student = new studentClass({
+                    studentID: studentID,
+                    teacherID: teacherID,
+                    studentinfo: {},
+                    modules: []
+                });
+                console.log("STUDENT: ", kursistModules);
 
-                var id_db = JSON.stringify(teacher[0].tests[i]._id);
-                if (id_db == id_serv) {
+                student.save(function(err) {
+                    if (err) {
+                        console.log(err);
+                    }
 
-                    kursistModules = setupStudentModules(teacher[0].tests[i].modules);
-
-                    studentClass.findOneAndUpdate({
-                        studentID: studentID
-                    }, 'modules', function(err, student) {
-                        if (err) {
-                            res.send(err);
-                        } else {
-
-                            if (!student) {
-                                student = new studentClass({
-                                    studentID: studentID,
-                                    teacherID: teacherID,
-                                    studentinfo: {},
-                                    modules: []
-                                });
-                                console.log("STUDENT: ", kursistModules);
-
-                                student.save(function(err) {
-                                    if (err) {
-                                        console.log(err);
-                                    }
-
-                                    res.redirect(kursistModules[0]);
-                                    kursistModules.shift();
-                                });
-                            } else {
-                                res.send('ID ER TAGET!');
-                            }
+                    var modules = kursistModules;
+                    var idTeacher = teacherID;
+                    // res.cookie('studentModules', kursistModules);
+                    res.redirect(url.format({
+                        pathname: '/' + kursistModules[0],
+                        query: {
+                            'modules': modules,
+                            'idTeacher': idTeacher
                         }
-                    });
+                    }));
 
-                }
 
+                    kursistModules.shift();
+                });
+            } else {
+                res.send('ID ER TAGET!');
             }
-
         }
-
     });
+
 });
 
 router.post('/index_addinfo', function(req, res) {
@@ -949,6 +926,9 @@ var g_moduleCount = 0;
 
 router.get(encodeURI('/kursistinfo_kursist'), function(req, res) {
 
+    var kursistModules = req.query.modules;
+    var teacherID = req.query.idTeacher;
+    console.log(kursistModules);
     teacherClass.find({
 
 
@@ -968,8 +948,11 @@ router.get(encodeURI('/kursistinfo_kursist'), function(req, res) {
 
                 if (id_db == id_serv) {
                     var totalLen = teacher[0].tests[i].totalModules;
-                    var currentLen = kursistModules.length;
+                    var currentLen = kursistModules.length - 1;
+                    console.log(totalLen);
+                    console.log(currentLen);
                     var index = totalLen - currentLen;
+                    console.log(index);
                     var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
                     var moduleType = teacher[0].tests[i].modules[index].moduleType;
 
