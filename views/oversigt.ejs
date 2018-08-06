@@ -46,8 +46,7 @@
 		<tbody>
 		<tr>
 			<td>
-				<button class="ul_btn" type="button">+</button> Quiz <%=i+1%><%=content.tests[i].date.toLocaleDateString() %>:
-
+				<button type="button" class="ul_btn">+</button> Quiz <%=i+1%><%=content.tests[i].date.toLocaleString()%>:
 				<ul class="ul_show" style="display: none">
 					<% for(var j=0; j < content.tests[i].totalModules; j++) { %>
 						<li>

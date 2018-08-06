@@ -14,7 +14,7 @@ var mongoose = require('mongoose');
 var Grid = require('gridfs-stream');
 var http = require("http");
 
-// var mongoDB = 'mongodb://localhost/vucfyntest';
+//var mongoDB = 'mongodb://localhost/vucfyntest';
 var mongoDB = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb';
 
 
@@ -86,7 +86,7 @@ checkIdInUrl = function(req, res, next) {
         var collection = teacherClass.find();
 
         var idUrl = req.url.slice(8);
-        var teacherID;
+
         // get the id reference to the collection docs
         collection.find({}).then((docs) => {
             var match = false;
@@ -98,56 +98,21 @@ checkIdInUrl = function(req, res, next) {
                     // is technically != the teachers id anymore!.
                     console.log("ID " + docs[i].tests[j]._id);
                     idTeacher = docs[i].tests[j]._id;
-                    console.log(idUrl);
+
                     if (idUrl == idTeacher) {
-                        teacherID = idTeacher;
+                        app.set('idTeacher', idTeacher);
                         match = true;
-                        break;
+                        console.log('there is a match, now redirecting to the correct page');
+                        res.render('welcome', {
+                            title: 'main page',
+                            username: idTeacher
+                        });
                         //                   next();
                     }
-                    if (match) { break; }
                 }
+
             }
-
-            if (match) {
-
-                app.set('idTeacher', teacherID);
-                console.log('there is a match, now redirecting to the correct page');
-
-                var kursistModules;
-
-                teacherClass.find().where({
-                    'tests._id': teacherID
-                }).exec(function(err, teacher) {
-                    if (err) {
-                        res.send(err);
-                    } else {
-                        console.log(teacher);
-                        // find relevnt teacher data to student 
-                        console.log(teacher[0].tests[0].modules[0].moduleType);
-                        // make student object with data
-                        var id_serv = JSON.stringify(teacherID);
-                        console.log("01");
-                        for (var i = 0; i < teacher[0].tests.length; i++) {
-                            console.log("02");
-                            var id_db = JSON.stringify(teacher[0].tests[i]._id);
-                            console.log(id_db);
-                            console.log(id_serv);
-                            if (id_db == id_serv) {
-                                console.log("11");
-                                kursistModules = setupStudentModules(teacher[0].tests[i].modules);
-                                console.log("22");
-                                res.render('welcome', {
-                                    title: 'main page',
-                                    username: teacherID,
-                                    kursistModules: kursistModules
-                                });
-                            }
-                        }
-                    }
-                });
-
-            } else {
+            if (!match) {
                 console.log('there is no match, redirect to error');
                 res.redirect('/error');
             }
@@ -155,8 +120,6 @@ checkIdInUrl = function(req, res, next) {
 
 
     }
-
-
     // else if(isWelcome === '/test_da'){
     // 	  req.db = db;
     //     console.log('Checking db for entries');
@@ -231,16 +194,6 @@ checkIdInUrl = function(req, res, next) {
     }
 
 };
-
-function setupStudentModules(modulesArray) {
-    var tempArray = [];
-    for (var i = 0; i < modulesArray.length; i++) {
-        console.log("MODULETYPE " + modulesArray[i].moduleType);
-        tempArray.push(modulesArray[i].moduleType + '_kursist');
-    }
-    tempArray.push('finalpage');
-    return tempArray;
-}
 
 
 app.use(checkIdInUrl);

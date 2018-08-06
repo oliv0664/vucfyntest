@@ -1,33 +1,30 @@
 {
     "name": "nodetest1",
-    "version": "6.11.5",
     "engines": {
-        "node": "8.11.3"
+        "node": "^9.2.0"
     },
+    "version": "6.11.5",
     "private": true,
     "scripts": {
-        "start": "set NODE_ENV=production && node ./bin/www",
+        "start": "nodemon ./bin/www",
         "deploy": "gcloud app deploy"
     },
     "dependencies": {
-        "body-parser": "^1.18.3",
-        "compression": "^1.7.3",
+        "body-parser": "^1.18.2",
         "cookie-parser": "~1.4.3",
         "debug": "^3.1.0",
-        "ejs": "^2.6.1",
-        "empty-folder": "^2.0.2",
-        "express": "^4.16.3",
-        "formidable": "^1.2.1",
+        "ejs": "^2.5.8",
+        "empty-folder": "^2.0.1",
+        "express": "^4.16.2",
+        "formidable": "^1.1.1",
         "generate-password": "^1.4.0",
         "gridfs-stream": "^1.1.1",
-        "helmet": "^3.13.0",
-        "heroku": "^7.7.8",
-        "mongodb": "^3.1.1",
-        "mongoose": "^4.13.14",
-        "monk": "^6.0.6",
+        "jade": "~1.11.0",
+        "mongodb": "^2.2.35",
+        "mongoose": "^4.12.3",
+        "monk": "^6.0.5",
         "morgan": "^1.9.0",
-        "nodemailer": "^4.6.7",
-        "pug": "^2.0.3",
+        "nodemailer": "^4.4.2",
         "serve-favicon": "~2.4.2",
         "url": "^0.11.0",
         "utf8": "^3.0.0"

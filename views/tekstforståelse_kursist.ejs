@@ -2,7 +2,7 @@
     .audDiv {
         display: inline;
     }
-    
+
     .aud {
         background-image: url('images/audio.png');
         background-repeat: no-repeat;
@@ -11,10 +11,11 @@
         width: 50px;
         height: 30px;
     }
-    
+
     .contentDiv {
-        margin-top: 30px;
+        margin-top: 30px; 
     }
+
 </style>
 
 <script>
@@ -30,38 +31,9 @@
             if (a > 0) {
                 d.removeChild(audBut);
                 a = 0;
-            } else {
-                a++;
-            }
+            } else { a++; }
         }
     }
-
-    $(function() {
-
-
-        $('#form').submit(function(event) {
-
-            event.preventDefault();
-            var user = JSON.parse(sessionStorage.getItem('currentUser'));
-            var teacherID = user.testID;
-            var studentID = user.studentID;
-            var studentModules = user.studentModules;
-            studentModules.shift();
-            user.studentModules = studentModules;
-
-            sessionStorage.setItem('currentUser', JSON.stringify(user));
-
-            var obj = {
-                teacherID: teacherID,
-                studentID: studentID,
-                studentModules: studentModules
-            }
-
-            $('#data').val(JSON.stringify(obj));
-
-            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
-        });
-    });
 </script>
 
 <form id="form" method="post" action="/tekstforståelse_answer" enctype="multipart/form-data">
@@ -84,15 +56,14 @@
                 <%= content.questions[j].question %>
             </div>
 
-            <% for(var k=0; k<content.questions[j].options.length; k++) { %>
+            <% for(var k=0; k<content.questions[j].options.length; k++) { %>    
                 <input type="radio" name="<%= j %>" value="<%= content.questions[j].options[k] %>">
                 <span><%= content.questions[j].options[k] %></span>
                 <br>
-                <% } %>
-                    <% } %>
+            <% } %>
+        <% } %>
     </div>
 
-    <input type="hidden" id="data" name="data">
-    <input class="submit" type="submit" value="Gem/Videre">
+    <input type="submit">
 
 </form>

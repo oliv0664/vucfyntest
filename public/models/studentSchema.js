@@ -1,21 +1,18 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var mongoose = require('mongoose'); 
+var Schema = mongoose.Schema; 
 
 
 var studentSchema = new Schema({
-
-    studentID: String,
+    
+	studentID: String, 
     teacherID: String,
-    studentInfo: { type: Object, default: {} },
+    studentInfo: { type: Object, default: {}},
     modules: [{
         moduleType: String,
         answers: { type: Array, default: [] }
     }]
-
-}, {
-    usePushEach: true
-});
-
+   
+},{usePushEach: true}); 
 
 
 
