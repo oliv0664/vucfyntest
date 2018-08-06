@@ -1,9 +1,7 @@
-/* global expect */
+/* global expect, describe, beforeEach, it */
+import ofType from './../src/index.js';
 
-const path = require('path');
-const ofType = require(path.resolve('./index.js'));
-
-describe("When the module is executed without any arguments",function(){
+describe('When the module is executed without any arguments',function(){
   beforeEach(function(){
     this.b = ofType.bind(this);
   });
@@ -16,7 +14,7 @@ describe("When the module is executed without any arguments",function(){
   });
 });
 
-describe("When the module is executed without the second [type] parameter",function(){
+describe('When the module is executed without the second [type] parameter',function(){
   beforeEach(function(){
     this.b = ofType.bind(this,'hello');
   });

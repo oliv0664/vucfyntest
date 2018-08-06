@@ -8,16 +8,12 @@ var Schema = mongoose.Schema;
 
 //
 var moduleSchema = new Schema({
-	moduleType: String,
-	audio: String,
-	content: {
-		type: Array,
-		default: []
-	},
-	contentAnswers: {
-		type: Array,
-		default: []
-	}
+    moduleType: String,
+    audio: String,
+    content: { type: Array, default: [] },
+    contentAnswers: { type: Array, default: [] }
+}, {
+    usePushEach: true
 });
 //
 //var moduleClass = mongoose.model('modules', moduleSchema); 
@@ -25,7 +21,7 @@ var moduleSchema = new Schema({
 
 
 var teacherSchema = new Schema({
-	initials: String,
+    initials: String,
 	password: { type: String,
 			   default: function(){
 				   return generator.generate({
@@ -34,21 +30,18 @@ var teacherSchema = new Schema({
 					   uppercase: true
 				   });
 			   }
-	},
-	totalTests: Number,
-	tests: [{
-		date: Date,
-		totalModules: Number,
-		totalTestTaken: {
-			type: Number,
-			default: 0
-		},
-		modules: {
-			type: Array,
-			default: []
-		}
-	}]
-}, {usePushEach: true});
+			  },
+    totalTests: Number,
+    tests: [{
+        date: Date,
+        totalModules: Number,
+		totalTestTaken: {type: Number, default: 0},
+        modules: { type: Array, default: [] }
+    }]
+}, {
+    usePushEach: true
+});
+
 
 
 
