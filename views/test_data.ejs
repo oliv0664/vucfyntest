@@ -1,39 +1,47 @@
 <html>
 
 <head>
-	<script src="/jquery/jquery-3.2.1.min.js"></script>
-	<script src="/js/getData.js"></script>
+    <script src="/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/js/getData.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
-	<link rel="stylesheet" type="text/css" href="stylesheets/oversigt.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/oversigt.css">
 
-	<style>
-		.contentDiv {
-			border: 1px solid black; 
-			margin: 20px;
-			width: 10vw;  
-		}
-	</style>
+    <style>
+        .contentDiv {
+            border: 1px solid black;
+            margin: 20px;
+            width: 10vw;
+        }
+    </style>
 
 </head>
 
 <body>
 
-	<div id="header">
-		<img class="header" id="head_1" src="images/VUC_logo.png" height="100">
-		<h3 class="header" id="head_2">NIVEAUAFKLARINGSTEST</h3>
-		<h3 class="header" id="head_3">VUC FYN ODENSE</h3>
-	</div>
+    <header>
+        <% include header %>
+    </header>
 
-	<h2>Dette er datasiden for test med id'et: <%=content.idTeacher %> </h2>
+    <div id="header">
+        <img class="header" id="head_1" src="images/VUC_logo.png" height="100">
+        <h3 class="header" id="head_2">NIVEAUAFKLARINGSTEST</h3>
+        <h3 class="header" id="head_3">VUC FYN ODENSE</h3>
+    </div>
 
-	<% for(var i=0; i<content.studentIDs.length; i++) { %>
-		<div id="<%= 's'+i %>" class="contentDiv">Kursist ID: <%=content.studentIDs[i]%></div>
-		<button id="<%= 'b'+i %>" onclick="getStudentData('<%=content.studentIDs[i]%>', '<%=content.idTeacher%>', this)">+</button>
-		<button id="<%= 'r'+i %>" onclick="removeAnswers(this)" hidden>-</button>
-		<div id="<%= 'd'+i %>"></div>
-	<% } %>
-	
+    <h2>Dette er datasiden for test med id'et:
+        <%=content.idTeacher %>
+    </h2>
+
+    <% for(var i=0; i<content.studentIDs.length; i++) { %>
+        <div id="<%= 's'+i %>" class="contentDiv">Kursist ID:
+            <%=content.studentIDs[i]%>
+        </div>
+        <button id="<%= 'b'+i %>" onclick="getStudentData('<%=content.studentIDs[i]%>', '<%=content.idTeacher%>', this)">+</button>
+        <button id="<%= 'r'+i %>" onclick="removeAnswers(this)" hidden>-</button>
+        <div id="<%= 'd'+i %>"></div>
+        <% } %>
+
 
 </body>
 
