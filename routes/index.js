@@ -135,7 +135,7 @@ router.get('/oversigt', function(req, res, next) {
                     content: teacher
                 });
             } else {
-                res.send("Initialerne findes ikke!");
+                res.send("Der er ingen tests tilknyttet disse initialer endnu!");
             }
         }
     });
