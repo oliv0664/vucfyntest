@@ -3,9 +3,7 @@ $(function () {
 	$('.form').bind('submit', function (event) {
 		event.preventDefault(); //this will prevent the default submit
 
-		// HER ER JEG KOMMET TIL OLIVER!
-		// 1. de valgte moduler skal sættes på session storage.
-		// 2. de valgte moduler skal sendes til server siden.
+		
 		var modules = [];
 		var user = JSON.parse(sessionStorage.getItem('currentUser'));
 		if (user) {

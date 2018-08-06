@@ -102,7 +102,7 @@ router.get('/index', function(req, res, next) {
 });
 
 router.post('/oversigt_info', function(req, res, next) {
-    tjek = req.body.init_field;
+    tjek = JSON.parse(req.body.data);
     console.log("KIG HER 1");
     console.log(tjek);
     res.redirect('oversigt');
@@ -125,7 +125,7 @@ router.get('/oversigt', function(req, res, next) {
                     content: teacher
                 });
             } else {
-                res.send("Initialerne findes ikke!");
+                res.send("Der er ingen tests tilknyttet disse initialer endnu!");
             }
         }
     });
