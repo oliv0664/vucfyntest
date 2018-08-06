@@ -15,10 +15,11 @@
             };
             sessionStorage.setItem('currentUser', JSON.stringify(obj));
 
+            var initials = handleLogin();
+
             $('#form').bind('submit', function(event) {
                 event.preventDefault();
 
-                var initials = handleLogin();
                 $('#data').val(initials);
 
                 $(this).unbind('submit').submit();
