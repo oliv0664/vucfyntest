@@ -17,19 +17,20 @@ var mongoose = require('mongoose');
 
 
 // %%% Skal gemmes i sessionStorage
-//var teacherID;
-//var studentID;
-//var initials;
-//var teacherModules = [];
-//var studentModules = [];
-//var kursistModules = [];
-//// denne variabel er navngivet dårligt, men den holder på samme data som initials. 
-//var tjek;
+var teacherID;
+var studentID;
+var initials;
+var teacherModules = [];
+var studentModules = [];
+var kursistModules = [];
+// denne variabel er navngivet dårligt, men den holder på samme data som initials. 
+var tjek;
 
 /* GET home page. */
 
 
 router.get('/', function(req, res, next) {
+    initials = "";
 
     res.render('login', { //login
         title: 'Express'
@@ -997,7 +998,7 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
         studentID = data.studentID;
         kursistModules = data.studentModules;
 
-        HandleTestCounter(teacherID, kursistModules);
+        HandleTestCounter(teacherID);
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1149,7 +1150,7 @@ router.post(encodeURI('/orddiktat_answer'), function(req, res) {
         studentID = data.studentID;
         kursistModules = data.studentModules;
 
-        HandleTestCounter(teacherID, kursistModules);
+        HandleTestCounter(teacherID);
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1290,7 +1291,7 @@ router.post(encodeURI('/vrøvleord_answer'), function(req, res) {
         studentID = data.studentID;
         kursistModules = data.studentModules;
 
-        HandleTestCounter(teacherID, kursistModules);
+        HandleTestCounter(teacherID);
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1429,7 +1430,7 @@ router.post(encodeURI('/clozetest_answer'), function(req, res) {
         studentID = data.studentID;
         kursistModules = data.studentModules;
 
-        HandleTestCounter(teacherID, kursistModules);
+        HandleTestCounter(teacherID);
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1573,7 +1574,7 @@ router.post(encodeURI('/tekstforståelse_answer'), function(req, res) {
         studentID = data.studentID;
         kursistModules = data.studentModules;
 
-        HandleTestCounter(teacherID, kursistModules);
+        HandleTestCounter(teacherID);
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1712,7 +1713,7 @@ router.post('/brev_answer', function(req, res) {
         studentID = data.studentID;
         kursistModules = data.studentModules;
 
-        HandleTestCounter(teacherID, kursistModules);
+        HandleTestCounter(teacherID);
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -2150,9 +2151,9 @@ function folderHandler() {
 }
 
 
-function HandleTestCounter(testId, moduleArray) {
+function HandleTestCounter(testId) {
     console.log(testId);
-    var isThisLastModule = moduleArray.length === 1;
+    var isThisLastModule = kursistModules.length === 1;
     if (isThisLastModule) {
         console.log('this is the last module, now we update the test counter');
 
