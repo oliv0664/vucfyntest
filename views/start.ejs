@@ -18,9 +18,11 @@
 		$(function(){
 		handleLogin();
 		});
-		function inDevelopment(){
-			alert('mangler stadig at blive udviklet, rolig Michael');
-		}
+		
+		
+		
+		
+		
 		
 		
 	</script>
@@ -57,7 +59,22 @@
 		<input id="searc_init" type="submit" value="Oversigt over dine test ">
 		</form>
     </li>
-	<li id="MMR" style="display: none;"> <button type="button" onclick="inDevelopment()">Opret ny bruger</button></li>
+	<li class="MMR" style="display: none;"> 
+		<form method="post" action="/addUser">
+		<label for="createUser">
+		<input id="createUser" name="createUser" type="text" placeholder="Initaler til ny">
+		<input type="submit" value="Opret ny bruger">
+		</label>
+		</form>
+	</li>
+	<li class="MMR" style="display: none;"> 
+		<form method="post" action="/sendUser">
+		<label for="sendUser">
+		<input id="sendUser" name="sendUser" type="text" placeholder="Initaler på bruger">
+		<input type="submit" value="Send mail om brugeroplysninger">
+		</label>
+		</form>
+	</li>
     </ol>
 	
 

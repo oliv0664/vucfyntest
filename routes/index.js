@@ -2105,4 +2105,69 @@ function HandleTestCounter(testId) {
     }
 };
 
+router.post('/addUser', function(req, res) {
+    console.log('first retrieve initials');
+	var initials = req.body.createUser.trim().toUpperCase();
+    console.log('second create new teacher entry');
+	teacherClass.findOne({
+            initials: initials
+        }, function(err, teacher) {
+            if (err) {
+                console.log(err);
+            } else {
+
+                if (!teacher) {
+                    console.log("NEW TEACHER");
+                    //opret en ny
+                    teacher = new teacherClass({
+                        initials: initials,
+                        totalTests: 0,
+                        tests: []
+                    });
+					  teacher.save(function(err, test) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        res.redirect('/start');
+                    }
+                });
+                } 
+			}
+	});
+	
+    console.log('third get initials and password after');
+	console.log('finally send mail with info to mmr');
+//	res.redirect('/start');
+	
+});
+router.post('/sendUser', function(req, res) {
+    console.log('third get initials and password after');
+	var init = req.body.sendUser.trim().toUpperCase();
+	var psw;
+	teacherClass.findOne({
+            initials: init
+        }, function(err, teacher) {
+            if (err) {
+                console.log(err);
+            } else {
+
+                if (!teacher) {
+					res.redirect('/start');
+                    }
+				else {
+					init = teacher.initials;
+					psw = teacher.password;
+					console.log('finally send mail with info to mmr');
+					console.log(init + ' ' + psw);
+					var msg = 'brugernavn: ' + init + '\r' + ', adgangskode: ' + psw; 
+					mailSender.sendMail('mmr@vucfyn.dk', msg);
+					res.redirect('tak');
+					}						  
+                
+				
+                } 
+			});
+	});
+	
+
 module.exports = router;

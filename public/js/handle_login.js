@@ -6,7 +6,7 @@ function handleLogin(){
 	if (initials != null) {
 		console.log('client is logged in as: ' + initials);
 		if(initials == 'MMR'){
-			$('#MMR').css('display','block');
+			$('.MMR').css('display','block');
 		}
 		
 	} else {
