@@ -1,30 +1,31 @@
 <style>
     .blockDiv {
-        margin-bottom: 30px; 
+        margin-bottom: 30px;
         height: 30px;
     }
-
-    .audDiv, .contentDiv {
-        display:inline; 
-    }
-
+    
+    .audDiv,
     .contentDiv {
-        position: absolute; 
-        left: 80px; 
+        display: inline;
     }
-
+    
+    .contentDiv {
+        position: absolute;
+        left: 80px;
+    }
+    
     .aud {
-        background-image: url('images/audio.png'); 
-        background-repeat: no-repeat; 
-        background-position: center; 
-        background-size: 30px 30px; 
-        width: 50px; 
+        background-image: url('images/audio.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 30px 30px;
+        width: 50px;
         height: 30px;
     }
 </style>
 
 <script>
-    var a = 0; 
+    var a = 0;
 
     //TO DO
     //knapper må kun kunne trykkes på 2 gange
@@ -34,37 +35,65 @@
         var d = document.getElementById("d" + ind);
         var audBut = document.getElementById("audBut" + ind);
         var sound = document.getElementById("file" + ind);
-        if(sound.paused) {
-            sound.load();  
+        if (sound.paused) {
+            sound.load();
             sound.play();
-            if(count[ind]>0) { 
-                d.removeChild(audBut);  
-            } else { 
-                count[ind]++; 
+            if (count[ind] > 0) {
+                d.removeChild(audBut);
+            } else {
+                count[ind]++;
             }
         }
     }
+
+    $(function() {
+
+
+        $('#form').submit(function(event) {
+
+            event.preventDefault();
+            var user = JSON.parse(sessionStorage.getItem('currentUser'));
+            var teacherID = user.testID;
+            var studentID = user.studentID;
+            var studentModules = user.studentModules;
+            studentModules.shift();
+            user.studentModules = studentModules;
+
+            sessionStorage.setItem('currentUser', JSON.stringify(user));
+
+            var obj = {
+                teacherID: teacherID,
+                studentID: studentID,
+                studentModules: studentModules
+            }
+
+            $('#data').val(JSON.stringify(obj));
+
+            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
+        });
+    });
 </script>
 
 <form id="form" method="post" action="/orddiktat_answer" enctype="multipart/form-data">
 
-    <% for(var i=0; i<content.length; i++) { %> 
-        <div class="blockDiv">    
-            <div id="<%= 'd'+i %>" class="audDiv"> 
+    <% for(var i=0; i<content.length; i++) { %>
+        <div class="blockDiv">
+            <div id="<%= 'd'+i %>" class="audDiv">
                 <input class="aud" id="<%= 'audBut'+i %>" type="button" onclick="playAudio(this)">
                 <span id="<%= 's'+i %>" hidden>0</span>
             </div>
-            
-            <div class="contentDiv">    
+
+            <div class="contentDiv">
                 <audio id="<%= 'file'+i %>" src="<%= audioFiles[i] %>"></audio>
                 <span><%= content[i].line1 %></span>
                 <input type="text" name="<%= 'answer_' + i %>" placeholder="Skriv ordet her">
                 <span><%= content[i].line2 %></span>
             </div>
         </div>
-        
-    <% } %> 
-    
-    <input type="submit">
+
+        <% } %>
+
+            <input type="hidden" id="data" name="data">
+            <input class="submit" type="submit" value="Gem/Videre">
 
 </form>

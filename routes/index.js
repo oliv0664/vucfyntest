@@ -1026,7 +1026,18 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
 
                 student.save(function(err) {
                     if (err) console.log(err);
-                    res.redirect(kursistModules[0]);
+
+                    var modules = kursistModules;
+                    var idTeacher = teacherID;
+                    // res.cookie('studentModules', kursistModules);
+                    res.redirect(url.format({
+                        pathname: '/' + kursistModules[0],
+                        query: {
+                            'modules': modules,
+                            'idTeacher': idTeacher
+                        }
+                    }));
+
                     kursistModules.shift();
                 });
             }
@@ -1040,6 +1051,9 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
 //henter 'worddictate_participant' og finder data i databasen, svarende til de indtastede initialer
 router.get(encodeURI('/orddiktat_kursist'), function(req, res) {
 
+    var kursistModules = req.query.modules;
+    var teacherID = req.query.idTeacher;
+    console.log(kursistModules);
     // teacherID = JSON.stringify(teacherID); 
     // %%% Skal hentes fra sessionStorage
     console.log("TEACHER ID: " + typeof JSON.stringify(teacherID));
@@ -1069,7 +1083,7 @@ router.get(encodeURI('/orddiktat_kursist'), function(req, res) {
                     var audio_files = [];
                     var promises = [];
                     var totalLen = teacher[0].tests[i].totalModules;
-                    var currentLen = kursistModules.length;
+                    var currentLen = kursistModules.length - 1;
                     console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);
                     var index = totalLen - currentLen;
                     var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
@@ -1110,8 +1124,9 @@ router.post(encodeURI('/orddiktat_answer'), function(req, res) {
 
     //update teacher test counter.
     // %%% Skal hentes fra sessionStorage
-    HandleTestCounter(teacherID);
-
+    var teacherID;
+    var studentID;
+    var kursistModules;
 
     //det første der sker, er at 'writeTo' mappen tømmes 
     folderHandler();
@@ -1127,6 +1142,15 @@ router.post(encodeURI('/orddiktat_answer'), function(req, res) {
     // parse the request and handle fields data
 
     form.parse(req, function(err, fields, files) {
+
+        var data = JSON.parse(fields.data);
+        delete fields.data;
+
+        teacherID = data.teacherID;
+        studentID = data.studentID;
+        kursistModules = data.studentModules;
+
+        HandleTestCounter(teacherID);
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1154,7 +1178,18 @@ router.post(encodeURI('/orddiktat_answer'), function(req, res) {
                 student.save(function(err) {
                     if (err) console.log(err);
                     //					isThisLastModule(kursistModules);
-                    res.redirect(kursistModules[0]);
+
+                    var modules = kursistModules;
+                    var idTeacher = teacherID;
+                    // res.cookie('studentModules', kursistModules);
+                    res.redirect(url.format({
+                        pathname: '/' + kursistModules[0],
+                        query: {
+                            'modules': modules,
+                            'idTeacher': idTeacher
+                        }
+                    }));
+
                     kursistModules.shift();
                 });
             }
@@ -1165,6 +1200,9 @@ router.post(encodeURI('/orddiktat_answer'), function(req, res) {
 //henter 'output' og finder data i databasen, svarende til de indtastede initialer
 router.get(encodeURI('/vrøvleord_kursist'), function(req, res) {
 
+    var kursistModules = req.query.modules;
+    var teacherID = req.query.idTeacher;
+    console.log(kursistModules);
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     teacherClass.find({
@@ -1187,7 +1225,7 @@ router.get(encodeURI('/vrøvleord_kursist'), function(req, res) {
                     var audio_files = [];
                     var promises = [];
                     var totalLen = teacher[0].tests[i].totalModules;
-                    var currentLen = kursistModules.length;
+                    var currentLen = kursistModules.length - 1;
                     console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);
                     var index = totalLen - currentLen;
                     var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
@@ -1228,8 +1266,9 @@ router.get(encodeURI('/vrøvleord_kursist'), function(req, res) {
 router.post(encodeURI('/vrøvleord_answer'), function(req, res) {
 
     // %%% Skal hentes fra sessionStorage
-    HandleTestCounter(teacherID);
-
+    var teacherID;
+    var studentID;
+    var kursistModules;
 
     //det første der sker, er at 'writeTo' mappen tømmes 
     folderHandler();
@@ -1244,6 +1283,15 @@ router.post(encodeURI('/vrøvleord_answer'), function(req, res) {
     // parse the request and handle fields data
 
     form.parse(req, function(err, fields, files) {
+
+        var data = JSON.parse(fields.data);
+        delete fields.data;
+
+        teacherID = data.teacherID;
+        studentID = data.studentID;
+        kursistModules = data.studentModules;
+
+        HandleTestCounter(teacherID);
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1271,7 +1319,16 @@ router.post(encodeURI('/vrøvleord_answer'), function(req, res) {
                 student.save(function(err) {
                     if (err) console.log(err);
                     //					isThisLastModule(kursistModules);
-                    res.redirect(kursistModules[0]);
+                    var modules = kursistModules;
+                    var idTeacher = teacherID;
+                    // res.cookie('studentModules', kursistModules);
+                    res.redirect(url.format({
+                        pathname: '/' + kursistModules[0],
+                        query: {
+                            'modules': modules,
+                            'idTeacher': idTeacher
+                        }
+                    }));
                     kursistModules.shift();
                 });
             }
@@ -1282,6 +1339,10 @@ router.post(encodeURI('/vrøvleord_answer'), function(req, res) {
 router.get(encodeURI('/clozetest_kursist'), function(req, res) {
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
+    var kursistModules = req.query.modules;
+    var teacherID = req.query.idTeacher;
+    console.log(kursistModules);
+
     teacherClass.find({
 
 
@@ -1303,7 +1364,7 @@ router.get(encodeURI('/clozetest_kursist'), function(req, res) {
                     var audio_files = [];
                     var promises = [];
                     var totalLen = teacher[0].tests[i].totalModules;
-                    var currentLen = kursistModules.length;
+                    var currentLen = kursistModules.length - 1;
                     console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);
                     var index = totalLen - currentLen;
                     var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
@@ -1343,9 +1404,10 @@ router.post(encodeURI('/clozetest_answer'), function(req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
 
-
+    var teacherID;
+    var studentID;
+    var kursistModules;
     // %%% Skal hentes fra sessionStorage
-    HandleTestCounter(teacherID);
 
 
     folderHandler();
@@ -1360,6 +1422,15 @@ router.post(encodeURI('/clozetest_answer'), function(req, res) {
     // parse the request and handle fields data
 
     form.parse(req, function(err, fields, files) {
+
+        var data = JSON.parse(fields.data);
+        delete fields.data;
+
+        teacherID = data.teacherID;
+        studentID = data.studentID;
+        kursistModules = data.studentModules;
+
+        HandleTestCounter(teacherID);
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1386,7 +1457,18 @@ router.post(encodeURI('/clozetest_answer'), function(req, res) {
 
                 student.save(function(err) {
                     if (err) console.log(err);
-                    res.redirect(kursistModules[0]);
+
+                    var modules = kursistModules;
+                    var idTeacher = teacherID;
+                    // res.cookie('studentModules', kursistModules);
+                    res.redirect(url.format({
+                        pathname: '/' + kursistModules[0],
+                        query: {
+                            'modules': modules,
+                            'idTeacher': idTeacher
+                        }
+                    }));
+
                     kursistModules.shift();
                 });
             }
@@ -1403,6 +1485,9 @@ router.get(encodeURI('/tekstforståelse_kursist'), function(req, res) {
 
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
+    var kursistModules = req.query.modules;
+    var teacherID = req.query.idTeacher;
+    console.log(kursistModules);
 
     teacherClass.find({
 
@@ -1424,7 +1509,7 @@ router.get(encodeURI('/tekstforståelse_kursist'), function(req, res) {
                     var audio_files = [];
                     var promises = [];
                     var totalLen = teacher[0].tests[i].totalModules;
-                    var currentLen = kursistModules.length;
+                    var currentLen = kursistModules.length - 1;
                     console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);
                     var index = totalLen - currentLen;
                     var content = teacher[0].tests[i].modules[index].content; //0 = orddiktat
@@ -1466,8 +1551,9 @@ router.post(encodeURI('/tekstforståelse_answer'), function(req, res) {
     //det første der sker, er at 'writeTo' mappen tømmes 
 
     // %%% Skal hentes fra sessionStorage
-    HandleTestCounter(teacherID);
-
+    var teacherID;
+    var studentID;
+    var kursistModules;
 
     folderHandler();
 
@@ -1481,6 +1567,14 @@ router.post(encodeURI('/tekstforståelse_answer'), function(req, res) {
 
     form.parse(req, function(err, fields, files) {
 
+        var data = JSON.parse(fields.data);
+        delete fields.data;
+
+        teacherID = data.teacherID;
+        studentID = data.studentID;
+        kursistModules = data.studentModules;
+
+        HandleTestCounter(teacherID);
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1508,7 +1602,18 @@ router.post(encodeURI('/tekstforståelse_answer'), function(req, res) {
 
                 student.save(function(err) {
                     if (err) console.log(err);
-                    res.redirect(kursistModules[0]);
+
+                    var modules = kursistModules;
+                    var idTeacher = teacherID;
+                    // res.cookie('studentModules', kursistModules);
+                    res.redirect(url.format({
+                        pathname: '/' + kursistModules[0],
+                        query: {
+                            'modules': modules,
+                            'idTeacher': idTeacher
+                        }
+                    }));
+
                     kursistModules.shift();
                 });
             }
@@ -1522,6 +1627,9 @@ router.post(encodeURI('/tekstforståelse_answer'), function(req, res) {
 
 router.get('/brev_kursist', function(req, res) {
 
+    var kursistModules = req.query.modules;
+    var teacherID = req.query.idTeacher;
+    console.log(kursistModules);
     //lige nu henter den alle documenter med disse initialer, selvom den kun skal vise 1 (den første)
     //senere skal der tilføjes en hovedside hvor brugeren kan vælge hvilken test, på baggrund af sine initialer 
     teacherClass.find({
@@ -1544,7 +1652,7 @@ router.get('/brev_kursist', function(req, res) {
                     var audio_files = [];
                     var promises = [];
                     var totalLen = teacher[0].tests[i].totalModules;
-                    var currentLen = kursistModules.length;
+                    var currentLen = kursistModules.length - 1;
                     console.log("TOTAL LEN: " + totalLen + ", CURR LEN: " + currentLen);
                     var index = totalLen - currentLen;
                     var moduleType = teacher[0].tests[i].modules[index].moduleType;
@@ -1581,8 +1689,9 @@ router.post('/brev_answer', function(req, res) {
 
     //det første der sker, er at 'writeTo' mappen tømmes 
     // %%% Skal hentes fra sessionStorage
-    HandleTestCounter(teacherID);
-
+    var teacherID;
+    var studentID;
+    var kursistModules;
 
     folderHandler();
 
@@ -1596,6 +1705,15 @@ router.post('/brev_answer', function(req, res) {
     // parse the request and handle fields data
 
     form.parse(req, function(err, fields, files) {
+
+        var data = JSON.parse(fields.data);
+        delete fields.data;
+
+        teacherID = data.teacherID;
+        studentID = data.studentID;
+        kursistModules = data.studentModules;
+
+        HandleTestCounter(teacherID);
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1622,7 +1740,18 @@ router.post('/brev_answer', function(req, res) {
 
                 student.save(function(err) {
                     if (err) console.log(err);
-                    res.redirect(kursistModules[0]);
+
+                    var modules = kursistModules;
+                    var idTeacher = teacherID;
+                    // res.cookie('studentModules', kursistModules);
+                    res.redirect(url.format({
+                        pathname: '/' + kursistModules[0],
+                        query: {
+                            'modules': modules,
+                            'idTeacher': idTeacher
+                        }
+                    }));
+
                     kursistModules.shift();
                 });
             }
