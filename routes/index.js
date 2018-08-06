@@ -102,19 +102,29 @@ router.get('/index', function(req, res, next) {
 });
 
 router.post('/oversigt_info', function(req, res, next) {
-    tjek = req.body.init_field;
+    // tjek = req.body.init_field;
+    var initials = req.body.data;
     console.log("KIG HER 1");
-    console.log(tjek);
-    res.redirect('oversigt');
+    console.log(initials);
+    res.redirect(url.format({
+        pathname: '/oversigt',
+        query: {
+            'data': initials
+        }
+    }));
 });
 
 router.get('/oversigt', function(req, res, next) {
+
+    var initials = req.query.data;
+
     teacherClass.findOne({
-        "initials": tjek
+        "initials": initials
     }, function(err, teacher) {
         if (err) {
             console.log(err);
         } else {
+            console.log(teacher);
             if (teacher != null) {
 
                 console.log("KIG HER 2 " + teacher);
@@ -233,15 +243,15 @@ function setTestIndex(index) {
 router.post('/welcome_addinfo', function(req, res) {
 
     //var db = req.db;
-    console.log('before anything: ', studentModules);
 
 
     // %%% Skal gemmes i Sessionstorage
     studentID = req.body.id;
-    teacherID = req.app.get('idTeacher');
+    teacherID = JSON.parse(req.body.data);
 
 
     console.log(studentID + " YNLPYPHTASCSACASC");
+    console.log(teacherID + " YNLPYPHTASCSACASC");
 
     //var collection = db.get('students');
     teacherClass.find().where({
@@ -250,6 +260,7 @@ router.post('/welcome_addinfo', function(req, res) {
         if (err) {
             res.send(err);
         } else {
+            console.log(teacher);
             // find relevnt teacher data to student 
             console.log(teacher[0].tests[0].modules[0].moduleType);
             // make student object with data

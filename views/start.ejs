@@ -1,82 +1,82 @@
 <html>
 
 <head>
-	<script src="/jquery/jquery-3.2.1.min.js"></script>
-	<script src="/js/handle_login.js"></script>
-	<script src="/js/test.js"></script>
-	<script>
+    <script src="/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/js/handle_login.js"></script>
+    <script src="/js/test.js"></script>
+    <script>
+        $(function() {
 
-		//Skal laves til sessionStorage i stedet 
-		var cookieValue = document.cookie;
-		console.log(cookieValue);
-		var firstSplit = cookieValue.split('=')[1]; 
-		var obj = {
-			username: firstSplit
-		}
-		console.log(obj); 
-		sessionStorage.setItem('currentUser', JSON.stringify(obj)); 
-		$(function(){
-		handleLogin();
-		});
-		
-		
-		
-		
-		
-		
-		
-	</script>
+            var cookieValue = document.cookie;
+            console.log(cookieValue);
+            var username = cookieValue.split('=')[1];
+            var obj = {
+                'username': username
+            };
+            sessionStorage.setItem('currentUser', JSON.stringify(obj));
 
-<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+            $('#form').bind('submit', function(event) {
+                event.preventDefault();
+
+                var initials = handleLogin();
+                $('#data').val(initials);
+
+                $(this).unbind('submit').submit();
+            });
+        });
+    </script>
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
 </head>
 
 <body>
-		
-	
-	<div id="header">
-		<img class="header" id="head_1" src="images/VUC_logo.png" height="100">
-		<h3 class="header" id="head_2">Test og quizmodul 
-		</h3>
-		<h3 class="header" id="head_3">HF & VUC FYN ODENSE</h3>
-	</div>
-	
-	<h4>Velkommen til HF & VUC FYNs quizmodul. Her kan du oprette en række forskellige quizzer. Du kan vælge om du vil lave enkelte quizzer, eller kombinere en række forskellige quizmoduler til en samlet quiz. Du kan vælge mellem disse moduler:
-		
-		
-</h4>
+
+
+    <div id="header">
+        <img class="header" id="head_1" src="images/VUC_logo.png" height="100">
+        <h3 class="header" id="head_2">Test og quizmodul
+        </h3>
+        <h3 class="header" id="head_3">HF & VUC FYN ODENSE</h3>
+    </div>
+
+    <h4>Velkommen til HF & VUC FYNs quizmodul. Her kan du oprette en række forskellige quizzer. Du kan vælge om du vil lave enkelte quizzer, eller kombinere en række forskellige quizmoduler til en samlet quiz. Du kan vælge mellem disse moduler:
+
+
+    </h4>
     <ul>
-    <li>Orddiktat</li>
-    <li>Vrøvleditat</li>
-    <li>Clozetest</li>
-    <li>Tekstforståelse</li>
-    <li>Brev</li>
+        <li>Orddiktat</li>
+        <li>Vrøvleditat</li>
+        <li>Clozetest</li>
+        <li>Tekstforståelse</li>
+        <li>Brev</li>
     </ul>
-    
+
     <ol>
-    <li><button type="button" onclick="newTest()">Lav ny test</button></li>
-    <li>
-		<form id="form" method="post" action="/oversigt_info">
-		<input id="searc_init" type="submit" value="Oversigt over dine test ">
-		</form>
-    </li>
-	<li class="MMR" style="display: none;"> 
-		<form method="post" action="/addUser">
-		<label for="createUser">
+        <li><button type="button" onclick="newTest()">Lav ny test</button></li>
+        <li>
+            <form id="form" method="post" action="/oversigt_info">
+                <input type="hidden" id="data" name="data">
+                <input id="searc_init" type="submit" value="Oversigt over dine test ">
+            </form>
+        </li>
+        <li class="MMR" style="display: none;">
+            <form method="post" action="/addUser">
+                <label for="createUser">
 		<input id="createUser" name="createUser" type="text" placeholder="Initaler til ny">
 		<input type="submit" value="Opret ny bruger">
 		</label>
-		</form>
-	</li>
-	<li class="MMR" style="display: none;"> 
-		<form method="post" action="/sendUser">
-		<label for="sendUser">
+            </form>
+        </li>
+        <li class="MMR" style="display: none;">
+            <form method="post" action="/sendUser">
+                <label for="sendUser">
 		<input id="sendUser" name="sendUser" type="text" placeholder="Initaler på bruger">
 		<input type="submit" value="Send mail om brugeroplysninger">
 		</label>
-		</form>
-	</li>
+            </form>
+        </li>
     </ol>
-	
+
 
 
 </body>
