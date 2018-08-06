@@ -568,6 +568,8 @@ router.get(encodeURI('/vrøvleord_lærer'), function(req, res) {
 
 router.post(encodeURI('/vrøvleord'), function(req, res) {
 
+    var initials;
+    var teacherModules;
 
     var inputContent = [];
     var inputContentAnswers = [];
@@ -578,6 +580,12 @@ router.post(encodeURI('/vrøvleord'), function(req, res) {
     form.parse(req, function(err, fields, files) {
 
         console.log("FIELDS: ", fields);
+
+        var data = JSON.parse(fields.data);
+        delete fields.data;
+
+        initials = data.username;
+        teacherModules = data.teacherModules;
 
         // organize data fields into temporary arrays for reference 
         var tempInputContentAnswers = Object.keys(fields);
@@ -637,6 +645,9 @@ router.get(encodeURI('/clozetest_lærer'), function(req, res) {
 
 router.post(encodeURI('/clozetest'), function(req, res) {
 
+    var initials;
+    var teacherModules;
+
     var inputContent = [];
     var inputContentAnswers = [];
 
@@ -646,6 +657,12 @@ router.post(encodeURI('/clozetest'), function(req, res) {
     form.parse(req, function(err, fields, files) {
 
         console.log("FIELDS: ", fields);
+
+        var data = JSON.parse(fields.data);
+        delete fields.data;
+
+        initials = data.username;
+        teacherModules = data.teacherModules;
 
         // organize data fields into temporary arrays for reference 
         var tempInputContent = Object.keys(fields);
@@ -704,6 +721,10 @@ router.get(encodeURI('/tekstforståelse_lærer'), function(req, res) {
 
 
 router.post(encodeURI('/tekstforståelse'), function(req, res) {
+
+    var initials;
+    var teacherModules;
+
     var inputContent = [];
     var inputContentAnswers = [];
     var inputTexts = [];
@@ -714,6 +735,11 @@ router.post(encodeURI('/tekstforståelse'), function(req, res) {
     // parse the request and handle fields data
     form.parse(req, function(err, fields, files) {
 
+        var data = JSON.parse(fields.data);
+        delete fields.data;
+
+        initials = data.username;
+        teacherModules = data.teacherModules;
 
         var howManyQuestions = Object.keys(fields).filter(input => input.length > 12);
         var bigTemp = [];
@@ -816,6 +842,9 @@ router.get(encodeURI('/brev_lærer'), function(req, res) {
 
 router.post(encodeURI('/brev'), function(req, res) {
 
+    var initials;
+    var teacherModules;
+
     var inputContent = [{}];
     var inputContentAnswers = [{}];
 
@@ -823,7 +852,11 @@ router.post(encodeURI('/brev'), function(req, res) {
 
     // // parse the request and handle fields data
     form.parse(req, function(err, fields, files) {
+        var data = JSON.parse(fields.data);
+        delete fields.data;
 
+        initials = data.username;
+        teacherModules = data.teacherModules;
     });
 
     // handle all the files together with fields data
@@ -2126,67 +2159,66 @@ function HandleTestCounter(testId) {
 
 router.post('/addUser', function(req, res) {
     console.log('first retrieve initials');
-	var initials = req.body.createUser.trim().toUpperCase();
+    var initials = req.body.createUser.trim().toUpperCase();
     console.log('second create new teacher entry');
-	teacherClass.findOne({
-            initials: initials
-        }, function(err, teacher) {
-            if (err) {
-                console.log(err);
-            } else {
+    teacherClass.findOne({
+        initials: initials
+    }, function(err, teacher) {
+        if (err) {
+            console.log(err);
+        } else {
 
-                if (!teacher) {
-                    console.log("NEW TEACHER");
-                    //opret en ny
-                    teacher = new teacherClass({
-                        initials: initials,
-                        totalTests: 0,
-                        tests: []
-                    });
-					  teacher.save(function(err, test) {
+            if (!teacher) {
+                console.log("NEW TEACHER");
+                //opret en ny
+                teacher = new teacherClass({
+                    initials: initials,
+                    totalTests: 0,
+                    tests: []
+                });
+                teacher.save(function(err, test) {
                     if (err) {
                         console.log(err);
                     } else {
                         res.redirect('/start');
                     }
                 });
-                } 
-			}
-	});
-	
+            }
+        }
+    });
+
     console.log('third get initials and password after');
-	console.log('finally send mail with info to mmr');
-//	res.redirect('/start');
-	
+    console.log('finally send mail with info to mmr');
+    //	res.redirect('/start');
+
 });
 router.post('/sendUser', function(req, res) {
     console.log('third get initials and password after');
-	var init = req.body.sendUser.trim().toUpperCase();
-	var psw;
-	teacherClass.findOne({
-            initials: init
-        }, function(err, teacher) {
-            if (err) {
-                console.log(err);
-            } else {
+    var init = req.body.sendUser.trim().toUpperCase();
+    var psw;
+    teacherClass.findOne({
+        initials: init
+    }, function(err, teacher) {
+        if (err) {
+            console.log(err);
+        } else {
 
-                if (!teacher) {
-					res.redirect('/start');
-                    }
-				else {
-					init = teacher.initials;
-					psw = teacher.password;
-					console.log('finally send mail with info to mmr');
-					console.log(init + ' ' + psw);
-					var msg = 'brugernavn: ' + init + '\r' + ', adgangskode: ' + psw; 
-					mailSender.sendMail('mmr@vucfyn.dk', msg);
-					res.redirect('tak');
-					}						  
-                
-				
-                } 
-			});
-	});
-	
+            if (!teacher) {
+                res.redirect('/start');
+            } else {
+                init = teacher.initials;
+                psw = teacher.password;
+                console.log('finally send mail with info to mmr');
+                console.log(init + ' ' + psw);
+                var msg = 'brugernavn: ' + init + '\r' + ', adgangskode: ' + psw;
+                mailSender.sendMail('mmr@vucfyn.dk', msg);
+                res.redirect('tak');
+            }
+
+
+        }
+    });
+});
+
 
 module.exports = router;
