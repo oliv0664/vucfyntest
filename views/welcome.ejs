@@ -11,13 +11,11 @@
             $('#form').bind('submit', function(event) {
                 event.preventDefault();
 
-                var user = sessionStorage.getItem('currentUser');
-                user = JSON.parse(user);
+                user = {};
 
                 var testID = $('#hidden').val();
                 $('#hidden').val("");
 
-                var username = user.username;
                 $('#hidden').val(JSON.stringify(testID));
 
                 var modules = $('#hidden2').val();
