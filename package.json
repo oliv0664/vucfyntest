@@ -6,7 +6,7 @@
     },
     "private": true,
     "scripts": {
-        "start": "set NODE_ENV=production && node ./bin/www",
+        "start": "set NODE_ENV=production && nodemon ./bin/www",
         "deploy": "gcloud app deploy"
     },
     "dependencies": {
