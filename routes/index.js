@@ -45,7 +45,7 @@ router.get('/start', function(req, res, next) {
 
 router.post('/signin', function(req, res, next) {
 
-    var user = req.body.uname;
+    var user = req.body.uname.toLocaleUpperCase();
     var password = req.body.psw;
 
 
