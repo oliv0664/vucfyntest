@@ -8,8 +8,8 @@ var bodyParser = require('body-parser');
 
 var mongo = require('mongodb');
 var monk = require('monk');
-// var url = 'localhost:27017/vucfyntest'
-var url = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb'
+//var url = 'localhost:27017/vucfyntest'
+var url = 'mongodb://vucfyntest:admin2018@ds159782.mlab.com:59782/vucfyn_mat_test'
 
 
 
