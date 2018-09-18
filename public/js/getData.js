@@ -6,7 +6,9 @@ function getStudentData(studentID, teacherID, index) {
         data: {
             teacherID,
             studentID
-        }
+        },error: function(data) {
+        alert('Der gik noget galt og brugeren kan ikke findes.'); //or whatever
+    }
     })
     .done(function (dataStr) {
         var data = JSON.parse(dataStr);
