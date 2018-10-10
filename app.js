@@ -9,7 +9,7 @@ var bodyParser = require('body-parser');
 var mongo = require('mongodb');
 var monk = require('monk');
 //var url = 'localhost:27017/vucfyntest'
-var url = 'mongodb://vucfyntest:test@ds237475.mlab.com:37475/vucfyntestdb'
+var url = 'mongodb://test:vuctest2018@ds129770.mlab.com:29770/dictate'
 
 
 
