@@ -104,7 +104,7 @@
 				class: 'h3size',
 				id: 'answer',
 				//name: 'userinput',
-				placeholder: 'Skriv brev'
+				placeholder: 'Skriv din besked her'
 			})
 			.css({
 				'width': '80%',
