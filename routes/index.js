@@ -770,7 +770,7 @@ router.get('/finalpage', function (req, res) {
 
         // Dette stykke kode er rykket op fra POST finalpage
         // Da denne test i Master2, skal maile automatisk
-        var mail = 'mmr@vucfyn.dk';
+        var mail = 'lca@vucfyn.dk';
         var msg = mailSender.htmlBuilder(testResult);
         mailSender.sendMail(mail, msg);
         // Slut på kode stykke 
