@@ -51,8 +51,8 @@ router.get('/error', function (req, res, next) {
 
 
 function getId() {
-    
-    var id = '5aa695f7ecb6082f88c5cfe0';
+
+    var id = '5ba38d3413378948c4833328';
    console.log('getID is running'); 
     return id;
    
@@ -519,7 +519,7 @@ router.get('/worddictate_participant', function (req, res) {
             //    console.log('test data from db: ' + docs.tests[0].content[0].line1);
             console.log("hej"); 
         res.render('worddictate_participant', {
-            "data": docs.tests[0], 
+            "data": '', 
             title: 'worddictate_participant'
         });
         g_moduleCount++;
