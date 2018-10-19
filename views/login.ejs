@@ -7,22 +7,23 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="jquery/jquery-3.2.1.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="stylesheets/loginstyle.css">
-	<link rel="stylesheet" type="text/css" href="stylesheets/12cols.css">
 
 	<script>
 		/*script der gemmer/henter fra local storage*/
 		$(function () {
 
-			$('#myForm').submit(function (event) {
-				event.preventDefault();
-				if ($('#username').val() == 'læsning') {
-
+			$('#myForm').bind('submit', function (event) {
+				var user = $('#username').val();
+				var pass = $('#pass').val();
+				if (user == 'læsning' && pass == 'vuclæsning2018') {
 					localStorage.usrname = $('#username').val();
 					localStorage.pass = $('#pass').val();
 					localStorage.chkbx = $('#remember_me').val();
 					$(this).unbind('submit').submit();
 				} else {
 					alert("Forkert kode eller brugernavn");
+					event.preventDefault();
+
 				}
 			});
 			if (localStorage.chkbx && localStorage.chkbx != '') {
