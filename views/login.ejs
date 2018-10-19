@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>LoginPage</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="jquery/jquery-3.2.1.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="stylesheets/loginstyle.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/12cols.css">
+
+	<script>
+		/*script der gemmer/henter fra local storage*/
+		$(function () {
+
+			$('#myForm').submit(function (event) {
+				event.preventDefault();
+				if ($('#username').val() == 'læsning') {
+
+					localStorage.usrname = $('#username').val();
+					localStorage.pass = $('#pass').val();
+					localStorage.chkbx = $('#remember_me').val();
+					$(this).unbind('submit').submit();
+				} else {
+					alert("Forkert kode eller brugernavn");
+				}
+			});
+			if (localStorage.chkbx && localStorage.chkbx != '') {
+				$('#remember_me').attr('checked', 'checked');
+				$('#username').val(localStorage.usrname);
+				$('#pass').val(localStorage.pass);
+			} else {
+				$('#remember_me').removeAttr('checked');
+				$('#username').val('');
+				$('#pass').val('');
+			}
+
+			$('#remember_me').click(function () {
+
+				if ($('#remember_me').is(':checked')) {
+					// save username and password
+					localStorage.usrname = $('#username').val();
+					localStorage.pass = $('#pass').val();
+					localStorage.chkbx = $('#remember_me').val();
+				} else {
+					localStorage.usrname = '';
+					localStorage.pass = '';
+					localStorage.chkbx = '';
+				}
+			});
+
+		});
+	</script>
+
+</head>
+<h2>Under udvikling</h2>
+
+<body>
+	<div class="container">
+		<p class="overskrift">Velkommen
+		</p>
+		<form id="myForm" name="myForm" action="/signin" method="post">
+			<div>
+
+				<!--                Brugernavn                  -->
+				<input id="username" type="text" name="User" placeholder="Brugernavn" required="">
+
+
+				<!--                Adgangskode                 -->
+				<input id="pass" type="password" name="Password" placeholder="Adgangskode" required="">
+
+
+			</div>
+
+			<!--            "husk mig" knap                 -->
+			<label class="checkbox">
+				<input type="checkbox" value="remember-me" id="remember_me"> Husk mig
+				<br>
+				<br>
+			</label>
+			<input type="submit" name="submit" value="LOG IND">
+		</form>
+	</div>
+</body>
+
+</html>

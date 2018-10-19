@@ -13,7 +13,7 @@ var teacherModules = [];
 var studentModules = [];
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    res.render('index', {
+    res.render('login', {
         title: 'Express'
     });
     teacherModules = [];
@@ -26,6 +26,12 @@ router.get('/filepicker', function (req, res, next) {
 });
 router.get('/error', function (req, res, next) {
     res.render('error', {
+        title: 'page not found'
+    });
+});
+
+router.post('/signin', function (req, res, next) {
+    res.render('index', {
         title: 'page not found'
     });
 });
