@@ -99,15 +99,15 @@ $(function() {
 
 
 
-function initializeTest(data) {
-    console.log("only run once! data= ", data);
-    this.data = data;
-    console.log("only run uuh..twice!! data= ", data);
-    totalTextCount = data.content.texts.length;
-    totalQuestionCount = data.content.questions.length;
-    //    countT = 0;
-    //    countQ = 0;
-}
+//function initializeTest(data) {
+//    console.log("only run once! data= ", data);
+//    this.data = data;
+//    console.log("only run uuh..twice!! data= ", data);
+//    totalTextCount = data.content.texts.length;
+//    totalQuestionCount = data.content.questions.length;
+//    //    countT = 0;
+//    //    countQ = 0;
+//}
 
 
 

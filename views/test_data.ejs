@@ -1,0 +1,43 @@
+<html>
+
+<head>
+	<script src="/jquery/jquery-3.2.1.min.js"></script>
+	<script src="/js/getData.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+
+	<style>
+		.contentDiv {
+			border: 1px solid black;
+			margin: 20px;
+			width: 10vw;
+		}
+	</style>
+	<script>
+	</script>
+
+</head>
+
+<body>
+
+	<header>
+		<% include header %>
+	</header>
+
+
+	<p> Der er
+		<%= JSON.parse(content).length%> svar 
+	</p>
+	<%var data = JSON.parse(content)%>
+		<% for(var i=0; i<JSON.parse(content).length; i++) { %>
+			<div id="<%= 's'+i %>" class="contentDiv">Kursist ID:
+				<%=data[i].studentID%>
+			</div>
+			<button id="<%= 'b'+i %>" onclick="getStudentData('<%=data[i].studentID%>', '<%=data[i].teacherID%>', this, '<%=JSON.stringify(data[i])%>' )">+</button>
+			<button id="<%= 'r'+i %>" onclick="removeAnswers(this)" hidden>-</button>
+			<div id="<%= 'd'+i %>"></div>
+			<% } %>
+
+</body>
+
+</html>
