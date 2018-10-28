@@ -18,6 +18,14 @@
 		}
 	</style>
 	<script>
+window.onload = function(e){ 
+    if(localStorage.usrname)
+
+	else {
+		alert('du er ikke logget ind');
+		window.location.replace('http://vuctest-diktat.herokuapp.com');
+	}
+}
 	</script>
 
 </head>
