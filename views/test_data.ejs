@@ -8,6 +8,10 @@
 
 	<style>
 		.contentDiv {
+			width: 10vw;
+		}
+		
+		.student_info {
 			border: 1px solid black;
 			margin: 20px;
 			width: 10vw;
@@ -26,15 +30,18 @@
 
 
 	<p> Der er
-		<%= JSON.parse(content).length%> svar 
+		<%= JSON.parse(content).length%> svar
 	</p>
 	<%var data = JSON.parse(content)%>
 		<% for(var i=0; i<JSON.parse(content).length; i++) { %>
-			<div id="<%= 's'+i %>" class="contentDiv">Kursist ID:
-				<%=data[i].studentID%>
+			<div class="student_info">
+				<button id="<%= 'b'+i %>" onclick="getStudentData('<%=data[i].studentID%>', '<%=data[i].teacherID%>', this, '<%=JSON.stringify(data[i])%>' )">+</button>
+				<button id="<%= 'r'+i %>" onclick="removeAnswers(this)" hidden>-</button>
+				<div id="<%= 's'+i %>" class="contentDiv">
+					Kursist ID:
+					<%=data[i].studentID%>
+				</div>
 			</div>
-			<button id="<%= 'b'+i %>" onclick="getStudentData('<%=data[i].studentID%>', '<%=data[i].teacherID%>', this, '<%=JSON.stringify(data[i])%>' )">+</button>
-			<button id="<%= 'r'+i %>" onclick="removeAnswers(this)" hidden>-</button>
 			<div id="<%= 'd'+i %>"></div>
 			<% } %>
 
