@@ -168,7 +168,7 @@
 		$next = $('<input/>').attr({
 			class: 'h3size', 
 			type: 'submit',
-			value: 'Videre'
+			value: 'afslut'
 		});
 
 		$('#bottom').append($next);

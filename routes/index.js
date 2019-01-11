@@ -74,7 +74,7 @@ router.get('/test_data', function (req, res) {
 
 function getId() {
 
-	var id = '5aa23dd2734d1d3717fd5630'; //nyt ID fra master 2 deployment
+	var id = '5bbe18386941a15798e8dd8c'; //nyt ID fra master 2 deployment
 	console.log('getID is running');
 	return id;
 

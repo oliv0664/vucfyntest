@@ -4,14 +4,14 @@
     <title>Startside</title>
     <script src="/jquery/jquery-3.2.1.min.js"></script>
     <script src="/js/startpage.js"></script>
-    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
 
 </head>
 
 <body>
 
     <div id="header">
-        <img class="header" id="head_1" src="images/VUC_logo.png" height="100">
+        <img class="header" id="head_1" src="/images/VUC_logo.png" height="100">
         <div id="test1" class="header">
             <h1 class="header" id="head_2">Læsning </h1>
         </div>
@@ -26,7 +26,7 @@
         <div class="section">
             <div class="fullwidth">
                 <h2 class="title" id="h1_1">1. PERSONLIG OPLYSNING OG SPROGLIG BAGGRUND</h2>
-                
+
                 <div class="fullwidth">
                     <h3 class="h3size">Navn:</h3>
                     <input class="h3size" type="text" name="firstname" placeholder="Fornavn(e)">
@@ -40,8 +40,8 @@
                 </div>
 
                 <div class="fullwidth checkIfYes">
-                    <h3 class="h3size">Har du et andet sprog end dansk som modersmål?</h3>
-                    <select class="h3size" id="mothertong_dk" name="mothertong_dk" form="form" >
+                    <h3 class="h3size">har du dansk som modersmål?</h3>
+                    <select class="h3size" id="mothertong_dk" name="mothertong_dk" form="form">
                         <option value="" selected="true" disabled="disabled">-</option>
                         <option value="Ja">Ja</option>
                         <option value="Nej">Nej</option>
@@ -51,27 +51,24 @@
                         <h3 class="h3size">Hvad er dit modersmål:</h3>
                         <input class="h3size" type="text" id="tong_input" name="tong_input" placeholder="Indtast">
                     </div>
-                </div>
+                    <div class="fullwidth showIfYes">
+                        <h3 class="h3size">Hvor længe har du boet i danmark?</h3>
+                        <input class="h3size" type="number" name="years_in_dk" placeholder="Antal år">
+                        <h3 class="h3size">År</h3>
+                    </div>
 
-
-                <div class="fullwidth">
-                    <h3 class="h3size">Hvor længe har du boet i danmark?</h3>
-                    <input class="h3size" type="number" name="years_in_dk" placeholder="Antal år">
-                    <h3 class="h3size">År</h3>
-                </div>
-            
-                <div class="fullwidth">
-                    <h3 class="h3size">Har du fået undervisning i dansk?</h3>
-                    <select class="h3size" id="edu_in_dk" name="edu_in_dk" form="form" >
+                    <div class="fullwidth showIfYes">
+                        <h3 class="h3size">Har du fået undervisning i dansk?</h3>
+                        <select class="h3size" id="edu_in_dk" name="edu_in_dk" form="form">
                         <option value="" selected="true" disabled="disabled">-</option>
                         <option value="Ja">Ja</option>
                         <option value="Nej">Nej</option>
                     </select>
+                    </div>
                 </div>
-
                 <div class="fullwidth checkIfYes">
                     <h3 class="h3size">Har du bestået nogen prøver?</h3>
-                    <select class="h3size" id="pass_test" name="pass_test" form="form" >
+                    <select class="h3size" id="pass_test" name="pass_test" form="form">
                         <option value="" selected="true" disabled="disabled">-</option>
                         <option value="Ja">Ja</option>
                         <option value="Nej">Nej</option>
@@ -83,7 +80,10 @@
                     </div>
                 </div>
 
-                
+
+
+
+
 
             </div>
 
@@ -92,7 +92,7 @@
 
                 <div class="fullwidth">
                     <h3 class="h3size">Har du modtaget specialundervisning i skolen?</h3>
-                    <select class="h3size" id="speciel_edu" name="speciel_edu" form="form" >
+                    <select class="h3size" id="speciel_edu" name="speciel_edu" form="form">
                         <option value="" selected="true" disabled="disabled">-</option>
                         <option value="Ja">Ja</option>
                         <option value="Nej">Nej</option>
@@ -101,7 +101,7 @@
 
                 <div class="fullwidth">
                     <h3 class="h3size">Har du modtaget specialundervisning som voksen?</h3>
-                    <select class="h3size" id="speciel_edu_adult" name="speciel_edu_adult" form="form" >
+                    <select class="h3size" id="speciel_edu_adult" name="speciel_edu_adult" form="form">
                         <option value="" selected="true" disabled="disabled">-</option>
                         <option value="Ja">Ja</option>
                         <option value="Nej">Nej</option>
@@ -120,7 +120,7 @@
                 <h2 class="title" id="h1_1">3. Skolegang, uddannelse og job</h2>
 
                 <div class="fullwidth">
-                    <h2 class="h3size">Skolegang</h2>
+                    <h2 class="h3size greentext">Skolegang</h2>
                 </div>
 
                 <div class="fullwidth">
@@ -136,12 +136,12 @@
                 </div>
 
                 <div class="fullwidth">
-                    <h2 class="h3size" id="h1_2">Uddannelse</h2>
+                    <h2 class="h3size greentext" id="h1_2">Uddannelse</h2>
                 </div>
 
                 <div class="fullwidth checkIfYes">
                     <h3 class="h3size">Har du afsluttende eksamen fra din skole?</h3>
-                    <select class="h3size" id="exam_finish" name="exam_finish" form="form" >
+                    <select class="h3size" id="exam_finish" name="exam_finish" form="form">
                         <option value="" selected="true" disabled="disabled">-</option>
                         <option value="Ja">Ja</option>
                         <option value="Nej">Nej</option>
@@ -157,7 +157,7 @@
 
                 <div class="fullwidth checkIfYes">
                     <h3 class="h3size">Har du en uddannelse?</h3>
-                    <select class="h3size" id="edu_finish" name="edu_finish" form="form" >
+                    <select class="h3size" id="edu_finish" name="edu_finish" form="form">
                         <option value="" selected="true" disabled="disabled">-</option>
                         <option value="Ja">Ja</option>
                         <option value="Nej">Nej</option>
@@ -169,11 +169,11 @@
                         <input class="h3size" type="text" id="eg_edu_finish_country" name="eg_edu_finish_country" placeholder="Hvilket land?">
                     </div>
                 </div>
-                
+
 
                 <div class="fullwidth checkIfYes">
                     <h3 class="h3size">Har dine læse- og stavevanskeligheder haft betydning for skole og uddannelse?</h3>
-                    <select class="h3size" id="read_write_con" name="read_write_con" form="form" >
+                    <select class="h3size" id="read_write_con" name="read_write_con" form="form">
                         <option value="" selected="true" disabled="disabled">-</option>
                         <option value="Ja">Ja</option>
                         <option value="Nej">Nej</option>
@@ -189,44 +189,41 @@
 
 
                 <div class="fullwidth">
-                    <h2 class="h3size" id="h1_2">Job</h2>
+                    <h2 class="h3size greentext" id="h1_2">Job</h2>
                 </div>
 
                 <div class="fullwidth checkIfYes">
                     <h3 class="h3size">Er du i job?</h3>
-                    <select class="h3size" id="in_job" name="in_job" form="form" >
+                    <select class="h3size" id="in_job" name="in_job" form="form">
                         <option value="" selected="true" disabled="disabled">-</option>
                         <option value="Ja">Ja</option>
                         <option value="Nej">Nej</option>
                     </select>
 
                     <div class="fullwidth showIfYes">
-                        <h3 class="h3size">Evt. hvilket?</h3>
+                        <h3 class="h3size">Hvilket?</h3>
                         <input class="h3size" type="text" id="eg_job" name="eg_job" placeholder="Indtast">
                     </div>
-                </div>
-
-
-                <div class="fullwidth checkIfYes">
+                <div class="fullwidth showIfYes checkIfYes">
                     <h3 class="h3size">Indgår der læsning eller skrivning i dit job?</h3>
-                    <select class="h3size" id="read_write_in_job" name="read_write_in_job" form="form" >
+                    <select class="h3size" id="read_write_in_job" name="read_write_in_job" form="form">
                         <option value="" selected="true" disabled="disabled">-</option>
                         <option value="Ja">Ja</option>
                         <option value="Nej">Nej</option>
                     </select>
 
                     <div class="fullwidth showIfYes">
-                        <h3 class="h3size">Evt. på hvilken måde?</h3><br>
+                        <h3 class="h3size">På hvilken måde?</h3><br>
                         <!-- <input class="h3size" type="text" id="eg_read_write_in_job" name="eg_read_write_in_job" placeholder="Indtast"> -->
                         <textarea class="h3size textarea" placeholder="Indtast"></textarea>
                         <input type="hidden" id="eg_read_write_in_job" name="eg_read_write_in_job">
                     </div>
                 </div>
-
-
-                <div class="fullwidth">
+                    
+                    
+                <div class="fullwidth showIfYes" >
                     <h3 class="h3size">Hvordan klarer du at læse på jobbet?</h3>
-                    <select class="h3size" id="read_in_job" name="read_in_job" form="form" >
+                    <select class="h3size" id="read_in_job" name="read_in_job" form="form">
                         <option value="" selected="true" disabled="disabled">-</option>
                         <option value="dårligt">Dårligt</option>
                         <option value="ikke så godt">Ikke så godt</option>
@@ -236,9 +233,9 @@
                     </select>
                 </div>
 
-                <div class="fullwidth">
+                <div class="fullwidth showIfYes">
                     <h3 class="h3size">Hvordan klarer du at skrive på jobbet?</h3>
-                    <select class="h3size" id="write_in_job" name="write_in_job" form="form" >
+                    <select class="h3size" id="write_in_job" name="write_in_job" form="form">
                         <option value="" selected="true" disabled="disabled">-</option>
                         <option value="dårligt">Dårligt</option>
                         <option value="ikke så godt">Ikke så godt</option>
@@ -247,27 +244,36 @@
                         <option value="virkelig godt">virkelig godt</option>
                     </select>
                 </div>
+                </div>
 
-                <div class="fullwidth">
+
+
+
+<br>
+                <div class="fullwidth showIfYes">
                     <h3 class="h3size"><i>Særligt for tosprogede:</i></h3>
                 </div>
 
-                <div class="fullwidth">
+                <div class="fullwidth showIfYes">
                     <h3 class="h3size">Hvilket sprog taler du mest på dit job?</h3>
                     <input class="h3size" type="text" id="lang_in_job" name="lang_in_job" placeholder="Indtast">
                 </div>
             </div>
 
+<!--
             <div class="fullwidth">
                 <h2 class="title" id="h1_1">4. Fagønsker</h2>
 
                 <div class="fullwidth">
                     <h3 class="h3size">Hvilke fag hos HF & VUC FYN ønsker du?</h3><br>
+-->
                     <!-- <input class="h3size" type="text" id="why_fvu" name="why_fvu" placeholder="Indtast"> -->
+<!--
                     <textarea class="h3size textarea" placeholder="Indtast"></textarea>
                     <input type="hidden" id="why_fvu" name="why_fvu">
                 </div>
             </div>
+-->
 
             <!-- <div class="fullwidth">
                 <h2 class="title" id="h1_1">5. Personlige mål med FVU</h2>
@@ -291,15 +297,16 @@
                     <input size="50" class="h3size" type="text" id="eg_improvement" name="eg_improvement" placeholder="Andet?">
                 </div>
             </div> -->
-
+            <br>
             <div class="fullwidth">
-                <h3 class="h3size">Husk at du skal indsende dine eventuelle eksamensbeviser til:</h3>
+                <h3 class="h3size"><span class="greentext">Husk</span>
+                    at du skal indsende dine eventuelle eksamensbeviser til:</h3>
                 <h3 class="h3size">fuvirk@vucfyn.dk</h3>
             </div>
 
         </div>
 
-       <!--  
+        <!--  
         TEMPLATES
 
         HEADLINE

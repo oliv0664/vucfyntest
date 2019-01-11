@@ -1,57 +1,58 @@
 <html>
 
 <head>
-	<script src="/jquery/jquery-3.2.1.min.js"></script>
-	<script src="/js/getData.js"></script>
+    <script src="/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/js/getData.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
 
-	<style>
-		.contentDiv {
-			width: 10vw;
-		}
-		
-		.student_info {
-			border: 1px solid black;
-			margin: 20px;
-			width: 10vw;
-		}
-	</style>
-	<script>
-window.onload = function(e){ 
-    if(localStorage.usrname)
+    <style>
+        .contentDiv {
+            width: 10vw;
+        }
 
-	else {
-		alert('du er ikke logget ind');
-		window.location.replace('http://vuctest-diktat.herokuapp.com');
-	}
-}
-	</script>
+        .student_info {
+            border: 1px solid black;
+            margin: 20px;
+            width: 10vw;
+        }
+
+    </style>
+    <script>
+        window.onload = function(e) {
+            if (!localStorage.usrname) {
+                alert('du er ikke logget ind');
+                window.location.replace('http://vuctest-diktat.herokuapp.com');
+            }
+        }
+
+    </script>
 
 </head>
 
 <body>
 
-	<header>
-		<% include header %>
-	</header>
+    <header>
+        <% include header %>
+    </header>
 
+   
 
-	<p> Der er
-		<%= JSON.parse(content).length%> svar
-	</p>
-	<%var data = JSON.parse(content)%>
-		<% for(var i=0; i<JSON.parse(content).length; i++) { %>
-			<div class="student_info">
-				<button id="<%= 'b'+i %>" onclick="getStudentData('<%=data[i].studentID%>', '<%=data[i].teacherID%>', this, '<%=JSON.stringify(data[i])%>' )">+</button>
-				<button id="<%= 'r'+i %>" onclick="removeAnswers(this)" hidden>-</button>
-				<div id="<%= 's'+i %>" class="contentDiv">
-					Kursist ID:
-					<%=data[i].studentID%>
-				</div>
-			</div>
-			<div id="<%= 'd'+i %>"></div>
-			<% } %>
+            <p> Der er
+                <%= JSON.parse(content).length%> svar
+            </p>
+            <%var data = JSON.parse(content)%>
+                <% for(var i=0; i<JSON.parse(content).length; i++) { %>
+                    <div class="student_info">
+                        <button id="<%= 'b'+i %>" onclick="getStudentData('<%=data[i].studentID%>', '<%=data[i].teacherID%>', this, <%=JSON.stringify(data[i])%> )">+</button>
+                        <button id="<%= 'r'+i %>" onclick="removeAnswers(this)" hidden>-</button>
+                        <div id="<%= 's'+i %>" class="contentDiv">
+                            Kursist ID:
+                            <%=data[i].studentID%>
+                        </div>
+                    </div>
+                    <div id="<%= 'd'+i %>"></div>
+                    <% } %>
 
 </body>
 
