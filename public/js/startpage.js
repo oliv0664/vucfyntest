@@ -4,7 +4,13 @@ $(function() {
         $(this).hide(); 
     });
     
-    
+     $('.isDanish').children('select').change(function() {
+        if( $(this).val() == "Nej" ) {
+            $(this).parent('.isDanish').children('.showIfYes').show(); 
+        } else {
+            $(this).parent('.isDanish').children('.showIfYes').hide(); 
+        }
+    }); 
     
     $('.checkIfYes').children('select').change(function() {
         if( $(this).val() == "Ja" ) {
