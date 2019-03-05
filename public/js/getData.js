@@ -88,3 +88,72 @@ function removeAnswers(index) {
     $('#d'+ind).empty(); 
     $('#b'+ind).show();
 }
+
+
+
+
+//CODE TO DO!! 
+//MAKE THE DATA OUTPUT NICE 
+//FIRST MAKE A OVERVIEW PAGE 
+//--> THIS SHOULD SHOW THE DIFFERENT TESTS AND THE AVERAGE SCORE
+
+function getOverviewData(studentIDs, teacherID, index) {
+    console.log("OOOOOOOOOOOOOOOOOOOOOOOOOO " + typeof JSON.parse(studentIDs)); 
+    var ids = JSON.parse(studentIDs);
+    var studentID = ids[0];  
+
+    $.ajax({
+        url: '/getStudentData',
+        method: 'GET',
+        data: {
+            teacherID,
+            studentID
+        }
+    })
+    .done(function (dataStr) {
+        var data = JSON.parse(dataStr);
+        //var ind = index.id.slice(1);
+
+        for(var i=3; i<data.length; i++) {
+            
+            $tr = $('<tr>'); 
+
+            $td1 = $('<td>'+data[i].type+'</td>');
+            $td2 = $('<td>Gennemsnit: '+calculateAverageScore(ids, teacherID, i)+'</td>'); 
+
+            $('#content-table').append($tr.append($td1, $td2)); 
+        }
+    }); 
+}
+
+
+function calculateAverageScore(studentIDs, teacherID, index) {
+
+    var totalScore = 0;
+
+    for(var i=0; i<studentIDs.length; i++) {
+        
+        var studentID = studentIDs[i]; 
+
+        $.ajax({
+            url: '/getStudentData',
+            method: 'GET',
+            data: {
+                teacherID,
+                studentID
+            }
+        })
+        .done(function (dataStr) {
+            var data = JSON.parse(dataStr);
+            
+            for(var j=0; j<data[index].answers.length; j++) {
+                if(data[index].answers[j].point == "1") {
+                    totalScore++; 
+                }
+            }
+        }); 
+
+    }
+
+    return totalScore; 
+}
