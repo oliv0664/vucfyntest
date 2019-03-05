@@ -26,7 +26,7 @@ function getStudentData(studentID, teacherID, index, contentdb) {
 
         $table = $('<table border="1"/> ');
         for (var isNull in content) {
-            if (content[isNull] == null || content[isNull] == undefined || content[isNull] == "") {
+            if (content[isNull] == null || content[isNull] == "undefined" || content[isNull] == "") {
                 content[isNull] = "Ikke besvaret";
             }
         }
