@@ -9,7 +9,23 @@
 
             var cookieValue = document.cookie;
             console.log(cookieValue);
-            var username = cookieValue.split('=')[1];
+
+
+
+            var username = cookieValue.split(';');
+            
+            console.log(username); 
+
+            for(var i=0; i<username.length; i++) { 
+                var key = username[i].split("=");
+                console.log(key);  
+                if(key[0].trim() == "username") {
+                    username = key[1];
+                    console.log(username);  
+                    break; 
+                } 
+            }
+
             var obj = {
                 'username': username
             };
@@ -34,7 +50,7 @@
 
 
 	<header>
-		        <% include header %>		
+        <% include header %>		
 	</header>
 <!--
     <div id="header">

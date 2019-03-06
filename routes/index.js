@@ -1794,10 +1794,83 @@ router.get('/getStudentData', function(req, res) {
             });
         }
     });
-
-
-
 });
+
+router.get('/getTestTypes', function(req, res) {
+    var idTeacher = req.query.teacherID;
+
+    teacherClass.find({
+        "tests._id": idTeacher
+    }, function(err, teacher) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("DATA FROM DB ABOUT TEACHER: ", teacher);
+            var id_serv = JSON.stringify(idTeacher);
+
+            for (var i = 0; i < teacher[0].tests.length; i++) {
+                var id_db = JSON.stringify(teacher[0].tests[i]._id);
+
+                if (id_serv == id_db) {
+                    console.log("NYNYNYNYNYNY: " + teacher[0]);
+                    for(var j=0; j<teacher[0].tests.length; j++) {
+                        if(teacher[0].tests[j]._id == idTeacher) {
+                            res.send(JSON.stringify(teacher[0].tests[j].modules)); 
+                        }
+                    } 
+                }
+            }
+        }
+    });
+});
+
+
+router.get('/getStudentScore', function(req, res) {
+    var idTeacher = req.query.teacherID;
+    var idStudent = req.query.studentID;
+
+    studentClass.find({
+        "teacherID": idTeacher,
+        "studentID": idStudent
+    }, function(err, students) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("DATA FROM DB ABOUT STUDENTS: ", students);
+            student_data = students;
+
+            var final_score;
+
+            teacherClass.find({
+                "tests._id": idTeacher
+            }, function(err, teacher) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log("DATA FROM DB ABOUT TEACHER: ", teacher);
+
+                    var id_serv = JSON.stringify(idTeacher);
+
+                    for (var i = 0; i < teacher[0].tests.length; i++) {
+                        var id_db = JSON.stringify(teacher[0].tests[i]._id);
+
+                        if (id_serv == id_db) {
+                            console.log("1111 ", student_data[0]);
+                            console.log("2222 ", teacher[0]);
+                            //final_score = evaluateScore(i, student_data[0], teacher[0]);
+                            //console.log("FINAL SCORE ", final_score);
+                            //res.send(JSON.stringify(final_score));
+                        }
+                    }
+
+                }
+            });
+        }
+    });
+});
+
+
+
 
 // }).exec(function(err, user) {
 //     if(err) console.log(err);
