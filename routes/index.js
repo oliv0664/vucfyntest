@@ -164,7 +164,7 @@ router.get('/test_data', function(req, res, next) {
         if (err) {
             console.log(err);
         } else {
-            console.log("TEACHER ID FROM STUDENT DB ", student);
+            console.log("TEACHER ID FROM STUDENT DB 2019 ", student);
 
             var studentIDs = [];
 
@@ -1830,46 +1830,44 @@ router.get('/getStudentScore', function(req, res) {
     var idStudent = req.query.studentID;
 
     studentClass.find({
-        "teacherID": idTeacher,
-        "studentID": idStudent
+        "teacherID": idTeacher
     }, function(err, students) {
         if (err) {
             console.log(err);
         } else {
-            console.log("DATA FROM DB ABOUT STUDENTS: ", students);
-            student_data = students;
-
-            var final_score;
-
-            teacherClass.find({
-                "tests._id": idTeacher
-            }, function(err, teacher) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log("DATA FROM DB ABOUT TEACHER: ", teacher);
-
-                    var id_serv = JSON.stringify(idTeacher);
-
-                    for (var i = 0; i < teacher[0].tests.length; i++) {
-                        var id_db = JSON.stringify(teacher[0].tests[i]._id);
-
-                        if (id_serv == id_db) {
-                            console.log("1111 ", student_data[0]);
-                            console.log("2222 ", teacher[0]);
-                            //final_score = evaluateScore(i, student_data[0], teacher[0]);
-                            //console.log("FINAL SCORE ", final_score);
-                            //res.send(JSON.stringify(final_score));
-                        }
-                    }
-
-                }
-            });
+            console.log("MARTS 2019 KIG HER - STUDENTS: ", students);
+            res.send(JSON.stringify(students)); 
         }
     });
 });
 
 
+router.get('/getTeacherScore', function(req, res) {
+    var idTeacher = req.query.teacherID; 
+
+    teacherClass.find({
+        "tests._id": idTeacher
+    }, function(err, teacher) {
+        if (err) {
+            console.log(err);
+        } else {
+            var id_serv = JSON.stringify(idTeacher);
+
+            for (var i = 0; i < teacher[0].tests.length; i++) {
+                var id_db = JSON.stringify(teacher[0].tests[i]._id);
+
+                if (id_serv == id_db) {
+                    
+                    for(var j=0; j<teacher[0].tests.length; j++) {
+                        if(teacher[0].tests[j]._id == idTeacher) {
+                            res.send(JSON.stringify(teacher[0].tests[j].modules)); 
+                        }
+                    } 
+                }
+            }
+        }
+    });
+});
 
 
 // }).exec(function(err, user) {
