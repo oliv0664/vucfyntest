@@ -28,6 +28,7 @@
 			display: inline-block;
 			padding-left: 10px;
 			padding-right: 10px;
+			margin-right: 0.5vw; 
 		}
 
 		#main-content {
@@ -55,7 +56,7 @@
 			margin-left: 2vw; 
 		}
 
-		#average {
+		#rightContent {
 			float: right; 
 			margin-right: 10vw; 
 		}
@@ -80,7 +81,7 @@
 	-->
 
 	<div id="sidebar">
-		Oversigt
+		<div class="overview">Oversigt</div>
 		
 		<% for(var i=0; i<content.studentIDs.length; i++) { %>
 			<div id="<%= 's'+i %>"><%=content.studentIDs[i]%></div>
@@ -88,8 +89,7 @@
 	</div>
 
 	<div id="navbar">
-		<div id="nav1" class="nav">Oversigt</div>
-		<div class="nav">nav2</div>
+		<div class="overview nav">Oversigt</div>
 	</div>
 	
 	<div id="main-content"></div>

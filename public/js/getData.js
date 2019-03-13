@@ -1,13 +1,17 @@
 
 
 function readyPage(studentIDs, teacherID) {
-
     readySidebar(studentIDs, teacherID); 
+    readyNavbar(studentIDs, teacherID); 
     getOverviewData(studentIDs, teacherID); 
 }
 
 
 function readySidebar(studentIDs, teacherID) {
+
+    $('.overview').click(function() {
+        getOverviewData(studentIDs, teacherID); 
+    });
 
     for(var i=0; i<studentIDs.length; i++) {
         $('#s'+i).click(function() {
@@ -15,12 +19,6 @@ function readySidebar(studentIDs, teacherID) {
         }); 
     }
 }
-
-
-
-
-
-
 
 function getStudentData(studentIDs, teacherID, btnID) {
     var index = btnID.slice(1); 
@@ -37,35 +35,99 @@ function getStudentData(studentIDs, teacherID, btnID) {
     .done(function (dataStr) {
         var data = JSON.parse(dataStr);
         console.log(data); 
-        setSidebarView(data); 
+        getSidebarView(data); 
     });
 }
 
-function setSidebarView(data) {
+function getSidebarView(data) {
     var $div1 = $('<div>'+data[1]+'</div>'); 
     $('#main-content').empty().append($div1); 
 
     for(var i=2; i<data.length; i++) {
         if(data[i].type == "kursistinfo") continue; 
 
-        var $div2 = $('<div>'+data[i].type+'</div>');
+        //add 2 buttons for expanding (+) and minimizing (-)
+        var $btn1 = $('<button>').text('+').attr('id','expandBtn'+i).css('width','30px').click(function() { showMoreStudentInfo(this.id, data); }); 
+        var $btn2 = $('<button>').text('-').attr('id', 'minimizeBtn'+i).css('width','30px').click(function() { showLessStudentInfo(this.id, data); }).hide();
 
-        for(var j=0; j<data[i].answers.length; j++) {
-            //CODE TO DO!!! 
-            //INDSÆT KORREKT SVAR OG LÆRER SVAR!!!
-            var $div3 = $('<div></div>');
-        }
+        var $div1 = $('<div>').append($btn1, $btn2).attr('class', 'contentDiv');
+        var $div2 = $('<div>'+data[i].type+'</div>').attr('class', 'contentDiv');
 
-        $('#main-content').append($div2.append($div3)); 
+        var $br = $('<br>').attr('id', 'br'+i); //add break
+
+        $('#main-content').append($div1, $div2, $br); 
     }
+}
 
+//this function expands the + button to show student info 
+function showMoreStudentInfo(btnID, data) {
+    $('#'+btnID).hide();
+    var id = btnID.slice(9);  
+    $('#minimizeBtn'+id).show(); 
+
+    for(var i=0; i<data[id].answers.length; i++) {
+        var $div1 = $('<div>').attr('id','div'+id+'-'+i); 
+        var $div2 = $('<div>Kursist svar: '+data[id].answers[i].student_answer+'</div>').attr('class', 'studentData');
+        var $div3 = $('<div>Korrekt svar: '+data[id].answers[i].correct_answer+'</div>').attr('class', 'studentData');
+        var $div4 = $('<div>Point: '+data[id].answers[i].point+'</div>').attr({class: 'studentData', id: 'rightContent'});
+        
+        if(i==0) $div1.append($div2, $div3, $div4).insertAfter($('#br'+id)); 
+        else $div1.append($div2, $div3, $div4).insertAfter($('#div'+id+'-'+(i-1)));
+    }
+}
+
+//this function minimizes the - button and the student info 
+function showLessStudentInfo(btnID, data) {
+    $('#'+btnID).hide();
+    var id = btnID.slice(11);  
+    $('#expandBtn'+id).show();
+
+    for(var i=0; i<data[id].answers.length; i++) {
+        $('#div'+id+'-'+i).remove(); 
+    }
+}
+
+
+
+
+function readyNavbar(studentIDs, teacherID) {
+    //ajax call to get data from teacher
+    $.ajax({
+        url: '/getTestTypes',
+        method: 'GET',
+        data: {
+            teacherID
+        }
+    })
+    .done(function (dataStr) {
+        var data = JSON.parse(dataStr); //parse and store all data from teacher
+        var ids = JSON.parse(studentIDs); //parse and store array of students
+        
+        console.log(data); 
+
+        for(var i=1; i<data.length; i++) {
+            $div1 = $('<div>'+data[i].moduleType+'</div>').attr({class: 'nav', id: 'n'+i}).click(function() {
+                getNavbarView(studentIDs, teacherID, this.id); 
+            }); 
+            $('#navbar').append($div1); 
+        }
+    }); 
+}
+
+function getNavbarView(studentIDs, teacherID, id) {
+    
 }
 
 
 
 
 
+
+
+
 function getOverviewData(studentIDs, teacherID) {
+
+    $('#main-content').empty(); 
 
     //ajax call to get data from teacher
     $.ajax({
@@ -158,7 +220,7 @@ function setView(scoreData, ids) {
         //add moduletype and average
         var $div1 = $('<div>').append($btn1, $btn2).attr('class', 'contentDiv'); 
         var $div2 = $('<div>'+scoreData[i].moduleType+'</div>').attr('class', 'contentDiv');
-        var $div3 = $('<td>Gennemsnit: '+scoreData[i].averageScore+' ud af '+scoreData[i].totalPoints+'</td>').attr({class: 'contentDiv', id: 'average'});
+        var $div3 = $('<td>Gennemsnit: '+scoreData[i].averageScore+' ud af '+scoreData[i].totalPoints+'</td>').attr({class: 'contentDiv', id: 'rightContent'});
 
         var $br = $('<br>').attr('id', 'br'+i); //add break
 
@@ -188,7 +250,7 @@ function showMoreInfo(btnID, scoreData) {
     for(var i=0; i<scoreData[id].students.length; i++) {
         var $div1 = $('<div>').attr('id','div'+id+'-'+i); 
         var $div2 = $('<div>'+scoreData[id].students[i].student+'</div>').attr('class', 'studentData'); 
-        var $div3 = $('<div>'+scoreData[id].students[i].totalScore+' ud af '+scoreData[id].totalPoints+'</div>').attr({class: 'studentData', id: 'average'}); 
+        var $div3 = $('<div>'+scoreData[id].students[i].totalScore+' ud af '+scoreData[id].totalPoints+'</div>').attr({class: 'studentData', id: 'rightContent'}); 
         
         if(i==0) $div1.append($div2, $div3).insertAfter($('#br'+id)); 
         else $div1.append($div2, $div3).insertAfter($('#div'+id+'-'+(i-1)));
