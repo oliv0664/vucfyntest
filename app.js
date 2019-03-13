@@ -11,7 +11,7 @@ var mongo = require('mongodb');
 
 //var monk = require('monk');
 var url = 'localhost:27017/vucfyntest'
-
+var hejsaDetteSkalFjernesIgenSnart = 'husk det';
 var mongoose = require('mongoose');
 var Grid = require('gridfs-stream');
 var http = require("http");
