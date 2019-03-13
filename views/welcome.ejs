@@ -8,6 +8,7 @@
     <script>
         $(function() {
 
+
             $('#form').bind('submit', function(event) {
                 event.preventDefault();
 
@@ -17,12 +18,6 @@
                 $('#hidden').val("");
 
                 $('#hidden').val(JSON.stringify(testID));
-
-                var modules = $('#hidden2').val();
-                $('#hidden2').val("");
-                var studentModules = modules.split(',');
-                user.studentModules = studentModules;
-                $('#hidden2').val(JSON.stringify(studentModules));
 
                 var studentID = $('#studentID').val();
                 user.studentID = studentID;
@@ -41,7 +36,7 @@
 	<header>
 		<% include header %>
 	</header>
-<!--
+
     <div id="header">
         <img class="header" id="head_1" src="images/VUC_logo.png" height="100">
         <div id="test1" class="header">
@@ -65,7 +60,6 @@
 
         <div id="bottom">
             <input type="hidden" id="hidden" name="data" value="<%= username %>">
-            <input type="hidden" id="hidden2" name="modules" value="<%= kursistModules %>">
             <input class="h3size" type="submit" value="NÆSTE">
         </div>
 

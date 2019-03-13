@@ -90,3 +90,123 @@ function removeAnswers(index) {
     $('#d'+ind).empty(); 
     $('#b'+ind).show();
 }
+
+
+
+
+//CODE TO DO!! 
+//MAKE THE DATA OUTPUT NICE 
+//FIRST MAKE A OVERVIEW PAGE 
+//--> THIS SHOULD SHOW THE DIFFERENT TESTS AND THE AVERAGE SCORE
+
+function getOverviewData(studentIDs, teacherID) {
+
+    $.ajax({
+        url: '/getTestTypes',
+        method: 'GET',
+        data: {
+            teacherID
+        }
+    })
+    .done(function (dataStr) {
+        var data = JSON.parse(dataStr);
+        var ids = JSON.parse(studentIDs);
+
+        for(var i=0; i<data.length; i++) {
+
+
+            //CODE TO DO..
+            //GET THE SCORE OF EACH STUDENT AND THE TOTAL POSSIBLE SCORE --> TO CALCULATE AVERAGE 
+            //CONTINUE CODE ON INDEX.JS LINE 1828
+            var studentID = ids[i]; 
+
+            $.ajax({
+                url: '/getStudentScore',
+                method: 'GET',
+                data: {
+                    teacherID,
+                    studentID        
+                }
+            })
+            .done(function (dataStr) {
+                var data = JSON.parse(dataStr);
+                
+                console.log(data); 
+            }); 
+
+            //^ ^ ^ CODE UP TO HERE ^ ^ ^ 
+
+
+
+            if(data[i].moduleType.toLowerCase() == "kursistinfo") { continue };
+
+            var $tr = $('<tr>').attr('id', 'tr'+i); 
+
+            var $btn1 = $('<button>').text('+').attr('id','expandBtn'+i).click(function() { showMoreInfo(ids, this.id); }); 
+            var $btn2 = $('<button>').text('-').attr('id', 'minimizeBtn'+i).click(function() { showLessInfo(ids, this.id); }).hide();
+
+            var $td1 = $('<td>').append($btn1, $btn2); 
+            var $td2 = $('<td>'+data[i].moduleType+'</td>');
+            var $td3 = $('<td>Gennemsnit:</td>');
+
+            $('#content-table').append($tr.append($td1, $td2, $td3)); 
+        }
+    }); 
+}
+
+function showMoreInfo(studentdIDs, btnID) {
+    $('#'+btnID).hide();
+    var id = btnID.slice(9);  
+    $('#minimizeBtn'+id).show(); 
+
+    for(var i=0; i<studentdIDs.length; i++) {
+        var $tr = $('<tr>').attr('id','tr'+id+'-'+i); 
+        var $td1 = $('<td>'+studentdIDs[i]+'</td>'); 
+        if(i==0) $tr.append($td1).insertAfter($('#tr'+id)); 
+        else $tr.append($td1).insertAfter($('#tr'+id+'-'+(i-1)));
+        
+    }
+}
+
+
+function showLessInfo(studentdIDs, btnID) {
+    $('#'+btnID).hide();
+    var id = btnID.slice(11);  
+    $('#expandBtn'+id).show();
+
+    for(var i=0; i<studentdIDs.length; i++) {
+        $('#tr'+id+'-'+i).remove(); 
+    }
+}
+
+
+function calculateAverageScore(studentIDs, teacherID, index) {
+
+    var totalScore = 0;
+
+    for(var i=0; i<studentIDs.length; i++) {
+        
+        var studentID = studentIDs[i]; 
+
+        $.ajax({
+            url: '/getStudentData',
+            method: 'GET',
+            data: {
+                teacherID,
+                studentID
+            }
+        })
+        .done(function (dataStr) {
+            var data = JSON.parse(dataStr);
+            
+            for(var j=0; j<data[index].answers.length; j++) {
+                if(data[index].answers[j].point == "1") {
+                    totalScore++; 
+                }
+            }
+        }); 
+
+    }
+
+    return totalScore; 
+}

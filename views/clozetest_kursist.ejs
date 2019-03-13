@@ -3,17 +3,17 @@
         margin-bottom: 30px;
         height: 30px;
     }
-    
+
     .audDiv,
     .contentDiv {
         display: inline;
     }
-    
+
     .contentDiv {
         position: absolute;
         left: 80px;
     }
-    
+
     .aud {
         background-image: url('images/audio.png');
         background-repeat: no-repeat;
@@ -22,10 +22,14 @@
         width: 50px;
         height: 30px;
     }
+
 </style>
 
 <script>
     var a = 0;
+    $(function() {
+        formSetup();
+    });
 
     function playAudio(index) {
         var d = document.getElementById("d" + index);
@@ -43,32 +47,6 @@
         }
     }
 
-    $(function() {
-
-
-        $('#form').submit(function(event) {
-
-            event.preventDefault();
-            var user = JSON.parse(sessionStorage.getItem('currentUser'));
-            var teacherID = user.testID;
-            var studentID = user.studentID;
-            var studentModules = user.studentModules;
-            studentModules.shift();
-            user.studentModules = studentModules;
-
-            sessionStorage.setItem('currentUser', JSON.stringify(user));
-
-            var obj = {
-                teacherID: teacherID,
-                studentID: studentID,
-                studentModules: studentModules
-            }
-
-            $('#data').val(JSON.stringify(obj));
-
-            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
-        });
-    });
 </script>
 
 <form id="form" method="post" action="/clozetest_answer" enctype="multipart/form-data">
@@ -88,6 +66,5 @@
         </div>
         <% } %>
 
-            <input type="hidden" id="data" name="data">
-            <input class="submit" type="submit" value="Gem/Videre">
+            <input type="submit">
 </form>

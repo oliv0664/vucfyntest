@@ -14,13 +14,12 @@
 	<header>
 		<% include header %>
 	</header>
-<!--
+
 	<div id="header">
 		<img class="header" id="head_1" src="images/VUC_logo.png" height="100">
 		<h3 class="header" id="head_2">NIVEAUAFKLARINGSTEST</h3>
 		<h3 class="header" id="head_3">VUC FYN ODENSE</h3>
 	</div>
--->
 
 	<h2>Velkommen <%=content.initials%></h2>
 
@@ -44,8 +43,7 @@
 		<tbody>
 		<tr>
 			<td>
-				<button class="ul_btn" type="button">+</button> Quiz <%=i+1%><%=content.tests[i].date.toLocaleDateString() %>:
-
+				<button type="button" class="ul_btn">+</button> Quiz <%=i+1%><%=content.tests[i].date.toLocaleString()%>:
 				<ul class="ul_show" style="display: none">
 					<% for(var j=0; j < content.tests[i].totalModules; j++) { %>
 						<li>

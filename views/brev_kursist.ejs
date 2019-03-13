@@ -2,47 +2,25 @@
     .blockDiv {
         display: block;
     }
-    
+
     .blockDiv embed,
     textarea {
         display: block;
         margin-bottom: 30px;
         width: 50%;
     }
-    
+
     textarea {
         height: 300px;
     }
+
 </style>
 <script>
     $(function() {
-
-
-        $('#form').submit(function(event) {
-
-            event.preventDefault();
-            var user = JSON.parse(sessionStorage.getItem('currentUser'));
-            var teacherID = user.testID;
-            var studentID = user.studentID;
-            var studentModules = user.studentModules;
-            studentModules.shift();
-            user.studentModules = studentModules;
-
-            sessionStorage.setItem('currentUser', JSON.stringify(user));
-
-            var obj = {
-                teacherID: teacherID,
-                studentID: studentID,
-                studentModules: studentModules
-            }
-
-            $('#data').val(JSON.stringify(obj));
-
-            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
-        });
+        formSetup();
     });
-</script>
 
+</script>
 <form id="form" method="post" action="/brev_answer" enctype="multipart/form-data">
 
     <div class="blockDiv">
@@ -50,7 +28,6 @@
         <textarea name="<%= 'answer' %>" placeholder="Skriv dit brev her"></textarea>
     </div>
 
-    <input type="hidden" id="data" name="data">
-    <input class="submit" type="submit" value="Gem/Videre">
+    <input type="submit">
 
 </form>

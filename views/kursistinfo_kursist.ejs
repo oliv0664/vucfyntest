@@ -3,11 +3,12 @@
         width: 100%;
         margin-bottom: 20px;
     }
-    
+
     text_input {
         margin-left: 5vw;
         width: 40vw;
     }
+
 </style>
 
 <script>
@@ -15,56 +16,34 @@
     element.parentNode.removeChild(element);
 
     $(function() {
-
-
-        $('#form').submit(function(event) {
-
-            event.preventDefault(); //this will prevent the default submit
-
-            var val = $('#check_1').val();
-            console.log(val);
-
-            var checkboxes = $('#form input:checkbox');
-
-            for (var i = 0; i < checkboxes.length; i++) {
-
-                var id = checkboxes[i].id;
-                console.log(id);
-                if ($('#' + id).is(':checked')) {
-                    console.log(id + " is " + true);
-                    var ids = id.split('_');
-                    console.log(ids[1]);
-                    var val = $('#check_' + ids[1]).val();
-                    console.log(val);
-                    val += $('#' + id).val() + ", ";
-                    console.log(val);
-                    $('#check_' + ids[1]).val(val);
-                    console.log($('#check_' + ids[1]).val());
-                }
-            }
-
-            console.log($('#check_1').val());
-
-            var user = JSON.parse(sessionStorage.getItem('currentUser'));
-            var teacherID = user.testID;
-            var studentID = user.studentID;
-            var studentModules = user.studentModules;
-            studentModules.shift();
-            user.studentModules = studentModules;
-
-            sessionStorage.setItem('currentUser', JSON.stringify(user));
-
-            var obj = {
-                teacherID: teacherID,
-                studentID: studentID,
-                studentModules: studentModules
-            }
-
-            $('#data').val(JSON.stringify(obj));
-
-            $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
-        });
+        formSetup(kursistInfo);
     });
+    function kursistInfo() {
+        var val = $('#check_1').val();
+        console.log(val);
+
+        var checkboxes = $('#form input:checkbox');
+
+        for (var i = 0; i < checkboxes.length; i++) {
+
+            var id = checkboxes[i].id;
+            console.log(id);
+            if ($('#' + id).is(':checked')) {
+                console.log(id + " is " + true);
+                var ids = id.split('_');
+                console.log(ids[1]);
+                var val = $('#check_' + ids[1]).val();
+                console.log(val);
+                val += $('#' + id).val() + ", ";
+                console.log(val);
+                $('#check_' + ids[1]).val(val);
+                console.log($('#check_' + ids[1]).val());
+            }
+        }
+
+        console.log($('#check_1').val());
+    }
+
 </script>
 
 <form id="form" method="post" action="/kursistinfo_answer" enctype="multipart/form-data">
@@ -104,6 +83,5 @@
                         <% } %>
                             <% } %>
 
-                                <input type="hidden" id="data" name="data">
-                                <input class="submit" type="submit" value="Gem/Videre">
+                                <input id="submit" type="submit">
 </form>
