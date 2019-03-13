@@ -13,12 +13,15 @@
     }
 
     .contentDiv {
-        margin-top: 30px; 
+        margin-top: 30px;
     }
 
 </style>
 
 <script>
+    $(function() {
+        formSetup();
+    });
     var a = 0;
 
     function playAudio(index) {
@@ -31,9 +34,12 @@
             if (a > 0) {
                 d.removeChild(audBut);
                 a = 0;
-            } else { a++; }
+            } else {
+                a++;
+            }
         }
     }
+
 </script>
 
 <form id="form" method="post" action="/tekstforståelse_answer" enctype="multipart/form-data">
@@ -56,12 +62,12 @@
                 <%= content.questions[j].question %>
             </div>
 
-            <% for(var k=0; k<content.questions[j].options.length; k++) { %>    
+            <% for(var k=0; k<content.questions[j].options.length; k++) { %>
                 <input type="radio" name="<%= j %>" value="<%= content.questions[j].options[k] %>">
                 <span><%= content.questions[j].options[k] %></span>
                 <br>
-            <% } %>
-        <% } %>
+                <% } %>
+                    <% } %>
     </div>
 
     <input type="submit">
