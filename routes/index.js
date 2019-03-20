@@ -17,19 +17,20 @@ var mongoose = require('mongoose');
 
 
 // %%% Skal gemmes i sessionStorage
-//var teacherID;
-//var studentID;
-//var initials;
-//var teacherModules = [];
-//var studentModules = [];
-//var kursistModules = [];
-//// denne variabel er navngivet dårligt, men den holder på samme data som initials. 
-//var tjek;
+var teacherID;
+var studentID;
+var initials;
+var teacherModules = [];
+var studentModules = [];
+var kursistModules = [];
+// denne variabel er navngivet dårligt, men den holder på samme data som initials. 
+var tjek;
 
 /* GET home page. */
 
 
 router.get('/', function(req, res, next) {
+    initials = "";
 
     res.render('login', { //login
         title: 'Express'
@@ -45,7 +46,7 @@ router.get('/start', function(req, res, next) {
 
 router.post('/signin', function(req, res, next) {
 
-    var user = req.body.uname.toLocaleUpperCase();
+    var user = req.body.uname;
     var password = req.body.psw;
 
 
@@ -163,7 +164,7 @@ router.get('/test_data', function(req, res, next) {
         if (err) {
             console.log(err);
         } else {
-            console.log("TEACHER ID FROM STUDENT DB ", student);
+            console.log("TEACHER ID FROM STUDENT DB 2019 ", student);
 
             var studentIDs = [];
 
@@ -1101,16 +1102,6 @@ router.post(encodeURI('/kursistinfo_answer'), function(req, res) {
     // parse the request and handle fields data
     form.parse(req, function(err, fields, files) {
 
-        var data = JSON.parse(fields.data);
-        delete fields.data;
-
-        teacherID = data.teacherID;
-        studentID = data.studentID;
-        kursistModules = data.studentModules;
-
-        HandleTestCounter(teacherID, kursistModules);
-
-
         inputAnswers = [];
         var temp = Object.keys(fields);
         console.log("KKKUUURRRSSSIIISSSTTTT ", fields);
@@ -1241,16 +1232,6 @@ router.post(encodeURI('/orddiktat_answer'), function(req, res) {
 
     form.parse(req, function(err, fields, files) {
 
-        var data = JSON.parse(fields.data);
-        delete fields.data;
-
-        teacherID = data.teacherID;
-        studentID = data.studentID;
-        kursistModules = data.studentModules;
-
-        HandleTestCounter(teacherID, kursistModules);
-
-
         inputAnswers = [];
         var temp = Object.keys(fields);
         for (i = 0; i < temp.length; i++) {
@@ -1370,17 +1351,6 @@ router.post(encodeURI('/vrøvleord_answer'), function(req, res) {
     // parse the request and handle fields data
 
     form.parse(req, function(err, fields, files) {
-
-
-        var data = JSON.parse(fields.data);
-        delete fields.data;
-
-        teacherID = data.teacherID;
-        studentID = data.studentID;
-        kursistModules = data.studentModules;
-
-        HandleTestCounter(teacherID, kursistModules);
-
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1504,17 +1474,6 @@ router.post(encodeURI('/clozetest_answer'), function(req, res) {
 
     form.parse(req, function(err, fields, files) {
 
-
-        var data = JSON.parse(fields.data);
-        delete fields.data;
-
-        teacherID = data.teacherID;
-        studentID = data.studentID;
-        kursistModules = data.studentModules;
-
-        HandleTestCounter(teacherID, kursistModules);
-
-
         inputAnswers = [];
         var temp = Object.keys(fields);
         for (i = 0; i < temp.length; i++) {
@@ -1635,16 +1594,6 @@ router.post(encodeURI('/tekstforståelse_answer'), function(req, res) {
     form.parse(req, function(err, fields, files) {
 
 
-        var data = JSON.parse(fields.data);
-        delete fields.data;
-
-        teacherID = data.teacherID;
-        studentID = data.studentID;
-        kursistModules = data.studentModules;
-
-        HandleTestCounter(teacherID, kursistModules);
-
-
         inputAnswers = [];
         var temp = Object.keys(fields);
         for (i = 0; i < temp.length; i++) {
@@ -1758,17 +1707,6 @@ router.post('/brev_answer', function(req, res) {
     // parse the request and handle fields data
 
     form.parse(req, function(err, fields, files) {
-
-
-        var data = JSON.parse(fields.data);
-        delete fields.data;
-
-        teacherID = data.teacherID;
-        studentID = data.studentID;
-        kursistModules = data.studentModules;
-
-        HandleTestCounter(teacherID, kursistModules);
-
 
         inputAnswers = [];
         var temp = Object.keys(fields);
@@ -1892,46 +1830,44 @@ router.get('/getStudentScore', function(req, res) {
     var idStudent = req.query.studentID;
 
     studentClass.find({
-        "teacherID": idTeacher,
-        "studentID": idStudent
+        "teacherID": idTeacher
     }, function(err, students) {
         if (err) {
             console.log(err);
         } else {
-            console.log("DATA FROM DB ABOUT STUDENTS: ", students);
-            student_data = students;
-
-            var final_score;
-
-            teacherClass.find({
-                "tests._id": idTeacher
-            }, function(err, teacher) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log("DATA FROM DB ABOUT TEACHER: ", teacher);
-
-                    var id_serv = JSON.stringify(idTeacher);
-
-                    for (var i = 0; i < teacher[0].tests.length; i++) {
-                        var id_db = JSON.stringify(teacher[0].tests[i]._id);
-
-                        if (id_serv == id_db) {
-                            console.log("1111 ", student_data[0]);
-                            console.log("2222 ", teacher[0]);
-                            //final_score = evaluateScore(i, student_data[0], teacher[0]);
-                            //console.log("FINAL SCORE ", final_score);
-                            //res.send(JSON.stringify(final_score));
-                        }
-                    }
-
-                }
-            });
+            console.log("MARTS 2019 KIG HER - STUDENTS: ", students);
+            res.send(JSON.stringify(students)); 
         }
     });
 });
 
 
+router.get('/getTeacherScore', function(req, res) {
+    var idTeacher = req.query.teacherID; 
+
+    teacherClass.find({
+        "tests._id": idTeacher
+    }, function(err, teacher) {
+        if (err) {
+            console.log(err);
+        } else {
+            var id_serv = JSON.stringify(idTeacher);
+
+            for (var i = 0; i < teacher[0].tests.length; i++) {
+                var id_db = JSON.stringify(teacher[0].tests[i]._id);
+
+                if (id_serv == id_db) {
+                    
+                    for(var j=0; j<teacher[0].tests.length; j++) {
+                        if(teacher[0].tests[j]._id == idTeacher) {
+                            res.send(JSON.stringify(teacher[0].tests[j].modules)); 
+                        }
+                    } 
+                }
+            }
+        }
+    });
+});
 
 
 // }).exec(function(err, user) {
@@ -2270,9 +2206,9 @@ function folderHandler() {
 }
 
 
-function HandleTestCounter(testId, moduleArray) {
+function HandleTestCounter(testId) {
     console.log(testId);
-    var isThisLastModule = moduleArray.length === 1;
+    var isThisLastModule = kursistModules.length === 1;
     if (isThisLastModule) {
         console.log('this is the last module, now we update the test counter');
 

@@ -28,13 +28,14 @@
 			display: inline-block;
 			padding-left: 10px;
 			padding-right: 10px;
+			margin-right: 0.5vw; 
 		}
 
 		#main-content {
 			overflow: hidden;
 			border: 1px solid black;
 			margin-left: 10px; 
-			margin-right: 50px; 
+			margin-right: 1px; 
 			width: 70%; 
 			padding: 10px;
 		}
@@ -44,16 +45,26 @@
 		}
 
         .contentDiv {
-            border: 1px solid black;
-            margin: 20px;
-            width: 10vw;
+			display: inline-block; 
+			margin-right: 2vw; 
+			margin-bottom: 2vh;
+			margin-top: 2vh;
 		}
-        
+
+		.studentData {
+			display: inline-block; 
+			margin-left: 2vw; 
+		}
+
+		#rightContent {
+			float: right; 
+			margin-right: 10vw; 
+		}
     </style>
-    
+
 </head>
 
-<body onload="getOverviewData('<%= JSON.stringify(content.studentIDs)%>', '<%=content.idTeacher%>')">
+<body onload="readyPage('<%= JSON.stringify(content.studentIDs)%>', '<%=content.idTeacher%>')">
 
     <header>
         <% include header %>
@@ -63,13 +74,14 @@
         <%=content.idTeacher %>
     </h2>
 
+
 	<!--
 		CODE TO DO..
 		CHANGE LAYOUT OF CONTENT
 	-->
 
 	<div id="sidebar">
-		Oversigt
+		<div class="overview">Oversigt</div>
 		
 		<% for(var i=0; i<content.studentIDs.length; i++) { %>
 			<div id="<%= 's'+i %>"><%=content.studentIDs[i]%></div>
@@ -77,13 +89,10 @@
 	</div>
 
 	<div id="navbar">
-		<div id="nav1" class="nav">Oversigt</div>
-		<div class="nav">nav2</div>
+		<div class="overview nav">Oversigt</div>
 	</div>
 	
-	<div id="main-content">
-		<table id="content-table"></table>
-	</div>
+	<div id="main-content"></div>
 
 
 

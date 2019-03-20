@@ -12,11 +12,13 @@
             $('#form').bind('submit', function(event) {
                 event.preventDefault();
 
-                user = {};
+                var user = sessionStorage.getItem('currentUser');
+                user = JSON.parse(user);
 
                 var testID = $('#hidden').val();
                 $('#hidden').val("");
 
+                var username = user.username;
                 $('#hidden').val(JSON.stringify(testID));
 
                 var studentID = $('#studentID').val();
@@ -34,8 +36,9 @@
 <body>
 
 	<header>
-		<% include header %>
-	</header>
+        <% include header %>
+    </header>
+	<!--
 
     <div id="header">
         <img class="header" id="head_1" src="images/VUC_logo.png" height="100">
